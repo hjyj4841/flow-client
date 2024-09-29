@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { getKakaoCode } from "../api/kakao";
 
 const StyledRegister = styled.header`
   ul {
@@ -9,14 +10,6 @@ const StyledRegister = styled.header`
   }
 `;
 const Register = () => {
-  const kakaoApiKey = "1a0c2ee5a1c05d498d69df5ba445b391";
-  const redirectUri = "http://localhost:3000/auth";
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoApiKey}&redirect_uri=${redirectUri}&response_type=code`;
-
-  const kakaoRegister = () => {
-    window.location.href = kakaoURL;
-  };
-
   return (
     <StyledRegister>
       <ul>
@@ -24,7 +17,7 @@ const Register = () => {
           <button type="button">Google Register</button>
         </li>
         <li>
-          <button type="button" onClick={kakaoRegister}>
+          <button type="button" onClick={getKakaoCode}>
             Kakao Register
           </button>
         </li>
