@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getKakaoCode } from "../api/kakao";
+import { getKakaoCodeByRegister } from "../api/kakao";
 
 const StyledRegister = styled.header`
   ul {
@@ -9,6 +9,7 @@ const StyledRegister = styled.header`
     }
   }
 `;
+
 const Register = () => {
   return (
     <StyledRegister>
@@ -17,7 +18,7 @@ const Register = () => {
           <button type="button">Google Register</button>
         </li>
         <li>
-          <button type="button" onClick={getKakaoCode}>
+          <button type="button" onClick={getKakaoCodeByRegister}>
             Kakao Register
           </button>
         </li>

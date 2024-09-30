@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getKakaoToken } from "../api/kakao";
+import { getKakaoToken } from "../../api/kakao";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Auth = () => {
+const AuthRegister = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [user, setUser] = useState({
@@ -14,7 +14,7 @@ const Auth = () => {
 
   // kakao로 발급 받은 토큰으로 유저 정보 추출
   const loadToken = async () => {
-    setUserData(await getKakaoToken(code));
+    setUserData(await getKakaoToken(code, "register"));
   };
 
   useEffect(() => {
@@ -64,4 +64,4 @@ const Auth = () => {
 
   return;
 };
-export default Auth;
+export default AuthRegister;

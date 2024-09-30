@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { getKakaoCode } from "../api/kakao";
+import { getKakaoCodeByLogin } from "../api/kakao";
 
 const StyledLogin = styled.header`
   ul {
@@ -18,7 +18,7 @@ const Login = () => {
           <button type="button">Google Login</button>
         </li>
         <li>
-          <button type="button" onClick={getKakaoCode}>
+          <button type="button" onClick={getKakaoCodeByLogin}>
             Kakao Login
           </button>
         </li>
