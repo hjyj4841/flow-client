@@ -36,6 +36,5 @@ const getKakaoUserData = async (token) => {
       "Content-type": "application/x-www-form-urlencoded;charset=utf-8",
     },
   });
-  console.log(user.data.kakao_account.email);
   return user.data;
 };
