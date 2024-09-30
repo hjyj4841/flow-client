@@ -6,6 +6,7 @@ import RegisterUser from "./pages/RegisterUser";
 import Login from "./pages/Login";
 import AuthRegister from "./pages/auth/AuthRegister";
 import AuthLogin from "./pages/auth/AuthLogin";
+import LoginSuccess from "./components/LoginSuccess";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: "/login", element: <Login /> },
       { path: "/authRegister", element: <AuthRegister /> },
       { path: "/authLogin", element: <AuthLogin /> },
+      { path: "/loginSuccess", element: <LoginSuccess /> },
     ],
   },
 ]);

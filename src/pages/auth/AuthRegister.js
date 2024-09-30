@@ -52,7 +52,7 @@ const AuthRegister = () => {
       );
     } else {
       alert("이미 가입한 회원입니다.");
-      navigate("/"); // 로그인 주소로 바꾸어야함
+      navigate("/login"); // 로그인 주소로 바꾸어야함
     }
   };
 

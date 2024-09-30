@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 const AuthLogin = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
+  const [token, setToken] = useState(null);
   const [user, setUser] = useState({
     userEmail: "",
     userPlatform: "",
@@ -40,8 +41,7 @@ const AuthLogin = () => {
     );
 
     if (!result.data) {
-      alert("로그인 성공!");
-      navigate("/");
+      setToken(await axios.post("http://localhost:8080/api/user/login", user));
     } else {
       alert("로그인 실패!");
     }
@@ -52,6 +52,12 @@ const AuthLogin = () => {
       loginCheck();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (token != null) {
+      navigate("/loginSuccess?token=" + token.data);
+    }
+  }, [token]);
 
   return <></>;
 };
