@@ -3,7 +3,7 @@ import { getKakaoToken } from "../../api/kakao";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const AuthRegister = () => {
+const AuthRegisterKakao = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState(null);
   const [user, setUser] = useState({
@@ -23,13 +23,11 @@ const AuthRegister = () => {
 
   useEffect(() => {
     if (userData != null) {
-      // 유저가 카카오 계정으로 로그인 했을 경우
-      if (userData.kakao_account.profile.profile_image_url.includes("kakao")) {
-        setUser({
-          userEmail: userData.kakao_account.email,
-          userPlatform: "kakao",
-        });
-      }
+      // 유저가 카카오 계정으로 가입했을 경우
+      setUser({
+        userEmail: userData.kakao_account.email,
+        userPlatform: "kakao",
+      });
     }
   }, [userData]);
 
@@ -64,4 +62,4 @@ const AuthRegister = () => {
 
   return;
 };
-export default AuthRegister;
+export default AuthRegisterKakao;

@@ -19,7 +19,11 @@ const Header = () => {
         <li>
           <Link to={"/"}>Home</Link>
         </li>
-        {token == null ? (
+        {token !== null ? (
+          <button type="button" onClick={logout}>
+            로그아웃
+          </button>
+        ) : (
           <>
             <li>
               <Link to={"/register"}>회원가입</Link>
@@ -28,10 +32,6 @@ const Header = () => {
               <Link to={"/login"}>로그인</Link>
             </li>
           </>
-        ) : (
-          <button type="button" onClick={logout}>
-            로그아웃
-          </button>
         )}
       </ul>
     </>

@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { getKakaoCodeByRegister } from "../api/kakao";
+import { naverRegister } from "../api/naver";
 
 const StyledRegister = styled.header`
   ul {
@@ -23,7 +24,9 @@ const Register = () => {
           </button>
         </li>
         <li>
-          <button type="button">Naver Register</button>
+          <button type="button" onClick={naverRegister}>
+            Naver Register
+          </button>
         </li>
       </ul>
     </StyledRegister>

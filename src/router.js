@@ -4,9 +4,9 @@ import Main from "./pages/Main";
 import Register from "./pages/Register";
 import RegisterUser from "./pages/RegisterUser";
 import Login from "./pages/Login";
-import AuthRegister from "./pages/auth/AuthRegister";
-import AuthLogin from "./pages/auth/AuthLogin";
-import LoginSuccess from "./components/LoginSuccess";
+import AuthRegisterKakao from "./pages/auth/AuthRegisterKakao";
+import AuthLoginKakao from "./pages/auth/AuthLoginKakao";
+import AuthRegisterNaver from "./pages/auth/AuthRegisterNaver";
 
 const router = createBrowserRouter([
   {
@@ -17,9 +17,9 @@ const router = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/registerUser", element: <RegisterUser /> },
       { path: "/login", element: <Login /> },
-      { path: "/authRegister", element: <AuthRegister /> },
-      { path: "/authLogin", element: <AuthLogin /> },
-      { path: "/loginSuccess", element: <LoginSuccess /> },
+      { path: "/authRegisterKakao", element: <AuthRegisterKakao /> },
+      { path: "/authLoginKakao", element: <AuthLoginKakao /> },
+      { path: "/authRegisterNaver", element: <AuthRegisterNaver /> },
     ],
   },
 ]);
