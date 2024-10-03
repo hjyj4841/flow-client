@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { getNaverToken } from "../../api/naver";
+import { useEffect, useState } from "react";
+import { getNaverToken, getNaverUserData } from "../../api/naver";
 
 const AuthRegisterNaver = () => {
   const url = new URL(window.location.href);
