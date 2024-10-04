@@ -36,6 +36,9 @@ const Header = () => {
             </li>
           </>
         )}
+          <li>
+          <Link to={"/uploadPost"}>업로드</Link>
+        </li>
       </ul>
     </>
   );

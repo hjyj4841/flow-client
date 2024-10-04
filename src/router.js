@@ -8,6 +8,7 @@ import Mypage from "./pages/MyPage";
 import AuthRegisterKakao from "./pages/auth/AuthRegisterKakao";
 import AuthLoginKakao from "./pages/auth/AuthLoginKakao";
 import AuthRegisterNaver from "./pages/auth/AuthRegisterNaver";
+import UploadPost from "./pages/post/UploadPost";
 
 const router = createBrowserRouter([
   {
@@ -24,6 +25,7 @@ const router = createBrowserRouter([
       { path: "/authRegisterNaver", element: <AuthRegisterNaver /> },
     ],
   },
+  {path: "/uploadPost", element: <UploadPost />},
 ]);
 
 export default router;
