@@ -1,0 +1,128 @@
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { FaRegHeart } from "react-icons/fa";
+import { BsCollection } from "react-icons/bs";
+
+const MyPage = () => {
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [createdPosts, setCreatedPosts] = useState([]);
+
+  // 유저 코드 저장 및 불러오기
+  localStorage.setItem("userCode", 1);
+  const userCode = localStorage.getItem("userCode");
+
+  useEffect(() => {
+    const fetchLikedPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/likes/${userCode}/likes`
+        );
+        setLikedPosts(response.data.postInfoList || []);
+      } catch (error) {
+        console.error("Error fetching liked posts", error);
+      }
+    };
+
+    const fetchSavedPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/collection/${userCode}/collections`
+        );
+        setSavedPosts(response.data.postInfoList || []);
+      } catch (error) {
+        console.error("Error fetching saved posts", error);
+      }
+    };
+
+    const fetchCreatedPosts = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/api/${userCode}/post`
+        );
+        setCreatedPosts(response.data.postInfoList || []);
+      } catch (error) {
+        console.error("Error fetching created posts", error);
+      }
+    };
+
+    fetchLikedPosts();
+    fetchSavedPosts();
+    fetchCreatedPosts();
+  }, [userCode]);
+
+  return (
+    <div>
+      <h2>내가 좋아한 게시물</h2>
+      <ul>
+        {likedPosts.map((item) => (
+          <li key={item.post.postCode}>
+            <FaRegHeart />
+            <BsCollection />
+            {item.post.postDesc}
+            {item.imageFiles.length > 0 && (
+              <div>
+                {item.imageFiles.map((img) => (
+                  <img
+                    key={img.postImgCode}
+                    src={img.postImgUrl}
+                    alt="post"
+                    style={{ width: "100px" }}
+                  />
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <h2>내가 저장한 게시물</h2>
+      <ul>
+        {savedPosts.map((item) => (
+          <li key={item.post.postCode}>
+            <FaRegHeart />
+            <BsCollection />
+            {item.post.postDesc}
+            {item.imageFiles.length > 0 && (
+              <div>
+                {item.imageFiles.map((img) => (
+                  <img
+                    key={img.postImgCode}
+                    src={img.postImgUrl}
+                    alt="post"
+                    style={{ width: "100px" }}
+                  />
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <h2>내가 만든 게시물</h2>
+      <ul>
+        {createdPosts.map((item) => (
+          <li key={item.post.postCode}>
+            <FaRegHeart />
+            <BsCollection />
+            {item.post.postDesc}
+            {item.imageFiles.length > 0 && (
+              <div>
+                {item.imageFiles.map((img) => (
+                  <img
+                    key={img.postImgCode}
+                    src={img.postImgUrl}
+                    alt="post"
+                    style={{ width: "100px" }}
+                  />
+                ))}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default MyPage;
