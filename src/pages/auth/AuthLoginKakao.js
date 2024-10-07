@@ -26,7 +26,7 @@ const AuthLoginKakao = () => {
 
   // 카카오 토큰을 통해 받은 유저 정보를 userEmail, userPlatform에 세팅
   useEffect(() => {
-    if (kakaoToken != null) {
+    if (kakaoToken !== null) {
       if (
         kakaoToken.kakao_account.profile.profile_image_url.includes("kakao")
       ) {
