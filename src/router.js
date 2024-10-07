@@ -11,6 +11,7 @@ import AuthRegisterNaver from "./pages/auth/AuthRegisterNaver";
 import UploadPost from "./pages/post/UploadPost";
 import AuthRegisterGoogle from "./pages/auth/AuthRegisterGoogle";
 import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
+import ReportList from "./pages/ReportList";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +28,7 @@ const router = createBrowserRouter([
       { path: "/authRegisterNaver", element: <AuthRegisterNaver /> },
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
+      { path: "/reportList", element: <ReportList /> },
     ],
   },
   { path: "/uploadPost", element: <UploadPost /> },
