@@ -10,5 +10,5 @@ export const getReportPost = async () => {
 };
 
 export const deletePost = async (postReportCode) => {
-  return await instance.get(`delPostReport/${postReportCode}`);
+  return await instance.get("delPostReport");
 };

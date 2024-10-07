@@ -11,8 +11,8 @@ export const fetchReportPost = async (dispatch) => {
   dispatch({ type: "FETCH_REPORT_POST", payload: response.data });
 };
 
-export const fetchDeleteReportPost = async (dispatch) => {
-  dispatch({ type: "FETCH_DELETE_REPORT_POST" });
+export const fetchDeleteReportPost = async (dispatch, postReportCode) => {
+  dispatch({ type: "FETCH_DELETE_REPORT_POST", payload: postReportCode });
 };
 
 export const reportReducer = (state, action) => {
@@ -21,6 +21,6 @@ export const reportReducer = (state, action) => {
     case "FETCH_REPORT_POST":
       return { ...state, reportPosts: action.payload };
     case "FETCH_DELETE_REPORT_POST":
-      return { ...state };
+      return { ...state, postReportCode: action.payload };
   }
 };

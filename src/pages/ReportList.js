@@ -30,7 +30,9 @@ const ReportList = () => {
   const [state, dispatch] = useReducer(reportReducer, reportPostState);
   const { reportPosts } = state;
 
-  const deletePost = () => {};
+  const deletePost = (postReportCode) => {
+    // 삭제 기능
+  };
 
   useEffect(() => {
     fetchReportPost(dispatch);
@@ -53,7 +55,10 @@ const ReportList = () => {
               <h4>{post.postReportDesc}</h4>
             </div>
             {/* 버튼 클릭시 게시물 삭제 후 alert로 삭제알림, 화면에서도 삭제 */}
-            <button type="button" onClick={deletePost}>
+            <button
+              type="button"
+              onClick={() => deletePost(post.postReportCode)}
+            >
               삭제
             </button>
           </div>
