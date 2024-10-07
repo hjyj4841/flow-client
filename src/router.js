@@ -9,6 +9,7 @@ import AuthRegisterKakao from "./pages/auth/AuthRegisterKakao";
 import AuthLoginKakao from "./pages/auth/AuthLoginKakao";
 import AuthRegisterNaver from "./pages/auth/AuthRegisterNaver";
 import UploadPost from "./pages/post/UploadPost";
+import ReportList from "./pages/ReportList";
 
 const router = createBrowserRouter([
   {
@@ -23,9 +24,10 @@ const router = createBrowserRouter([
       { path: "/authRegisterKakao", element: <AuthRegisterKakao /> },
       { path: "/authLoginKakao", element: <AuthLoginKakao /> },
       { path: "/authRegisterNaver", element: <AuthRegisterNaver /> },
+      { path: "/reportList", element: <ReportList /> },
     ],
   },
-  {path: "/uploadPost", element: <UploadPost />},
+  { path: "/uploadPost", element: <UploadPost /> },
 ]);
 
 export default router;

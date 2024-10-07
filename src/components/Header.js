@@ -36,8 +36,12 @@ const Header = () => {
             </li>
           </>
         )}
-          <li>
+        <li>
           <Link to={"/uploadPost"}>업로드</Link>
+        </li>
+        {/* 신고리스트는 token값으로 user_manager_code가 Y일 경우에만 보이게 해야함 */}
+        <li>
+          <Link to={"/reportList"}>신고리스트</Link>
         </li>
       </ul>
     </>
