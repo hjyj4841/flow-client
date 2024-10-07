@@ -9,8 +9,32 @@ const MyPage = () => {
   const [createdPosts, setCreatedPosts] = useState([]);
 
   // 유저 코드 저장 및 불러오기
-  localStorage.setItem("userCode", 1);
-  const userCode = localStorage.getItem("userCode");
+  const token = localStorage.getItem("token"); // 로컬 스토리지에서 토큰 가져오기
+  let userCode = "";
+  if (token) {
+    const base64Url = token.split(".")[1]; // 페이로드 부분 추출
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64)); // 디코딩 후 JSON으로 파싱
+    userCode = userData.userCode;
+    console.log(userData); // 유저 정보 출력
+  }
+
+  const handleLikeToggle = async (postCode) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/toggle/${postCode}`,
+        { userCode } // 백엔드에서 필요한 유저 데이터 전송
+      );
+      const updatedLikedPosts = likedPosts.map((item) =>
+        item.post.postCode === postCode
+          ? { ...item, isLiked: response.data }
+          : item
+      );
+      setLikedPosts(updatedLikedPosts); // 좋아요 상태 업데이트
+    } catch (error) {
+      console.error("Error toggling like", error);
+    }
+  };
 
   useEffect(() => {
     const fetchLikedPosts = async () => {
@@ -57,7 +81,7 @@ const MyPage = () => {
       <ul>
         {likedPosts.map((item) => (
           <li key={item.post.postCode}>
-            <FaRegHeart />
+            <FaRegHeart onClick={() => handleLikeToggle(item.post.postCode)} />
             <BsCollection />
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
@@ -80,7 +104,7 @@ const MyPage = () => {
       <ul>
         {savedPosts.map((item) => (
           <li key={item.post.postCode}>
-            <FaRegHeart />
+            <FaRegHeart onClick={() => handleLikeToggle(item.post.postCode)} />
             <BsCollection />
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
@@ -103,7 +127,7 @@ const MyPage = () => {
       <ul>
         {createdPosts.map((item) => (
           <li key={item.post.postCode}>
-            <FaRegHeart />
+            <FaRegHeart onClick={() => handleLikeToggle(item.post.postCode)} />
             <BsCollection />
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
