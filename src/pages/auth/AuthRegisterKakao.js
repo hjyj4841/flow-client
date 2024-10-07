@@ -23,7 +23,6 @@ const AuthRegisterKakao = () => {
 
   useEffect(() => {
     if (userData != null) {
-      // 유저가 카카오 계정으로 가입했을 경우
       setUser({
         userEmail: userData.kakao_account.email,
         userPlatform: "kakao",
@@ -50,7 +49,7 @@ const AuthRegisterKakao = () => {
       );
     } else {
       alert("이미 가입한 회원입니다.");
-      navigate("/login"); // 로그인 주소로 바꾸어야함
+      navigate("/login");
     }
   };
 
