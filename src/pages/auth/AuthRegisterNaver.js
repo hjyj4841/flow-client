@@ -7,8 +7,8 @@ const AuthRegisterNaver = () => {
   const state = url.searchParams.get("state");
 
   const loadNaverToken = async () => {
-    const res = await getNaverToken(code, state);
-    console.log(res);
+    console.log("Auth-10 (인증 code) : " + code);
+    await getNaverToken(code, state);
   };
 
   useEffect(() => {

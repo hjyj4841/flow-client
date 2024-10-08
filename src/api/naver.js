@@ -13,8 +13,10 @@ export const naverRegister = () => {
 export const getNaverToken = async (code, state) => {
   // 발급받은 코드를 이용해 네이버 토큰 발급 - proxy 설정 사용 (Naver Api의 경우 보안상의 이유로 cors 허용 x)
   const token = await axios.get(
-    `/token?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&code=${code}&state=${state}`
+    `/oauth2.0/token?grant_type=authorization_code&client_id=${clientId}&client_secret=${clientSecret}&code=${code}&state=${state}`
   );
+
+  console.log(token);
 
   const userData = await getNaverUserData(token.data.access_token);
   return userData; // 토큰으로 유저 데이터 받아오는 거 안된 프록시 설정해도 404 error
@@ -22,12 +24,13 @@ export const getNaverToken = async (code, state) => {
 };
 
 const getNaverUserData = async (token) => {
-  console.log(token);
-  const userData = await axios.get("/me", {
+  console.log("naver-25 (naverToken) : " + token);
+
+  const userData = await axios.get(`/v1/nid/me`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
-  console.log("userData: " + userData);
+  console.log("naver-32 (naverUserData) : " + userData);
   return userData;
 };
