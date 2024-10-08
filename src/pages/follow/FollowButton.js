@@ -38,7 +38,7 @@ const FollowTest = () => {
                     follow.followingUser.userCode,
                     follow.followerUser.userCode
                 );
-                console.log(response.data);
+                if(response.data !== logic)
                 setLogic(response.data);
             } catch (error) {
                 console.error("팔로우 상태를 가져오는 중 오류 발생:", error);
@@ -47,9 +47,8 @@ const FollowTest = () => {
             }
         };
         fetchFollowStatus();
-    } , [logic]);
+    } , []);
     return <>
-        <h1>follow - test</h1>
         <button onClick={result}>{logic ? "unfollow" : "follow"}</button>
     </>
 }

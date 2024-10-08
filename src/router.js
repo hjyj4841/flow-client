@@ -12,7 +12,8 @@ import UploadPost from "./pages/post/UploadPost";
 import AuthRegisterGoogle from "./pages/auth/AuthRegisterGoogle";
 import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
 import ReportList from "./pages/ReportList";
-import FollowTest from "./pages/follow/FollowTest";
+import MyFollower from "./pages/follow/MyFollower";
+import FollowMeUsers from "./pages/follow/FollowMeUsers";
 
 const router = createBrowserRouter([
   {
@@ -30,9 +31,10 @@ const router = createBrowserRouter([
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
-      { path: "/followTest", element: <FollowTest /> },
     ],
   },
+  {path : "/follow/myFollower/:followingUserCode", element: <MyFollower/>},
+  { path : "/follow/followMeUsers/:followerUserCode", element: <FollowMeUsers/>},
   { path: "/uploadPost", element: <UploadPost /> },
 ]);
 
