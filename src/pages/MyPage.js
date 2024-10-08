@@ -27,54 +27,69 @@ const MyPage = () => {
         `http://localhost:8080/api/likes/toggle/${postCode}`,
         user
       );
-      const updatedLikedPosts = likedPosts.map((item) =>
-        item.post.postCode === postCode
-          ? { ...item, isLiked: !item.isLiked }
-          : item
+
+      setLikedPosts((prevPosts) =>
+        prevPosts.map((item) =>
+          item.post.postCode === postCode
+            ? { ...item, isLiked: !item.isLiked }
+            : item
+        )
       );
     } catch (error) {
       console.error("Error toggling like", error);
     }
   };
 
+  const fetchLikedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/likes/${userCode}/likes`
+      );
+
+      const likedPosts = response.data.postInfoList.map((post) => ({
+        ...post,
+        isLiked: true, // 좋아요된 게시물에 isLiked 값을 true로 설정
+      }));
+
+      setLikedPosts(likedPosts || []);
+    } catch (error) {
+      console.error("Error fetching liked posts", error);
+    }
+  };
+
+  const fetchSavedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/collection/${userCode}/collections`
+      );
+      setSavedPosts(response.data.postInfoList || []);
+    } catch (error) {
+      console.error("Error fetching saved posts", error);
+    }
+  };
+
+  const fetchCreatedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/${userCode}/post`
+      );
+      setCreatedPosts(response.data.postInfoList || []);
+    } catch (error) {
+      console.error("Error fetching created posts", error);
+    }
+  };
+
   useEffect(() => {
-    const fetchLikedPosts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/likes/${userCode}/likes`
-        );
-        setLikedPosts(response.data.postInfoList || []);
-      } catch (error) {
-        console.error("Error fetching liked posts", error);
-      }
-    };
-
-    const fetchSavedPosts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/collection/${userCode}/collections`
-        );
-        setSavedPosts(response.data.postInfoList || []);
-      } catch (error) {
-        console.error("Error fetching saved posts", error);
-      }
-    };
-
-    const fetchCreatedPosts = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/api/${userCode}/post`
-        );
-        setCreatedPosts(response.data.postInfoList || []);
-      } catch (error) {
-        console.error("Error fetching created posts", error);
-      }
-    };
-
-    fetchLikedPosts();
+    if (likedPosts.length === 0) {
+      fetchLikedPosts();
+    }
     fetchSavedPosts();
     fetchCreatedPosts();
   }, []);
+
+  useEffect(() => {
+    fetchLikedPosts();
+  }, [likedPosts]);
 
   return (
     <div>
