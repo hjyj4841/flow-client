@@ -1,13 +1,22 @@
+import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Main = () => {
   const [token, setToken] = useState(null);
+  const [newFeedImages, setNewFeedImages] = useState([]);
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
+    fetchNewFeedImages();
   }, []);
+
+  const fetchNewFeedImages = async () => {
+    const response = await axios.get("http://localhost:8080/api/post");
+    setNewFeedImages(response.data);
+  };
+
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
@@ -44,11 +53,17 @@ const Main = () => {
           <section className="mb-8">
             <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
             <div className="grid grid-cols-4 gap-4">
-              {[...Array(4)].map((_, i) => (
+              {newFeedImages.map((post) => (
                 <div
-                  key={i}
+                  key={post.postCode}
                   className="w-full h-64 bg-gray-300 rounded-lg"
-                ></div>
+                >
+                  <img
+                    src={post.url}
+                    alt={post.postDesc}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                </div>
               ))}
             </div>
           </section>
