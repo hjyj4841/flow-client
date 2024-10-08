@@ -57,11 +57,15 @@ const AuthLoginKakao = () => {
 
     // 가입되어 있는 회원이라면 서버를 통해 토큰 발급 후 메인으로 이동
     if (!result.data) {
-      const response = await axios.post(
-        "http://localhost:8080/api/user/login",
-        user
-      );
-      localStorage.setItem("token", response.data);
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/user/login",
+          user
+        );
+        localStorage.setItem("token", response.data);
+      } catch (error) {
+        alert("너 밴");
+      }
 
       window.location.href = "/";
       // navigate("/");

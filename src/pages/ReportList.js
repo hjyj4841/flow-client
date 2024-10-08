@@ -5,6 +5,7 @@ import {
   initState as reportPostState,
   reportReducer,
 } from "../reducers/reportReducer";
+import { fetchDeleteReportPost } from "../reducers/reportReducer";
 
 const StyledDiv = styled.div`
   h1 {
@@ -24,6 +25,11 @@ const StyledDiv = styled.div`
     margin: 10px;
     padding: 5px 5px;
   }
+  button {
+    border-color: red;
+    border-radius: 10%;
+    border-width: 1px;
+  }
 `;
 
 const ReportList = () => {
@@ -32,6 +38,8 @@ const ReportList = () => {
 
   const deletePost = (postReportCode) => {
     // 삭제 기능
+    fetchDeleteReportPost(dispatch, postReportCode);
+    alert("관리자에 의해 삭제되었습니다.");
   };
 
   useEffect(() => {
@@ -49,7 +57,7 @@ const ReportList = () => {
         </div>
         {/* map 시작 지점 */}
         {reportPosts.map((post) => (
-          <div className="post-report-list">
+          <div className="post-report-list" key={post.postReportCode}>
             <div className="post-report-code">{post.postReportCode}</div>
             <div className="post-report-desc">
               <h4>{post.postReportDesc}</h4>
