@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -12,9 +13,8 @@ const Main = () => {
   }, []);
 
   const fetchNewFeedImages = async () => {
-    const response = await fetch("http://localhost:8080/api/post");
-    const data = await response.json();
-    setNewFeedImages(data);
+    const response = await axios.get("http://localhost:8080/api/post");
+    setNewFeedImages(response.data);
   };
 
   const logout = () => {
