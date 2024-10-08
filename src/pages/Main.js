@@ -8,6 +8,7 @@ const Main = () => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
+
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
