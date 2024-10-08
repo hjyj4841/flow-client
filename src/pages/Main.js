@@ -1,8 +1,10 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
 const Main = () => {
   const [token, setToken] = useState(null);
+
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
