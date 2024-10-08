@@ -1,4 +1,4 @@
-import { getReportPost } from "../api/report";
+import { getReportPost, deletePost } from "../api/report";
 
 export const initState = {
   reportPosts: [],
@@ -12,7 +12,8 @@ export const fetchReportPost = async (dispatch) => {
 };
 
 export const fetchDeleteReportPost = async (dispatch, postReportCode) => {
-  dispatch({ type: "FETCH_DELETE_REPORT_POST", payload: postReportCode });
+  const response = await deletePost(postReportCode);
+  dispatch({ type: "FETCH_DELETE_REPORT_POST" });
 };
 
 export const reportReducer = (state, action) => {
@@ -21,6 +22,6 @@ export const reportReducer = (state, action) => {
     case "FETCH_REPORT_POST":
       return { ...state, reportPosts: action.payload };
     case "FETCH_DELETE_REPORT_POST":
-      return { ...state, postReportCode: action.payload };
+      return state;
   }
 };
