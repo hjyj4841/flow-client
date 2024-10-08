@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import Login from "../pages/Login";
+import { getKakaoCodeByLogin } from "../api/kakao";
+import { getGoogleCodeByLogin } from "../api/google";
+import styled from "styled-components";
 
 const Header = () => {
   const [token, setToken] = useState(null);
@@ -12,6 +16,9 @@ const Header = () => {
     localStorage.removeItem("token");
     setToken(null);
   };
+
+  const [loginOpen, setLoginOpen] = useState(false);
+  const modalBackground = useRef();
 
   return (
     <>
@@ -29,7 +36,49 @@ const Header = () => {
               <Link to={"/register"}>회원가입</Link>
             </li>
             <li>
-              <Link to={"/login"}>로그인</Link>
+              <button
+                className={"open-login-btn"}
+                onClick={() => setLoginOpen(true)}
+              >
+                로그인
+              </button>
+              {loginOpen && (
+                <div
+                  className={"modal-container"}
+                  ref={modalBackground}
+                  onClick={(e) => {
+                    if (e.target === modalBackground.current) {
+                      setLoginOpen(false);
+                    }
+                  }}
+                >
+                  <div className={"login-content"}>
+                    <p>
+                      <ul>
+                        <li>
+                          <button type="button" onClick={getGoogleCodeByLogin}>
+                            Google Login
+                          </button>
+                        </li>
+                        <li>
+                          <button type="button" onClick={getKakaoCodeByLogin}>
+                            Kakao Login
+                          </button>
+                        </li>
+                        <li>
+                          <button type="button">Naver Login</button>
+                        </li>
+                      </ul>
+                    </p>
+                    <button
+                      className={"login-close-btn"}
+                      onClick={() => setLoginOpen(false)}
+                    >
+                      모달 닫기
+                    </button>
+                  </div>
+                </div>
+              )}
             </li>
             <li>
               <Link to={"/mypage"}>마이페이지</Link>
