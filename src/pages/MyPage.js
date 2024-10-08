@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection } from "react-icons/bs";
+import { BsCollectionFill } from "react-icons/bs";
 
 const MyPage = () => {
   const [likedPosts, setLikedPosts] = useState([]);
@@ -35,8 +36,34 @@ const MyPage = () => {
             : item
         )
       );
+
+      // 좋아요 상태 업데이트 후 다시 데이터를 가져옴
+      await fetchLikedPosts();
     } catch (error) {
       console.error("Error toggling like", error);
+    }
+  };
+
+  // 저장 토글 함수
+  const handleSaveToggle = async (postCode) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/collection/toggle/${postCode}`,
+        user
+      );
+
+      setSavedPosts((prevPosts) =>
+        prevPosts.map((item) =>
+          item.post.postCode === postCode
+            ? { ...item, isSaved: !item.isSaved }
+            : item
+        )
+      );
+
+      // 저장 상태 업데이트 후 다시 데이터를 가져옴
+      await fetchSavedPosts();
+    } catch (error) {
+      console.error("Error toggling save", error);
     }
   };
 
@@ -62,7 +89,13 @@ const MyPage = () => {
       const response = await axios.get(
         `http://localhost:8080/api/collection/${userCode}/collections`
       );
-      setSavedPosts(response.data.postInfoList || []);
+
+      const savedPosts = response.data.postInfoList.map((post) => ({
+        ...post,
+        isSaved: true, // 저장된 게시물에 isSaved 값을 true로 설정
+      }));
+
+      setSavedPosts(savedPosts || []);
     } catch (error) {
       console.error("Error fetching saved posts", error);
     }
@@ -80,16 +113,10 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    if (likedPosts.length === 0) {
-      fetchLikedPosts();
-    }
+    fetchLikedPosts();
     fetchSavedPosts();
     fetchCreatedPosts();
   }, []);
-
-  useEffect(() => {
-    fetchLikedPosts();
-  }, [likedPosts]);
 
   return (
     <div>
@@ -107,7 +134,16 @@ const MyPage = () => {
                 onClick={() => handleLikeToggle(item.post.postCode)}
               />
             )}
-            <BsCollection />
+            {item.isSaved ? (
+              <BsCollectionFill
+                onClick={() => handleSaveToggle(item.post.postCode)}
+                style={{ color: "black" }}
+              />
+            ) : (
+              <BsCollection
+                onClick={() => handleSaveToggle(item.post.postCode)}
+              />
+            )}
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
               <div>
@@ -139,7 +175,16 @@ const MyPage = () => {
                 onClick={() => handleLikeToggle(item.post.postCode)}
               />
             )}
-            <BsCollection />
+            {item.isSaved ? (
+              <BsCollectionFill
+                onClick={() => handleSaveToggle(item.post.postCode)}
+                style={{ color: "black" }}
+              />
+            ) : (
+              <BsCollection
+                onClick={() => handleSaveToggle(item.post.postCode)}
+              />
+            )}
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
               <div>
@@ -171,7 +216,16 @@ const MyPage = () => {
                 onClick={() => handleLikeToggle(item.post.postCode)}
               />
             )}
-            <BsCollection />
+            {item.isSaved ? (
+              <BsCollectionFill
+                onClick={() => handleSaveToggle(item.post.postCode)}
+                style={{ color: "black" }}
+              />
+            ) : (
+              <BsCollection
+                onClick={() => handleSaveToggle(item.post.postCode)}
+              />
+            )}
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
               <div>
