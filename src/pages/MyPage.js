@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { FaRegHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection } from "react-icons/bs";
 
 const MyPage = () => {
@@ -9,8 +9,33 @@ const MyPage = () => {
   const [createdPosts, setCreatedPosts] = useState([]);
 
   // 유저 코드 저장 및 불러오기
-  localStorage.setItem("userCode", 1);
-  const userCode = localStorage.getItem("userCode");
+  const token = localStorage.getItem("token");
+  let userCode = "";
+  let user = "";
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    userCode = userData.userCode;
+    user = userData;
+  }
+
+  // 좋아요 토글 함수
+  const handleLikeToggle = async (postCode) => {
+    try {
+      const response = await axios.post(
+        `http://localhost:8080/api/likes/toggle/${postCode}`,
+        user
+      );
+      const updatedLikedPosts = likedPosts.map((item) =>
+        item.post.postCode === postCode
+          ? { ...item, isLiked: !item.isLiked }
+          : item
+      );
+    } catch (error) {
+      console.error("Error toggling like", error);
+    }
+  };
 
   useEffect(() => {
     const fetchLikedPosts = async () => {
@@ -49,7 +74,7 @@ const MyPage = () => {
     fetchLikedPosts();
     fetchSavedPosts();
     fetchCreatedPosts();
-  }, [userCode]);
+  }, []);
 
   return (
     <div>
@@ -57,7 +82,16 @@ const MyPage = () => {
       <ul>
         {likedPosts.map((item) => (
           <li key={item.post.postCode}>
-            <FaRegHeart />
+            {item.isLiked ? (
+              <FaHeart
+                onClick={() => handleLikeToggle(item.post.postCode)}
+                style={{ color: "red" }}
+              />
+            ) : (
+              <FaRegHeart
+                onClick={() => handleLikeToggle(item.post.postCode)}
+              />
+            )}
             <BsCollection />
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
@@ -80,7 +114,16 @@ const MyPage = () => {
       <ul>
         {savedPosts.map((item) => (
           <li key={item.post.postCode}>
-            <FaRegHeart />
+            {item.isLiked ? (
+              <FaHeart
+                onClick={() => handleLikeToggle(item.post.postCode)}
+                style={{ color: "red" }}
+              />
+            ) : (
+              <FaRegHeart
+                onClick={() => handleLikeToggle(item.post.postCode)}
+              />
+            )}
             <BsCollection />
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (
@@ -103,7 +146,16 @@ const MyPage = () => {
       <ul>
         {createdPosts.map((item) => (
           <li key={item.post.postCode}>
-            <FaRegHeart />
+            {item.isLiked ? (
+              <FaHeart
+                onClick={() => handleLikeToggle(item.post.postCode)}
+                style={{ color: "red" }}
+              />
+            ) : (
+              <FaRegHeart
+                onClick={() => handleLikeToggle(item.post.postCode)}
+              />
+            )}
             <BsCollection />
             {item.post.postDesc}
             {item.imageFiles.length > 0 && (

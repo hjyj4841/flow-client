@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { getKakaoCodeByRegister } from "../api/kakao";
 import { naverRegister } from "../api/naver";
+import { getGoogleCodeByRegister } from "../api/google";
 
 const StyledRegister = styled.header`
   ul {
@@ -16,7 +17,9 @@ const Register = () => {
     <StyledRegister>
       <ul>
         <li>
-          <button type="button">Google Register</button>
+          <button type="button" onClick={getGoogleCodeByRegister}>
+            Google Register
+          </button>
         </li>
         <li>
           <button type="button" onClick={getKakaoCodeByRegister}>
