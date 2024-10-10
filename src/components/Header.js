@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import Login from "../pages/Login";
-import { getKakaoCodeByLogin } from "../api/kakao";
-import { getGoogleCodeByLogin } from "../api/google";
+import { getKakaoCode } from "../api/kakao";
+import { getGoogleCode } from "../api/google";
+import { getNaverCode } from "../api/naver";
 import styled from "styled-components";
 
 const Header = () => {
@@ -56,17 +57,28 @@ const Header = () => {
                     <p>
                       <ul>
                         <li>
-                          <button type="button" onClick={getGoogleCodeByLogin}>
+                          <button
+                            type="button"
+                            onClick={() => getGoogleCode("login")}
+                          >
                             Google Login
                           </button>
                         </li>
                         <li>
-                          <button type="button" onClick={getKakaoCodeByLogin}>
+                          <button
+                            type="button"
+                            onClick={() => getKakaoCode("login")}
+                          >
                             Kakao Login
                           </button>
                         </li>
                         <li>
-                          <button type="button">Naver Login</button>
+                          <button
+                            type="button"
+                            onClick={() => getNaverCode("login")}
+                          >
+                            Naver Login
+                          </button>
                         </li>
                       </ul>
                     </p>

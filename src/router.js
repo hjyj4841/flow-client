@@ -14,6 +14,7 @@ import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
 import ReportList from "./pages/ReportList";
 import MyFollower from "./pages/follow/MyFollower";
 import FollowMeUsers from "./pages/follow/FollowMeUsers";
+import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
 
 const router = createBrowserRouter([
   {
@@ -28,13 +29,17 @@ const router = createBrowserRouter([
       { path: "/authRegisterKakao", element: <AuthRegisterKakao /> },
       { path: "/authLoginKakao", element: <AuthLoginKakao /> },
       { path: "/authRegisterNaver", element: <AuthRegisterNaver /> },
+      { path: "/authLoginNaver", element: <AuthLoginNaver /> },
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
     ],
   },
-  {path : "/follow/myFollower/:followingUserCode", element: <MyFollower/>},
-  { path : "/follow/followMeUsers/:followerUserCode", element: <FollowMeUsers/>},
+  { path: "/follow/myFollower/:followingUserCode", element: <MyFollower /> },
+  {
+    path: "/follow/followMeUsers/:followerUserCode",
+    element: <FollowMeUsers />,
+  },
   { path: "/uploadPost", element: <UploadPost /> },
 ]);
 
