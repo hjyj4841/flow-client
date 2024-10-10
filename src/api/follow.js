@@ -9,7 +9,18 @@ const auth = axios.create({
 
 
 export const addFollowRelative = async (follow) => {
-    return await auth.post("follow", follow);
+    return await auth.post("follow", {
+        followingUser : {
+            userCode: follow.followingUser.userCode
+        },
+        followerUser: {
+            userCode: follow.followerUser.userCode
+        }
+    }, {
+        headers: {
+            "Content-Type": "application/json"
+        }
+    });
 };
 
 export const unfollow = async (followingUserCode, followerUserCode) => {
