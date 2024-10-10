@@ -100,6 +100,7 @@ const Header = () => {
               <Link className="text-sm" to={"/mypage"}>
                 마이페이지
               </Link>
+              <Link to={"/reportList"}>신고리스트</Link>
             </>
           ) : (
             <>
