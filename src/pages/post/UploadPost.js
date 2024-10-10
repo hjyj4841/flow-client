@@ -1,14 +1,21 @@
 import { TbCirclePlus } from "react-icons/tb";
 import { useState, useEffect } from "react";
 import { addPost } from "../../api/post";
-import { useNavigate } from "react-router-dom";
 
 const UploadPost = () => {
-  const navigate = useNavigate();
+  // 유저 코드 저장 및 불러오기 -> 확인 필요**
+  const token = localStorage.getItem("token");
+  let userCode = "";
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    userCode = userData.userCode;
+  }
 
-  // localStorage 안의 userCode 받아오기 -> 현재는 1로 임의 저장, 추후 확인 필요
-  const userCode = localStorage.getItem("userCode");
   const [imgPreviews, setImgPreviews] = useState([]);
+  const [click, setClick] = useState([]);
+  const [sortedFiles, setSortedFiles] = useState([]);
 
   const product = {
     productBrand: "",
@@ -27,9 +34,11 @@ const UploadPost = () => {
     tagCodes: [],
   });
 
+  /*
   useEffect(() => {
     console.log(post);
   }, [post]);
+  */
 
   const upload = async () => {
     const formData = new FormData();
@@ -80,9 +89,9 @@ const UploadPost = () => {
 
     try {
       const response = await addPost(formData);
-      // console.log(response.data); // 새 post 정보
+      console.log(response.data); // 새 post 정보
       alert("업로드 완료");
-      navigate("/");
+      window.location.href = "/";
     } catch (error) {
       alert("업로드 실패:" + error);
     }
@@ -90,19 +99,47 @@ const UploadPost = () => {
 
   const imageUpload = (e) => {
     let files = Array.from(e.target.files);
-    // console.log(files);
 
     if (files.length > 5) {
       alert("이미지는 최대 5개까지 업로드할 수 있습니다.");
       e.target.value = "";
       return;
     }
+
     setPost({ ...post, imageFiles: files });
 
-    // 이미지 미리보기 설정 -> 클릭이벤트로 순서 설정..?
+    // 이미지 미리보기 설정
     const previews = files.map((file) => URL.createObjectURL(file));
     setImgPreviews(previews);
+
+    setClick([]); // 클릭 순서 초기화
   };
+
+  const handleImageClick = (index) => {
+    setClick((prevIndex) => {
+      if (prevIndex.includes(index)) {
+        // 이미 존재하는 인덱스는 제거
+        return prevIndex.filter((i) => i !== index);
+      } else {
+        // 새로 클릭된 인덱스를 추가
+        return [...prevIndex, index];
+      }
+    });
+  };
+
+  useEffect(() => {
+    // 클릭 순서에 맞춰 post 상태 업데이트
+    setSortedFiles(click.map((i) => post.imageFiles[i]));
+    //console.log(sortedFiles);
+
+    // setPost({ ...post, imageFiles: sortedFiles }); -> 불가능
+  }, [click]);
+
+  useEffect(() => {
+    if (post.imageFiles.length === sortedFiles.length) {
+      setPost({ ...post, imageFiles: sortedFiles }); //-> post에 저장
+    }
+  }, [sortedFiles]);
 
   const setBrand = (e, i) => {
     const products = post.products;
@@ -159,11 +196,15 @@ const UploadPost = () => {
     <>
       <div>
         <input type="file" accept="image/*" multiple onChange={imageUpload} />
+        {imgPreviews.length > 0 && (
+          <p style={{ color: "crimson" }}>이미지 순서 선택</p>
+        )}
         <div className="imgPreviews">
           {imgPreviews.map((preview, index) => (
             <div
               key={index}
               style={{ position: "relative", display: "inline-block" }}
+              onClick={() => handleImageClick(index)} // 클릭 이벤트 추가
             >
               <img
                 src={preview}
@@ -175,6 +216,23 @@ const UploadPost = () => {
                   margin: "5px",
                 }}
               />
+              {click.includes(index) && (
+                <span
+                  style={{
+                    position: "absolute",
+                    fontWeight: "bold",
+                    top: "5px",
+                    left: "5px",
+                    color: "white",
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    padding: "2px 5px",
+                    borderRadius: "3px",
+                    fontSize: "14px",
+                  }}
+                >
+                  {click.indexOf(index) + 1}
+                </span>
+              )}
             </div>
           ))}
         </div>

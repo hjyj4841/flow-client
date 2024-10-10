@@ -33,8 +33,11 @@ const router = createBrowserRouter([
       { path: "/reportList", element: <ReportList /> },
     ],
   },
-  {path : "/follow/myFollower/:followingUserCode", element: <MyFollower/>},
-  { path : "/follow/followMeUsers/:followerUserCode", element: <FollowMeUsers/>},
+  { path: "/follow/myFollower/:followingUserCode", element: <MyFollower /> },
+  {
+    path: "/follow/followMeUsers/:followerUserCode",
+    element: <FollowMeUsers />,
+  },
   { path: "/uploadPost", element: <UploadPost /> },
 ]);
 

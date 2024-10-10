@@ -85,9 +85,6 @@ const Header = () => {
             </li>
           </>
         )}
-        <li>
-          <Link to={"/uploadPost"}>업로드</Link>
-        </li>
       </ul>
       <div className="container mx-auto px-4 py-4 flex justify-between items-center">
         <h1 className="text-2xl font-bold">FLOW</h1>
@@ -100,6 +97,9 @@ const Header = () => {
               <Link className="text-sm" to={"/mypage"}>
                 마이페이지
               </Link>
+              <Link to={"/uploadPost"} className="text-sm">
+                업로드
+              </Link>
             </>
           ) : (
             <>
@@ -111,9 +111,6 @@ const Header = () => {
               </Link>
               <Link to={"/login"} className="text-sm">
                 로그인
-              </Link>
-              <Link to={"/uploadPost"} className="text-sm">
-                업로드
               </Link>
             </>
           )}
