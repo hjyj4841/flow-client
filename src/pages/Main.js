@@ -14,6 +14,7 @@ const Main = () => {
 
   const fetchNewFeedImages = async () => {
     const response = await axios.get("http://localhost:8080/api/post");
+    console.log(response.data);
     setNewFeedImages(response.data);
   };
 
@@ -53,18 +54,20 @@ const Main = () => {
           <section className="mb-8">
             <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
             <div className="grid grid-cols-4 gap-4">
-              {newFeedImages.map((post) => (
-                <div
-                  key={post.postCode}
-                  className="w-full h-64 bg-gray-300 rounded-lg"
-                >
-                  <img
-                    src={post.url}
-                    alt={post.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                </div>
-              ))}
+              {newFeedImages.map((post) =>
+                post.imageUrls.map((url, index) => (
+                  <div
+                    key={`${post.postCode}-${index}`}
+                    className="w-full h-64 bg-gray-300 rounded-lg"
+                  >
+                    <img
+                      src={url}
+                      alt={post.postDesc}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </section>
           <section>
