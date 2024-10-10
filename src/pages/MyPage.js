@@ -3,11 +3,14 @@ import { useState, useEffect } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection } from "react-icons/bs";
 import { BsCollectionFill } from "react-icons/bs";
+import FollowButton from "./follow/FollowButton";
+import { useNavigate } from "react-router-dom";
 
 const MyPage = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [createdPosts, setCreatedPosts] = useState([]);
+  const navigate = useNavigate();
 
   // 유저 코드 저장 및 불러오기
   const token = localStorage.getItem("token");
@@ -20,7 +23,12 @@ const MyPage = () => {
     userCode = userData.userCode;
     user = userData;
   }
-
+  const myFollower = (userCode) => {
+    navigate(`follow/myFollower/${userCode}`);
+  }
+  const followMeUsers = (userCode) => {
+    navigate(`follow/followMeUsers/${userCode}`);
+  }
   // 좋아요 토글 함수
   const handleLikeToggle = async (postCode) => {
     try {
@@ -242,6 +250,11 @@ const MyPage = () => {
           </li>
         ))}
       </ul>
+      <FollowButton/>
+      <div>
+      <button onClick={() => myFollower(userCode)}>내가 팔로우한 인간들</button>
+      </div>
+      <button onClick={() => followMeUsers(userCode)}>나를 팔로우한 인간들</button>
     </div>
   );
 };

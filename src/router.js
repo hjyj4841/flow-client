@@ -35,9 +35,12 @@ const router = createBrowserRouter([
       { path: "/reportList", element: <ReportList /> },
     ],
   },
-  { path: "/follow/myFollower/:followingUserCode", element: <MyFollower /> },
   {
-    path: "/follow/followMeUsers/:followerUserCode",
+    path: `mypage/follow/myFollower/:followingUserCode`,
+    element: <MyFollower />,
+  },
+  {
+    path: `mypage/follow/followMeUsers/:followerUserCode`,
     element: <FollowMeUsers />,
   },
   { path: "/uploadPost", element: <UploadPost /> },

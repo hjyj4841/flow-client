@@ -1,13 +1,24 @@
 import { useState, useEffect } from "react";
 import { addFollowRelative, unfollow, status } from "../../api/follow";
 
-const FollowTest = () => {
+const FollowButton = () => {
+    const token = localStorage.getItem("token");
+    function parseJwt(token) {
+        const base64Url = token.split('.')[1];  // 토큰의 두 번째 부분 (Payload)
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+    
+        return JSON.parse(jsonPayload);  // JSON 형태로 반환
+    }
+    const decodedPayload = parseJwt(token);
     const [follow, setFollow] = useState({
         followingUser : {
-            userCode : 2
+            userCode : parseInt(decodedPayload.userCode)
         },
         followerUser : {
-            userCode : 5
+            userCode : 6
         }
     });
     const [logic, setLogic] = useState(false);
@@ -52,4 +63,4 @@ const FollowTest = () => {
         <button onClick={result}>{logic ? "unfollow" : "follow"}</button>
     </>
 }
-export default FollowTest;
+export default FollowButton;

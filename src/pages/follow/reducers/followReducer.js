@@ -1,14 +1,8 @@
 import { viewMyFollower, followMeUsers } from "../../../api/follow";
 
 export const initState = {
-    myFollower : {
-        countFollower : 0 ,
-        follower : []
-    },
-    followMeUser : {
-        countFollower : 0 ,
-        follower : []
-    }
+    myFollower : null,
+    followMeUser : null
 }
 
 export const fetchFollowMeUsers = async (dispatch, followerUserCode) => {

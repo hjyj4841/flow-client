@@ -14,8 +14,8 @@ const FollowMeUsers = () => {
         <>
           <h1>나를 팔로우 한 인간들</h1>
           <div>
-            <p>팔로워 : {followMeUser.countFollower}명</p>
-            {followMeUser.countFollower === 0 ? (
+            <p>팔로워 : {followMeUser?.countFollower}명</p>
+            {followMeUser?.countFollower === 0 ? (
             <p>"아직 팔로워가 없습니다"</p>) : (
                 followMeUser?.follower?.map((user) => (
                     <div key={user.userCode}>
