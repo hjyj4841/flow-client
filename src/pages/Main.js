@@ -6,16 +6,26 @@ import { Link } from "react-router-dom";
 const Main = () => {
   const [token, setToken] = useState(null);
   const [newFeedImages, setNewFeedImages] = useState([]);
+  const [popularFeedImages, setPopularFeedImages] = useState([]);
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
+    fetchPopularFeedImages();
   }, []);
 
   const fetchNewFeedImages = async () => {
     const response = await axios.get("http://localhost:8080/api/post");
     console.log(response.data);
     setNewFeedImages(response.data);
+  };
+
+  const fetchPopularFeedImages = async () => {
+    const response = await axios.get(
+      "http://localhost:8080/api/likes/post/ordered-by-likes"
+    );
+    console.log(response.data);
+    setPopularFeedImages(response.data);
   };
 
   const logout = () => {
@@ -38,35 +48,40 @@ const Main = () => {
         <main className="container mx-auto px-4 py-8">
           <section className="mb-8">
             <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
-            <div className="flex items-center">
-              <button className="text-2xl">&lt;</button>
-              <div className="flex overflow-x-auto space-x-4 mx-4">
-                {[...Array(4)].map((_, i) => (
+            <div className="flex overflow-x-auto space-x-4 mx-4">
+              {popularFeedImages.map((post) =>
+                post.imageUrls.length > 0 ? (
                   <div
-                    key={i}
-                    className="flex-none w-48 h-64 bg-gray-300 rounded-lg"
-                  ></div>
-                ))}
-              </div>
-              <button className="text-2xl">&gt;</button>
+                    key={post.postCode}
+                    className="w-full h-64 bg-gray-300 rounded-lg"
+                  >
+                    <img
+                      src={post.imageUrls[0]}
+                      alt={post.postDesc}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                ) : null
+              )}
             </div>
+            <button className="text-2xl">&gt;</button>
           </section>
           <section className="mb-8">
             <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
             <div className="grid grid-cols-4 gap-4">
               {newFeedImages.map((post) =>
-                post.imageUrls.map((url, index) => (
+                post.imageUrls.length > 0 ? (
                   <div
-                    key={`${post.postCode}-${index}`}
+                    key={post.postCode}
                     className="w-full h-64 bg-gray-300 rounded-lg"
                   >
                     <img
-                      src={url}
+                      src={post.imageUrls[0]}
                       alt={post.postDesc}
                       className="w-full h-full object-cover rounded-lg"
                     />
                   </div>
-                ))
+                ) : null
               )}
             </div>
           </section>
