@@ -1,6 +1,7 @@
 import { TbCirclePlus } from "react-icons/tb";
 import { useState, useEffect } from "react";
 import { addPost } from "../../api/post";
+import Header from "../../components/Header";
 
 const UploadPost = () => {
   // 유저 코드 저장 및 불러오기 -> 확인 필요**

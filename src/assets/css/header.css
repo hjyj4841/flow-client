@@ -39,17 +39,7 @@
 .login-content h1 {
   font-size: 50px;
   font-weight: bold;
-}
-.input-container {
-  margin-top: 80px;
-  margin-bottom: 100px;
-}
-.login-content input {
-  width: 200px;
-  border: none;
-  outline: none;
-  margin-top: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 90px;
 }
 .login-content button {
   border: 1px solid black;
@@ -87,22 +77,6 @@
   justify-content: center;
   border-radius: 10px;
 }
-.input-container-2 {
-  margin-top: 50px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.input-container-2 div {
-  width: 300px;
-  border-bottom: 2px solid black;
-}
-.register-content input {
-  outline: none;
-  width: 200px;
-}
 .register-content button {
   border: 1px solid black;
   margin-top: 20px;
@@ -112,5 +86,35 @@
 .register-content h1 {
   font-size: 50px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin-bottom: 90px;
+}
+.google {
+  background-color: white;
+}
+.google span {
+  font-size: 20px;
+  margin-left: 0px;
+}
+.blue {
+  color: rgb(66, 133, 244);
+}
+.red {
+  color: red;
+}
+.yellow {
+  color: #ffce44;
+}
+.green {
+  color: #34a853;
+}
+.kakao {
+  font-size: 20px;
+  color: #3b1f06;
+  background-color: #f7e600;
+}
+.naver {
+  font-size: 20px;
+  font-weight: bolder;
+  background-color: #34a853;
+  color: white;
 }
