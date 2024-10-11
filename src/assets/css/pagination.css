@@ -52,9 +52,13 @@ ul.pagination li a.active {
   height: 30px;
   color: #337ab7;
 }
-button {
+.delete-report-post-btn {
   background-color: #ddd;
   padding: 10px;
   border-radius: 15px;
   margin: 10px 5px;
+}
+.report-post-list {
+  font-size: 2rem;
+  text-align: center;
 }

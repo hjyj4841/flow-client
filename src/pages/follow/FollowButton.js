@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { addFollowRelative, unfollow, status } from "../../api/follow";
 
-const FollowButton = () => {
+const FollowButton = ({user, codeName}) => {
     const token = localStorage.getItem("token");
     function parseJwt(token) {
         const base64Url = token.split('.')[1];  // 토큰의 두 번째 부분 (Payload)
@@ -13,12 +13,13 @@ const FollowButton = () => {
         return JSON.parse(jsonPayload);  // JSON 형태로 반환
     }
     const decodedPayload = parseJwt(token);
+    const tokenCode = decodedPayload.userCode;
     const [follow, setFollow] = useState({
         followingUser : {
-            userCode : parseInt(decodedPayload.userCode)
+            userCode : codeName === "followingUserCode" ? tokenCode : user.userCode
         },
         followerUser : {
-            userCode : 6
+            userCode :  codeName === "followerUserCode" ? tokenCode : user.userCode
         }
     });
     const [logic, setLogic] = useState(false);
@@ -28,7 +29,14 @@ const FollowButton = () => {
         if (follow.followingUser.userCode !== 0 && follow.followerUser.userCode !== 0) {
             try {
                 if (!logic) {
-                    await addFollowRelative(follow);
+                    await addFollowRelative(setFollow({
+                        followingUser : {
+                            userCode : codeName === "followingUserCode" ? tokenCode : user.userCode
+                        },
+                        followerUser : {
+                            userCode :  codeName === "followerUserCode" ? tokenCode : user.userCode
+                        }
+                    }));
                 } else {
                     await unfollow(
                         follow.followingUser.userCode,

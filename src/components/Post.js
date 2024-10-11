@@ -1,92 +1,116 @@
-import { addPost } from "../../api/post";
-import Header from "../../components/Header";
+import { TbCirclePlus } from "react-icons/tb";
+import { useState, useEffect } from "react";
 
-const UploadPost = () => {
-  // 유저 코드 저장 및 불러오기 -> 확인 필요**
-  const token = localStorage.getItem("token");
-  let userCode = "";
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    const userData = JSON.parse(window.atob(base64));
-    userCode = userData.userCode;
-  }
+const Post = ({ upload, post, setPost }) => {
+  const [imgPreviews, setImgPreviews] = useState([]);
+  const [sortedFiles, setSortedFiles] = useState([]);
+  const [click, setClick] = useState([]);
 
-  const [post, setPost] = useState({
-    imageFiles: [],
-    postDesc: "",
-    postPublicYn: "Y",
-    userCode: "",
-    products: [],
-    tagCodes: [],
-  });
+  const product = {
+    productBrand: "",
+    productName: "",
+    productSize: "",
+    productBuyFrom: "",
+    productLink: "",
+  };
 
-  /*
-  useEffect(() => {
-    console.log(post);
-  }, [post]);
-  */
+  const imageUpload = (e) => {
+    let files = Array.from(e.target.files);
 
-  const upload = async () => {
-    // formData저장
-    const formData = new FormData();
-
-    // 이미지 첨부 필수 알림처리
-    if (post.imageFiles.length === 0) {
-      alert("이미지 첨부 필요");
+    if (files.length > 5) {
+      alert("이미지는 최대 5개까지 업로드할 수 있습니다.");
+      e.target.value = "";
       return;
     }
 
-    // 이미지 리스트
-    for (let i = 0; i < post.imageFiles.length; i++) {
-      formData.append(`imageFiles[${i}]`, post.imageFiles[i]);
-    }
+    setPost({ ...post, imageFiles: files });
 
-    // product 리스트
-    for (let i = 0; i < post.products.length; i++) {
-      formData.append(
-        `products[${i}].productBrand`,
-        post.products[i].productBrand
-      );
-      formData.append(
-        `products[${i}].productName`,
-        post.products[i].productName
-      );
-      formData.append(
-        `products[${i}].productSize`,
-        post.products[i].productSize
-      );
-      formData.append(
-        `products[${i}].productBuyFrom`,
-        post.products[i].productBuyFrom
-      );
-      formData.append(
-        `products[${i}].productLink`,
-        post.products[i].productLink
-      );
-    }
+    // 이미지 미리보기 설정
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImgPreviews(previews);
 
-    // tag 리스트
-    for (let i = 0; i < post.tagCodes.length; i++) {
-      formData.append(`tagCodes[${i}]`, post.tagCodes[i]);
-    }
+    setClick([]); // 클릭 순서 초기화
+  };
 
-    formData.append("userCode", userCode);
-    formData.append("postDesc", post.postDesc);
-    formData.append("postPublicYn", post.postPublicYn);
+  const handleImageClick = (index) => {
+    setClick((prevIndex) => {
+      if (prevIndex.includes(index)) {
+        // 이미 존재하는 인덱스는 제거
+        return prevIndex.filter((i) => i !== index);
+      } else {
+        // 새로 클릭된 인덱스를 추가
+        return [...prevIndex, index];
+      }
+    });
+  };
 
-    try {
-      await addPost(formData);
-      alert("업로드 완료");
-      window.location.href = "/";
-    } catch (error) {
-      alert("업로드 실패:" + error);
+  useEffect(() => {
+    // 클릭 순서에 맞춰 post 상태 업데이트
+    setSortedFiles(click.map((i) => post.imageFiles[i]));
+    //console.log(sortedFiles);
+
+    // setPost({ ...post, imageFiles: sortedFiles }); -> 불가능
+  }, [click]);
+
+  useEffect(() => {
+    if (post.imageFiles.length === sortedFiles.length) {
+      setPost({ ...post, imageFiles: sortedFiles }); //-> post에 저장
     }
+  }, [sortedFiles]);
+
+  const setBrand = (e, i) => {
+    const products = post.products;
+    products[i].productBrand = e.target.value;
+    setPost({ ...post, products: products });
+  };
+
+  const setName = (e, i) => {
+    const products = post.products;
+    products[i].productName = e.target.value;
+    setPost({ ...post, products: products });
+  };
+
+  const setSize = (e, i) => {
+    const products = post.products;
+    products[i].productSize = e.target.value;
+    setPost({ ...post, products: products });
+  };
+
+  const setBuyFrom = (e, i) => {
+    const products = post.products;
+    products[i].productBuyFrom = e.target.value;
+    setPost({ ...post, products: products });
+  };
+
+  const setLink = (e, i) => {
+    const products = post.products;
+    products[i].productLink = e.target.value;
+    setPost({ ...post, products: products });
+  };
+
+  // + 제품 추가 버튼
+  const addProduct = () => {
+    const products = post.products;
+    products.push(product);
+    setPost({ ...post, products: products });
+  };
+
+  const tagCheck = (e) => {
+    const value = e.target.value;
+
+    setPost((post) => {
+      const isChecked = post.tagCodes.includes(value);
+      return {
+        ...post,
+        tagCodes: isChecked
+          ? post.tagCodes.filter((el) => el !== value) // 체크 해제
+          : [...post.tagCodes, value], // 체크
+      };
+    });
   };
 
   return (
     <>
-      <Header />
       <div>
         <input type="file" accept="image/*" multiple onChange={imageUpload} />
         {imgPreviews.length > 0 && (
@@ -248,4 +272,4 @@ const UploadPost = () => {
   );
 };
 
-export default UploadPost;
+export default Post;

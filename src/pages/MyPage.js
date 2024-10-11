@@ -5,6 +5,7 @@ import { BsCollection } from "react-icons/bs";
 import { BsCollectionFill } from "react-icons/bs";
 import FollowButton from "./follow/FollowButton";
 import { useNavigate } from "react-router-dom";
+import { deleteUser } from "../api/user";
 
 const MyPage = () => {
   const [likedPosts, setLikedPosts] = useState([]);
@@ -25,10 +26,10 @@ const MyPage = () => {
   }
   const myFollower = (userCode) => {
     navigate(`follow/myFollower/${userCode}`);
-  }
+  };
   const followMeUsers = (userCode) => {
     navigate(`follow/followMeUsers/${userCode}`);
-  }
+  };
   // 좋아요 토글 함수
   const handleLikeToggle = async (postCode) => {
     try {
@@ -118,6 +119,10 @@ const MyPage = () => {
     } catch (error) {
       console.error("Error fetching created posts", error);
     }
+  };
+
+  const withOutUser = async () => {
+    await deleteUser();
   };
 
   useEffect(() => {
@@ -250,11 +255,15 @@ const MyPage = () => {
           </li>
         ))}
       </ul>
-      <FollowButton/>
       <div>
-      <button onClick={() => myFollower(userCode)}>내가 팔로우한 인간들</button>
+        <button onClick={() => myFollower(userCode)}>
+          내가 팔로우한 인간들
+        </button>
       </div>
-      <button onClick={() => followMeUsers(userCode)}>나를 팔로우한 인간들</button>
+      <button onClick={() => followMeUsers(userCode)}>
+        나를 팔로우한 인간들
+      </button>
+      <button onClick={withOutUser}>회원탈퇴</button>
     </div>
   );
 };
