@@ -255,7 +255,6 @@ const MyPage = () => {
           </li>
         ))}
       </ul>
-      <FollowButton />
       <div>
         <button onClick={() => myFollower(userCode)}>
           내가 팔로우한 인간들

@@ -1,6 +1,7 @@
 import { initState, followReducer, fetchFollowMeUsers } from "./reducers/followReducer";
 import { useEffect, useReducer } from "react";
 import { useParams } from "react-router-dom";
+import FollowButton from "./FollowButton";
 
 const FollowMeUsers = () => {
     const {followerUserCode} = useParams();
@@ -9,7 +10,6 @@ const FollowMeUsers = () => {
         fetchFollowMeUsers(dispatch, followerUserCode);
     }, [dispatch, followerUserCode]);
     const {followMeUser} = state;
-    console.log(followMeUser);
     return (
         <>
           <h1>나를 팔로우 한 인간들</h1>
@@ -23,6 +23,7 @@ const FollowMeUsers = () => {
                       <p>{user.userEmail}</p>
                       <p>{user.userPlatform}</p>
                       <p>{user.userNickname}</p>
+                      <FollowButton user={user} codeName={"followerUserCode"}/>
                     </div>
                   ))
                 )
