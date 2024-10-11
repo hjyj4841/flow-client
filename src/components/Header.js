@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import Login from "../pages/Login";
 import { getKakaoCode } from "../api/kakao";
 import { getGoogleCode } from "../api/google";
 import { getNaverCode } from "../api/naver";
-import styled from "styled-components";
 import "../assets/css/header.css";
 
 const Header = () => {
@@ -69,33 +67,31 @@ const Header = () => {
                 >
                   <div className={"register-content"}>
                     <h1>회원가입</h1>
-                    <div className="input-container-2">
-                      <div>
-                        아이디 :
-                        <input type="text" placeholder="아이디" />
-                      </div>
-                      <div>
-                        비밀번호 :{" "}
-                        <input type="password" placeholder="비밀번호" />
-                      </div>
-                      <div>
-                        성별 : <input type="text" placeholder="성별" />
-                      </div>
-                      <div>
-                        직종 : <input type="text" placeholder="직종" />
-                      </div>
-                      <div>
-                        이메일 : <input type="email" placeholder="이메일" />
-                      </div>
-                    </div>
-                    <button type="button" onClick={getGoogleCode}>
-                      Google Register
+                    <button
+                      type="button"
+                      className="google"
+                      onClick={getGoogleCode}
+                    >
+                      <span className="blue">G</span>
+                      <span className="red">o</span>
+                      <span className="yellow">o</span>
+                      <span className="blue">g</span>
+                      <span className="green">l</span>
+                      <span className="red">e</span>
                     </button>
-                    <button type="button" onClick={getKakaoCode}>
-                      Kakao Register
+                    <button
+                      type="button"
+                      className="kakao"
+                      onClick={getKakaoCode}
+                    >
+                      Kakao
                     </button>
-                    <button type="button" onClick={getNaverCode}>
-                      Naver Register
+                    <button
+                      type="button"
+                      className="naver"
+                      onClick={getNaverCode}
+                    >
+                      NAVER
                     </button>
                     <button
                       className={"login-close-btn"}
@@ -126,32 +122,31 @@ const Header = () => {
                 >
                   <div className={"login-content"}>
                     <h1>로그인</h1>
-                    <div className="input-container">
-                      <div className="ID-border">
-                        아이디 :{" "}
-                        <input
-                          className="ID"
-                          type="text"
-                          placeholder="아이디"
-                        />
-                      </div>
-                      <div className="password-border">
-                        비밀번호 :{" "}
-                        <input
-                          type="password"
-                          className="password"
-                          placeholder="비밀번호"
-                        />
-                      </div>
-                    </div>
-                    <button type="button" onClick={getGoogleCode}>
-                      Google Login
+                    <button
+                      type="button"
+                      className="google"
+                      onClick={getGoogleCode}
+                    >
+                      <span className="blue">G</span>
+                      <span className="red">o</span>
+                      <span className="yellow">o</span>
+                      <span className="blue">g</span>
+                      <span className="green">l</span>
+                      <span className="red">e</span>
                     </button>
-                    <button type="button" onClick={getKakaoCode}>
-                      Kakao Login
+                    <button
+                      type="button"
+                      className="kakao"
+                      onClick={getKakaoCode}
+                    >
+                      Kakao
                     </button>
-                    <button type="button" onClick={getNaverCode}>
-                      Naver Login
+                    <button
+                      type="button"
+                      className="naver"
+                      onClick={getNaverCode}
+                    >
+                      NAVER
                     </button>
                     <button
                       className={"login-close-btn"}
