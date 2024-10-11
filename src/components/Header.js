@@ -88,13 +88,13 @@ const Header = () => {
                         이메일 : <input type="email" placeholder="이메일" />
                       </div>
                     </div>
-                    <button type="button" onClick={getGoogleCodeByRegister}>
+                    <button type="button" onClick={getGoogleCode}>
                       Google Register
                     </button>
-                    <button type="button" onClick={getKakaoCodeByRegister}>
+                    <button type="button" onClick={getKakaoCode}>
                       Kakao Register
                     </button>
-                    <button type="button" onClick={naverRegister}>
+                    <button type="button" onClick={getNaverCode}>
                       Naver Register
                     </button>
                     <button
@@ -144,13 +144,15 @@ const Header = () => {
                         />
                       </div>
                     </div>
-                    <button type="button" onClick={getGoogleCodeByLogin}>
+                    <button type="button" onClick={getGoogleCode}>
                       Google Login
                     </button>
-                    <button type="button" onClick={getKakaoCodeByLogin}>
+                    <button type="button" onClick={getKakaoCode}>
                       Kakao Login
                     </button>
-                    <button type="button">Naver Login</button>
+                    <button type="button" onClick={getNaverCode}>
+                      Naver Login
+                    </button>
                     <button
                       className={"login-close-btn"}
                       onClick={() => setLoginOpen(false)}
