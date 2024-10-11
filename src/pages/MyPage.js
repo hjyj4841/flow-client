@@ -121,6 +121,10 @@ const MyPage = () => {
     }
   };
 
+  const withOutUser = async () => {
+    await deleteUser();
+  };
+
   useEffect(() => {
     fetchLikedPosts();
     fetchSavedPosts();
@@ -260,7 +264,7 @@ const MyPage = () => {
       <button onClick={() => followMeUsers(userCode)}>
         나를 팔로우한 인간들
       </button>
-      <button onClick={deleteUser}>회원탈퇴</button>
+      <button onClick={withOutUser}>회원탈퇴</button>
     </div>
   );
 };

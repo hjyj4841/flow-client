@@ -43,5 +43,6 @@ export const registerUser = async (user) => {
 
 // 회원 탈퇴
 export const deleteUser = async () => {
+  // header에 token 묶는 로직 필요
   await instance.delete("deleteUser");
 };
