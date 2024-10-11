@@ -33,15 +33,15 @@ const router = createBrowserRouter([
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
+      {
+        path: `mypage/follow/myFollower/:followingUserCode`,
+        element: <MyFollower />,
+      },
+      {
+        path: `mypage/follow/followMeUsers/:followerUserCode`,
+        element: <FollowMeUsers />,
+      },
     ],
-  },
-  {
-    path: `mypage/follow/myFollower/:followingUserCode`,
-    element: <MyFollower />,
-  },
-  {
-    path: `mypage/follow/followMeUsers/:followerUserCode`,
-    element: <FollowMeUsers />,
   },
   { path: "/uploadPost", element: <UploadPost /> },
 ]);
