@@ -33,6 +33,7 @@ const router = createBrowserRouter([
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
+      { path: "/uploadPost", element: <UploadPost /> },
     ],
   },
   {
@@ -43,7 +44,6 @@ const router = createBrowserRouter([
     path: `mypage/follow/followMeUsers/:followerUserCode`,
     element: <FollowMeUsers />,
   },
-  { path: "/uploadPost", element: <UploadPost /> },
 ]);
 
 export default router;
