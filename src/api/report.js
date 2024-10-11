@@ -14,3 +14,12 @@ export const deletePost = async (postReportCode) => {
     "delPostReport?postReportCode=" + postReportCode
   );
 };
+
+export const reportPost = async () => {
+  return await instance.post("reportPost");
+};
+
+// 테이블 하나 더 필요함
+export const reportUser = async () => {
+  return await instance.put("reportUser");
+};

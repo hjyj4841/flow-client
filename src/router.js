@@ -15,6 +15,7 @@ import ReportList from "./pages/ReportList";
 import MyFollower from "./pages/follow/MyFollower";
 import FollowMeUsers from "./pages/follow/FollowMeUsers";
 import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
+import Detail from "./pages/Detail";
 
 const router = createBrowserRouter([
   {
@@ -33,6 +34,7 @@ const router = createBrowserRouter([
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
+      { path: "/post/:postCode", element: <Detail /> },
     ],
   },
   {

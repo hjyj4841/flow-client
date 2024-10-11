@@ -151,6 +151,7 @@ const ReportList = () => {
               </Typography>
               <br />
               <button
+                className="delete-report-post-btn"
                 type="button"
                 onClick={() => deletePost(post.postReportCode)}
               >
@@ -161,7 +162,9 @@ const ReportList = () => {
           </Card>
         ))
       ) : (
-        <div> No posts.</div>
+        <div className="report-post-list">
+          <h1>신고된 글이 없습니다.</h1>
+        </div>
       )}
 
       <Paging page={currentPage} count={count} setPage={setPage} />
