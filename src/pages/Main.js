@@ -1,27 +1,99 @@
 import axios from "axios";
-import React from "react";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
 
 const Main = () => {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [newFeedImages, setNewFeedImages] = useState([]);
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const navigate = useNavigate();
 
+  let userCode = "";
+  let user = "";
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    userCode = userData.userCode;
+    console.log(userCode);
+    user = userData;
+  }
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
+    fetchLikedPosts();
+    fetchSavedPosts();
   }, []);
 
   const fetchNewFeedImages = async () => {
     const response = await axios.get("http://localhost:8080/api/post");
-    console.log(response.data);
     setNewFeedImages(response.data);
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
+  const fetchLikedPosts = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/api/likes/${userCode}/likes`
+    );
+    const likedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isLiked: true,
+    }));
+    setLikedPosts(likedPosts || []);
   };
+
+  const fetchSavedPosts = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/api/collection/${userCode}/collections`
+    );
+    const savedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isSaved: true,
+    }));
+    setSavedPosts(savedPosts || []);
+  };
+
+  const handleLikeToggle = async (postCode) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/likes/toggle/${postCode}`,
+        user
+      );
+      setLikedPosts((prevPosts) =>
+        prevPosts.map((item) =>
+          item.post.postCode === postCode
+            ? { ...item, isLiked: !item.isLiked }
+            : item
+        )
+      );
+      await fetchLikedPosts();
+    } catch (error) {
+      console.error("Error toggling like", error);
+    }
+  };
+
+  const handleSaveToggle = async (postCode) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/collection/toggle/${postCode}`,
+        user
+      );
+      setSavedPosts((prevPosts) =>
+        prevPosts.map((item) =>
+          item.post.postCode === postCode
+            ? { ...item, isSaved: !item.isSaved }
+            : item
+        )
+      );
+
+      await fetchSavedPosts();
+    } catch (error) {
+      console.error("Error toggling save", error);
+    }
+  };
+
   return (
     <>
       <div className="bg-gray-100 text-gray-800">
@@ -58,13 +130,48 @@ const Main = () => {
                 post.imageUrls.map((url, index) => (
                   <div
                     key={`${post.postCode}-${index}`}
-                    className="w-full h-64 bg-gray-300 rounded-lg"
+                    className="relative w-full h-64 bg-gray-300 rounded-lg group"
                   >
                     <img
                       src={url}
                       alt={post.postDesc}
                       className="w-full h-full object-cover rounded-lg"
                     />
+                    <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <p className="text-white mb-2">{post.postDesc}</p>
+                      <div className="flex items-center">
+                        {likedPosts.some(
+                          (likedPost) =>
+                            likedPost.post.postCode === post.postCode
+                        ) ? (
+                          <FaHeart
+                            onClick={() => handleLikeToggle(post.postCode)}
+                            style={{ color: "red" }}
+                            className="mx-2"
+                          />
+                        ) : (
+                          <FaRegHeart
+                            onClick={() => handleLikeToggle(post.postCode)}
+                            className="mx-2"
+                          />
+                        )}
+                        {savedPosts.some(
+                          (savedPost) =>
+                            savedPost.post.postCode === post.postCode
+                        ) ? (
+                          <BsCollectionFill
+                            onClick={() => handleSaveToggle(post.postCode)}
+                            style={{ color: "black" }}
+                            className="mx-2"
+                          />
+                        ) : (
+                          <BsCollection
+                            onClick={() => handleSaveToggle(post.postCode)}
+                            className="mx-2"
+                          />
+                        )}
+                      </div>
+                    </div>
                   </div>
                 ))
               )}
@@ -89,4 +196,5 @@ const Main = () => {
     </>
   );
 };
+
 export default Main;
