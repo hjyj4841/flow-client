@@ -41,6 +41,9 @@ const Header = () => {
               <Link to={"/uploadPost"} className="text-sm">
                 업로드
               </Link>
+              <Link to={"/votePost"} className="text-sm">
+                투표
+              </Link>
             </>
           ) : (
             <div className="quick-slot">
