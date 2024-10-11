@@ -1,11 +1,12 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Main = () => {
   const [token, setToken] = useState(null);
   const [newFeedImages, setNewFeedImages] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -22,6 +23,11 @@ const Main = () => {
     localStorage.removeItem("token");
     setToken(null);
   };
+
+  const detail = (postCode) => {
+    navigate(`/post/${postCode}`);
+  };
+
   return (
     <>
       <div className="bg-gray-100 text-gray-800">
@@ -59,6 +65,7 @@ const Main = () => {
                   <div
                     key={`${post.postCode}-${index}`}
                     className="w-full h-64 bg-gray-300 rounded-lg"
+                    onClick={() => detail(post.postCode)}
                   >
                     <img
                       src={url}

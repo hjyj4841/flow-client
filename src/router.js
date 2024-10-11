@@ -18,6 +18,7 @@ import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
 import UploadVotePost from "./pages/post/UploadVotePost";
 import VotePost from "./pages/post/VotePost";
 import Vote from "./pages/post/Vote";
+import Detail from "./pages/Detail";
 
 const router = createBrowserRouter([
   {
@@ -47,6 +48,7 @@ const router = createBrowserRouter([
         path: `mypage/follow/followMeUsers/:followerUserCode`,
         element: <FollowMeUsers />,
       },
+      { path: "/post/:postCode", element: <Detail /> },
     ],
   },
   { path: "/uploadPost", element: <UploadPost /> },

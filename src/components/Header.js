@@ -7,7 +7,6 @@ import "../assets/css/header.css";
 
 const Header = () => {
   const [token, setToken] = useState(null);
-
   useEffect(() => {
     setToken(localStorage.getItem("token"));
   }, []);
@@ -21,6 +20,18 @@ const Header = () => {
   const loginBackground = useRef();
   const [registerOpen, setRegisterOpen] = useState(false);
   const registerBackground = useRef();
+
+  // 유저 정보 뽑기
+  let userData;
+  if (token) {
+    const testToken = token;
+
+    const base64Url = testToken.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    userData = JSON.parse(window.atob(base64));
+  }
+  // const ManagerCode = userData.userManagerCode;
+  // console.log(ManagerCode);
 
   return (
     <>
@@ -37,7 +48,15 @@ const Header = () => {
               <Link className="text-sm" to={"/mypage"}>
                 마이페이지
               </Link>
-              <Link to={"/reportList"}>신고리스트</Link>
+              {token !== null ? (
+                userData.userManagerCode === "Y" ? (
+                  <Link to={"/reportList"}>신고리스트</Link>
+                ) : (
+                  <></>
+                )
+              ) : (
+                <></>
+              )}
               <Link to={"/uploadPost"} className="text-sm">
                 업로드
               </Link>
