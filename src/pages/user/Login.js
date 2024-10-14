@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { getKakaoCode } from "../api/kakao";
-import { getGoogleCode } from "../api/google";
-import { getNaverCode } from "../api/naver";
+import { getKakaoCode } from "../../api/kakao";
+import { getGoogleCode } from "../../api/google";
+import { getNaverCode } from "../../api/naver";
 
 const StyledLogin = styled.header`
   ul {

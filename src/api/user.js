@@ -17,11 +17,11 @@ export const userCheck = async (user) => {
           userEmail: user.userEmail,
           userPlatform: user.userPlatform,
         });
-        localStorage.setItem("token", response.data);
+        return response.data;
       } catch (error) {
         alert("너 밴");
       }
-      window.location.href = "/";
+      return null;
     } else {
       alert("이미 가입한 회원입니다.");
       window.location.href = "/";
@@ -29,7 +29,7 @@ export const userCheck = async (user) => {
   } else {
     if (user.type === "login") {
       alert("회원가입 후 이용해 주세요.");
-      window.location.href = "/";
+      return null;
     } else {
       window.location.href = `/registerUser?userEmail=${user.userEmail}&userPlatform=${user.userPlatform}`;
     }
@@ -42,7 +42,24 @@ export const registerUser = async (user) => {
 };
 
 // 회원 탈퇴
-export const deleteUser = async () => {
-  // header에 token 묶는 로직 필요
-  await instance.delete("deleteUser");
+export const deleteUser = async (token) => {
+  await instance.delete("deleteUser", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+// 유저 정보 가져오기
+export const findUser = async (token) => {
+  return await instance.get("findUser", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+// 유저 정보 수정하기
+export const updateUser = async (data) => {
+  await instance.put("updateUser", data);
 };

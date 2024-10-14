@@ -4,18 +4,10 @@ import { getKakaoCode } from "../api/kakao";
 import { getGoogleCode } from "../api/google";
 import { getNaverCode } from "../api/naver";
 import "../assets/css/header.css";
+import { useAuth } from "../contexts/AuthContext";
 
 const Header = () => {
-  const [token, setToken] = useState(null);
-  useEffect(() => {
-    setToken(localStorage.getItem("token"));
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setToken(null);
-  };
-
+  const { token, logout } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const loginBackground = useRef();
   const [registerOpen, setRegisterOpen] = useState(false);

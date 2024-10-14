@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { getKakaoCode } from "../api/kakao";
-import { getNaverCode } from "../api/naver";
-import { getGoogleCode } from "../api/google";
+import { getKakaoCode } from "../../api/kakao";
+import { getNaverCode } from "../../api/naver";
+import { getGoogleCode } from "../../api/google";
 
 const StyledRegister = styled.header`
   ul {

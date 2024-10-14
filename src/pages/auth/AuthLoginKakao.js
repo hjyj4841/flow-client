@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { getKakaoToken } from "../../api/kakao";
 import { userCheck } from "../../api/user";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const AuthLoginKakao = () => {
   const [userEmail, setUserEmail] = useState(null);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const code = new URL(window.location.href).searchParams.get("code");
 
@@ -14,11 +18,13 @@ const AuthLoginKakao = () => {
 
   // 4. 해당 회원이 가입되어 있는지 조회
   const loginCheck = async () => {
-    await userCheck({
+    const token = await userCheck({
       userEmail: userEmail,
       userPlatform: "kakao",
       type: "login",
     });
+    if (token !== null) login(token);
+    navigate("/");
   };
 
   // 1. 페이지 첫 로드 시 실행

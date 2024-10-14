@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
 import Layout from "./components/Layout";
 import Main from "./pages/Main";
-import Register from "./pages/Register";
-import RegisterUser from "./pages/RegisterUser";
-import Login from "./pages/Login";
+import Register from "./pages/user/Register";
+import RegisterUser from "./pages/user/RegisterUser";
+import Login from "./pages/user/Login";
 import Mypage from "./pages/MyPage";
 import AuthRegisterKakao from "./pages/auth/AuthRegisterKakao";
 import AuthLoginKakao from "./pages/auth/AuthLoginKakao";
@@ -19,6 +19,7 @@ import UploadVotePost from "./pages/post/UploadVotePost";
 import VotePost from "./pages/post/VotePost";
 import Vote from "./pages/post/Vote";
 import Detail from "./pages/Detail";
+import UpdateUser from "./pages/user/UpdateUser";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
         element: <FollowMeUsers />,
       },
       { path: "/post/:postCode", element: <Detail /> },
+      { path: "/updateUser", element: <UpdateUser /> },
     ],
   },
   { path: "/uploadPost", element: <UploadPost /> },

@@ -122,7 +122,10 @@ const MyPage = () => {
   };
 
   const withOutUser = async () => {
-    await deleteUser();
+    await deleteUser(token);
+    localStorage.removeItem("token");
+    alert("회원탈퇴!");
+    window.location.href = "/";
   };
 
   useEffect(() => {
@@ -263,7 +266,12 @@ const MyPage = () => {
       <button onClick={() => followMeUsers(userCode)}>
         나를 팔로우한 인간들
       </button>
-      <button onClick={withOutUser}>회원탈퇴</button>
+      <div>
+        <button onClick={withOutUser}>회원탈퇴</button>
+      </div>
+      <div>
+        <button onClick={() => navigate("/updateUser")}>회원 수정</button>
+      </div>
     </div>
   );
 };

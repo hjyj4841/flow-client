@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react";
 import { getNaverToken } from "../../api/naver";
 import { userCheck } from "../../api/user";
+import { useAuth } from "../../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const AuthLoginNaver = () => {
   const [userEmail, setUserEmail] = useState(null);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   const code = new URL(window.location.href).searchParams.get("code");
 
@@ -14,11 +18,13 @@ const AuthLoginNaver = () => {
 
   // 4. 가입한 회원인지 확인
   const loginCheck = async () => {
-    await userCheck({
+    const token = await userCheck({
       userEmail: userEmail,
       userPlatform: "naver",
       type: "login",
     });
+    if (token !== null) login(token);
+    navigate("/");
   };
 
   // 1. 페이지 첫 로드 시 실행
