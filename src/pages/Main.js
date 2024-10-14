@@ -1,7 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 
@@ -10,6 +10,7 @@ const Main = () => {
   const [newFeedImages, setNewFeedImages] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
+  const [followedUserPosts, setFollowedUserPosts] = useState([]);
   const navigate = useNavigate();
   const [popularFeedImages, setPopularFeedImages] = useState([]);
 
@@ -27,14 +28,23 @@ const Main = () => {
     setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
     fetchPopularFeedImages();
+
     if (token !== null) {
       fetchLikedPosts();
       fetchSavedPosts();
     }
   }, []);
 
+  useEffect(() => {
+    if (userCode) {
+      // 로그인된 경우에만 팔로워의 피드를 가져옴
+      fetchFollowedUserPosts();
+    }
+  }, [userCode]);
+
   const fetchNewFeedImages = async () => {
     const response = await axios.get("http://localhost:8080/api/post");
+    console.log(response.data);
     setNewFeedImages(response.data);
   };
 
@@ -114,6 +124,16 @@ const Main = () => {
     }
   };
 
+  const fetchFollowedUserPosts = async () => {
+    if (userCode) {
+      const response = await axios.get(
+        `http://localhost:8080/api/posts/followed/${userCode}`
+      );
+      console.log(response.data);
+      setFollowedUserPosts(response.data);
+    }
+  };
+
   return (
     <>
       <div className="bg-gray-100 text-gray-800">
@@ -136,6 +156,7 @@ const Main = () => {
                   <div
                     key={post.postCode}
                     className="w-full h-64 bg-gray-300 rounded-lg"
+                    onClick={() => detail(post.postCode)}
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -203,20 +224,32 @@ const Main = () => {
               )}
             </div>
           </section>
-          <section>
-            <h2 className="text-xl font-bold mb-4">My Follower's FEED</h2>
-            <div className="grid grid-cols-3 gap-4 mb-4">
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className="w-full h-64 bg-gray-300 rounded-lg"
-                ></div>
-              ))}
-            </div>
-            <button className="px-4 py-2 border border-gray-800 rounded-full">
-              더 보러가기
-            </button>
-          </section>
+          {token && (
+            <section>
+              <h2 className="text-xl font-bold mb-4">My Follower's FEED</h2>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                {followedUserPosts.map(
+                  (post) =>
+                    post.imageUrls.length > 0 && (
+                      <div
+                        key={post.postCode}
+                        className="relative w-full h-64 bg-gray-300 rounded-lg"
+                        onClick={() => detail(post.postCode)}
+                      >
+                        <img
+                          src={post.imageUrls[0]}
+                          alt={post.postDesc}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </div>
+                    )
+                )}
+              </div>
+              <button className="px-4 py-2 border border-gray-800 rounded-full">
+                더 보러가기
+              </button>
+            </section>
+          )}
         </main>
       </div>
     </>
