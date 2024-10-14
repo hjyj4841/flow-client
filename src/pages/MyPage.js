@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection } from "react-icons/bs";
 import { BsCollectionFill } from "react-icons/bs";
-import FollowButton from "./follow/FollowButton";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../api/user";
 
