@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { updatePost, detailPost } from "../../api/post";
-import Post from "../../components/Post";
 import { useState, useEffect } from "react";
 
 const UpdatePost = () => {

@@ -1,5 +1,6 @@
 import { TbCirclePlus } from "react-icons/tb";
 import { useState, useEffect } from "react";
+import "../assets/css/post.css";
 
 const Post = ({ upload, post, setPost }) => {
   const [imgPreviews, setImgPreviews] = useState([]);
@@ -110,8 +111,8 @@ const Post = ({ upload, post, setPost }) => {
   };
 
   return (
-    <>
-      <div>
+    <div className="upload-container">
+      <div className="upload-photo">
         <input type="file" accept="image/*" multiple onChange={imageUpload} />
         {imgPreviews.length > 0 && (
           <p style={{ color: "crimson" }}>이미지 순서 선택</p>
@@ -155,8 +156,8 @@ const Post = ({ upload, post, setPost }) => {
         </div>
       </div>
 
-      <div>
-        <label>내용 입력</label>
+      <label className="tagType">내용 입력</label>
+      <div className="upload-log">
         <textarea
           rows="5"
           placeholder="내용 입력"
@@ -165,7 +166,7 @@ const Post = ({ upload, post, setPost }) => {
         ></textarea>
       </div>
 
-      <div>
+      <div className="upload-info">
         <label>제품 정보 추가</label>
         {post.products?.map((item, index) => (
           <div key={index}>
@@ -203,11 +204,11 @@ const Post = ({ upload, post, setPost }) => {
           </div>
         ))}
         <button type="button" onClick={addProduct}>
-          <TbCirclePlus />
+          <TbCirclePlus className="plus" />
         </button>
       </div>
 
-      <div>
+      <div className="public-clear">
         <label>공개 여부</label>
         <div>
           <input
@@ -231,21 +232,21 @@ const Post = ({ upload, post, setPost }) => {
 
       {/* 태그 */}
       <label className="tagType"> 계절 </label>
-      <div>
+      <div className="season">
         <input type="checkbox" value="1" onChange={tagCheck} /> 봄
         <input type="checkbox" value="2" onChange={tagCheck} /> 여름
         <input type="checkbox" value="3" onChange={tagCheck} /> 가을
         <input type="checkbox" value="4" onChange={tagCheck} /> 겨울
       </div>
       <label className="tagType"> 연차 </label>
-      <div>
+      <div className="carrier">
         <input type="checkbox" value="5" onChange={tagCheck} /> ~1년 미만
         <input type="checkbox" value="6" onChange={tagCheck} /> 1~3년차
         <input type="checkbox" value="7" onChange={tagCheck} /> 3년 이상
         <input type="checkbox" value="8" onChange={tagCheck} /> 임원
       </div>
       <label className="tagType"> 스타일 </label>
-      <div>
+      <div className="style">
         <input type="checkbox" value="9" onChange={tagCheck} /> 포멀
         <input type="checkbox" value="10" onChange={tagCheck} /> 캐주얼
         <input type="checkbox" value="11" onChange={tagCheck} /> 스트릿
@@ -259,16 +260,16 @@ const Post = ({ upload, post, setPost }) => {
         <input type="checkbox" value="19" onChange={tagCheck} /> 기타
       </div>
       <label className="tagType"> 체형 </label>
-      <div>
+      <div className="weight">
         <input type="checkbox" value="20" onChange={tagCheck} /> 마름
         <input type="checkbox" value="21" onChange={tagCheck} /> 보통
         <input type="checkbox" value="22" onChange={tagCheck} /> 건장
         <input type="checkbox" value="23" onChange={tagCheck} /> 빅사이즈
       </div>
-      <div>
+      <div className="upload-button">
         <button onClick={upload}>업로드</button>
       </div>
-    </>
+    </div>
   );
 };
 
