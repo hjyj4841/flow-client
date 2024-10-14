@@ -16,6 +16,7 @@ import MyFollower from "./pages/follow/MyFollower";
 import FollowMeUsers from "./pages/follow/FollowMeUsers";
 import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
 import UploadVotePost from "./pages/post/UploadVotePost";
+import UpdatePost from "./pages/post/UpdatePost";
 import VotePost from "./pages/post/VotePost";
 import Vote from "./pages/post/Vote";
 import Detail from "./pages/Detail";
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       { path: "/votePost", element: <VotePost /> },
       { path: "/uploadVotePost", element: <UploadVotePost /> },
       { path: "/Vote/:voteCode", element: <Vote /> },
+      { path: "/uploadPost", element: <UploadPost /> },
       {
         path: `mypage/follow/myFollower/:followingUserCode`,
         element: <MyFollower />,
@@ -49,9 +51,9 @@ const router = createBrowserRouter([
         element: <FollowMeUsers />,
       },
       { path: "/post/:postCode", element: <Detail /> },
+      { path: "/updatePost/:postCode", element: <UpdatePost /> },
     ],
   },
-  { path: "/uploadPost", element: <UploadPost /> },
 ]);
 
 export default router;

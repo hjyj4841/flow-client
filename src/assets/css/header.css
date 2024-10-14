@@ -39,6 +39,7 @@
 .login-content h1 {
   font-size: 50px;
   font-weight: bold;
+  margin-bottom: 90px;
 }
 .login-content button {
   border: 1px solid black;
@@ -75,10 +76,6 @@
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-}
-.register-content input {
-  outline: none;
-  width: 200px;
 }
 .register-content button {
   border: 1px solid black;
