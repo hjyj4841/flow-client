@@ -20,7 +20,6 @@ const Main = () => {
     const base64 = base64Url.replace("-", "+").replace("_", "/");
     const userData = JSON.parse(window.atob(base64));
     userCode = userData.userCode;
-    console.log(userCode);
     user = userData;
   }
   useEffect(() => {
@@ -50,7 +49,7 @@ const Main = () => {
     const response = await axios.get(
       "http://localhost:8080/api/likes/post/ordered-by-likes"
     );
-    console.log(response.data);
+    // console.log(response.data);
     setPopularFeedImages(response.data);
   };
 

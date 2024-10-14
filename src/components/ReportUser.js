@@ -1,0 +1,88 @@
+import React, { useState, useEffect, useReducer } from "react";
+import { Card, CardContent, Divider, Typography } from "@mui/material";
+import Paging from "./Paging";
+import {
+  fetchReportUser,
+  rUserState,
+  reportReducer,
+} from "../reducers/reportReducer";
+import { delReportUser } from "../reducers/reportReducer";
+
+const ReportUser = () => {
+  const [state, dispatch] = useReducer(reportReducer, rUserState);
+  const { reportUsers } = state;
+
+  const [count, setCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postPerPage] = useState(5);
+  const [indexOfLastPost, setIndexOfLastPost] = useState(0);
+  const [indexOfFirstPost, setIndexOfFirstPost] = useState(0);
+  const [currentPosts, setCurrentPosts] = useState(0);
+
+  useEffect(() => {
+    fetchReportUser(dispatch);
+    setCount(reportUsers.length);
+    setIndexOfLastPost(currentPage * postPerPage);
+    setIndexOfFirstPost(indexOfLastPost - postPerPage);
+    setCurrentPosts(reportUsers.slice(indexOfFirstPost, indexOfLastPost));
+  }, [
+    currentPage,
+    indexOfLastPost,
+    indexOfFirstPost,
+    reportUsers,
+    postPerPage,
+  ]);
+
+  const setPage = (error) => {
+    setCurrentPage(error);
+  };
+
+  //   수정필요 삭제하면서 밴도 해야함
+  const deleteUser = (userReportCode) => {
+    // 삭제 기능
+    delReportUser(dispatch, userReportCode);
+    alert("관리자에 의해 삭제되었습니다.");
+  };
+
+  return (
+    <>
+      <div style={{ marginBottom: 150 }}>
+        {currentPosts && reportUsers.length > 0 ? (
+          currentPosts.map((user) => (
+            <Card
+              key={user.userReportCode}
+              sx={{ minWidth: 275 }}
+              variant="outlined"
+            >
+              <CardContent>
+                <Typography variant="h5" component="div">
+                  신고번호: {user.userReportCode}
+                </Typography>
+                <Typography variant="body2">
+                  신고내용 : {user.userReportDesc}
+                  <br />
+                </Typography>
+                <br />
+                <button
+                  className="delete-report-post-btn"
+                  type="button"
+                  onClick={() => deleteUser(user.userReportCode)}
+                >
+                  삭제
+                </button>
+              </CardContent>
+              <Divider />
+            </Card>
+          ))
+        ) : (
+          <div className="report-post-list">
+            <h1>신고된 글이 없습니다.</h1>
+          </div>
+        )}
+        <Paging page={currentPage} count={count} setPage={setPage} />
+      </div>
+    </>
+  );
+};
+
+export default ReportUser;
