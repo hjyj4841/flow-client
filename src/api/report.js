@@ -19,7 +19,13 @@ export const reportPost = async () => {
   return await instance.post("reportPost");
 };
 
-// 테이블 하나 더 필요함
-export const reportUser = async () => {
-  return await instance.put("reportUser");
+export const getReportUser = async () => {
+  return await instance.get("showAllUserReport");
+};
+
+// 수정필요 => 삭제하면서 밴도 해야함
+export const deleteUser = async (userReportCode) => {
+  return await instance.delete(
+    "delUserReport?userReportCode=" + userReportCode
+  );
 };
