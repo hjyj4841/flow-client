@@ -26,9 +26,11 @@ const Main = () => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
-    fetchLikedPosts();
-    fetchSavedPosts();
     fetchPopularFeedImages();
+    if (token !== null) {
+      fetchLikedPosts();
+      fetchSavedPosts();
+    }
   }, []);
 
   const fetchNewFeedImages = async () => {
