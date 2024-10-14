@@ -11,6 +11,7 @@ const authorize = axios.create({
   },
 });
 
+// 게시물 추가
 export const addPost = async (data) => {
   return await instance.post("post", data, {
     headers: {
@@ -19,10 +20,21 @@ export const addPost = async (data) => {
   });
 };
 
+// 게시물 수정
 export const updatePost = async (data) => {
   return await instance.put("post", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+// POST_CODE로 게시물 1개 조회
+export const detailPost = async (postCode) => {
+  return await instance.get(`post/${postCode}`);
+};
+
+// postCode로 게시물 이미지 조회
+export const detailImg = async (postCode) => {
+  return await instance.get(`postImg/${postCode}`);
 };
