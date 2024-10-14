@@ -1,8 +1,24 @@
-import { useState, useEffect } from "react";
-import { addFollowRelative, unfollow, status } from "../../api/follow";
+import { useEffect, useState } from "react";
+import { createFollowRelative, removeFollowRelative, followStatus } from "../../store/followSlice";
+import { useDispatch } from "react-redux";
+import styled from "styled-components";
 
-const FollowButton = ({user, codeName}) => {
+const FollowButton = ({user}) => {
+
+    const FollowStyleAndEffect = styled.body`
+        button {
+            background-color: green;
+            width: 4rem;
+            height: 3rem;
+            border: 1px, solid, beige;
+            cursor: pointer;
+        }
+        
+    `;
+
     const token = localStorage.getItem("token");
+    const dispatch = useDispatch();
+
     function parseJwt(token) {
         const base64Url = token.split('.')[1];  // 토큰의 두 번째 부분 (Payload)
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -14,61 +30,47 @@ const FollowButton = ({user, codeName}) => {
     }
     const decodedPayload = parseJwt(token);
     const tokenCode = decodedPayload.userCode;
-    const [follow, setFollow] = useState({
+    const [follow,setFollow] = useState({
         followingUser : {
-            userCode : codeName === "followingUserCode" ? tokenCode : user.userCode
+            userCode : tokenCode
         },
         followerUser : {
-            userCode :  codeName === "followerUserCode" ? tokenCode : user.userCode
+            userCode : user.userCode
         }
     });
-    const [logic, setLogic] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isFollow, setIsFollow] = useState(false);
+    const addFollowRelative = () => {
+        dispatch(createFollowRelative(follow));
+        setIsFollow(true);
+    }
+    const unfollow = () => {
+        dispatch(removeFollowRelative({
+            followingUserCode : follow.followingUser.userCode, 
+            followerUserCode : follow.followerUser.userCode
+        }));
+        setIsFollow(false);
+    }
 
-    const result = async () => {
-        if (follow.followingUser.userCode !== 0 && follow.followerUser.userCode !== 0) {
-            try {
-                if (!logic) {
-                    await addFollowRelative(setFollow({
-                        followingUser : {
-                            userCode : codeName === "followingUserCode" ? tokenCode : user.userCode
-                        },
-                        followerUser : {
-                            userCode :  codeName === "followerUserCode" ? tokenCode : user.userCode
-                        }
-                    }));
-                } else {
-                    await unfollow(
-                        follow.followingUser.userCode,
-                        follow.followerUser.userCode
-                    );
-                }
-                setLogic(!logic);
-            } catch (error) {
-                console.error("팔로우 상태 변경 중 오류 발생:", error);
-            }
+    const submit = () => {
+        if(!isFollow) {
+            addFollowRelative();
+        } else {
+            unfollow();
         }
     }
     useEffect(() => {
-            const fetchFollowStatus = async () => {
-            setIsLoading(true);
-            try {
-                const response = await status(
-                    follow.followingUser.userCode,
-                    follow.followerUser.userCode
-                );
-                if(response.data !== logic)
-                setLogic(response.data);
-            } catch (error) {
-                console.error("팔로우 상태를 가져오는 중 오류 발생:", error);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-        fetchFollowStatus();
-    } , []);
+        dispatch(followStatus({
+            followingUserCode : tokenCode,
+            followerUserCode : user.userCode
+        })).then((response) => {
+            const status = response.payload;
+            setIsFollow(status);
+        })
+    }, [tokenCode, user.userCode, dispatch])
     return <>
-        <button onClick={result}>{logic ? "unfollow" : "follow"}</button>
+        <FollowStyleAndEffect onClick={submit}>
+            <button onClick={submit}>{isFollow ? "언팔로우" : "팔로우"}</button>
+        </FollowStyleAndEffect>
     </>
 }
 export default FollowButton;

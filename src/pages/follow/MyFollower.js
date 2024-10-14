@@ -1,34 +1,32 @@
-import { initState, followReducer, fetchViewMyFollower} from "./reducers/followReducer";
-import { useEffect, useReducer} from "react";
 import { useParams } from "react-router-dom";
 import FollowButton from "./FollowButton";
+import { useDispatch, useSelector } from "react-redux";
+import {  myFollower } from "../../store/followSlice";
+import { useEffect} from "react";
 
 const MyFollower = () => {
-  
     const {followingUserCode} = useParams();
-    const [state, dispatch] = useReducer(followReducer, initState);
+    const dispatch = useDispatch();
+    const count = useSelector((state) => state.follow.countFollower);
+    const follower = useSelector((state) => state.follow.follower);
     useEffect(() => {
-        fetchViewMyFollower(dispatch, followingUserCode);
-    }, [dispatch, followingUserCode]);
-    const {myFollower} = state;
+      dispatch(myFollower(followingUserCode)) 
+    }, []);
     return (
         <>
-          <h1>내가 팔로우 한 인간들</h1>
-          <div>
-            <p>팔로잉 : {myFollower?.countFollower}명</p>
-            {myFollower?.countFollower === 0 ? (
-                <p>아직 내가 팔로우한 인간이 없습니다.</p>
-            ) : (
-                myFollower?.follower?.map((user) => (
-                    <div key={user.userCode}>
-                      <p>{user.userEmail}</p>
-                      <p>{user.userPlatform}</p>
-                      <p>{user.userNickname}</p>
-                      <FollowButton user={user} codeName={"followingUserCode"}/>
-                    </div>
-                  ))
-            )}
-          </div>
+         <div className="following-userInfo">
+          <h1>내가 팔로우한 인간들</h1>
+          <p>{count}명</p>
+            <div className="following-users">
+              {follower?.map((user) => (
+                <div key={user.userCode}>
+                    <p>{user.userNickname}</p>
+                    <p>{user.userEmail}</p>
+                    <FollowButton user={user} key={user.userCode}/>
+                </div>
+              ))}
+            </div>
+         </div>
         </>
       );
 }
