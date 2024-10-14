@@ -45,7 +45,7 @@ const UpdatePost = () => {
       // console.log(remainingImages); // 남은거
       console.log(updatedSet); // 삭제된거
 
-      return updatedSet;
+      return updatedSet; //  삭제된 postImgCode
     });
   };
 
