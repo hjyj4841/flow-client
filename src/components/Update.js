@@ -39,7 +39,7 @@ const Update = () => {
             <textarea
               placeholder="내용을 입력해 다른이들과 소통해보세요!"
               class="w-full p-2 border border-gray-300 rounded h-32"
-            ></textarea>
+            />
           </div>
           <div class="mb-4">
             <button
