@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../../api/user";
-import "../../assets/css/registerUser.scss";
+import { nicknameCheck, registerUser } from "../../api/user";
+import "../../assets/css/registerUser.scoped.scss";
 
 const RegisterUser = () => {
   const [user, setUser] = useState({
@@ -14,6 +14,8 @@ const RegisterUser = () => {
     userGender: "남성",
     userHeight: 160,
     userWeight: 80,
+    userBodySpecYn: "Y",
+    userProfileUrl: "http://192.168.10.51:8081/userImg/defaultUser.png",
   });
 
   const navigate = useNavigate();
@@ -22,6 +24,11 @@ const RegisterUser = () => {
     let nickCheck = false;
     let heightCheck = false;
     let weightCheck = false;
+    let nickDuplicateCheck = false;
+
+    const nickDupl = await nicknameCheck(user.userNickname);
+    if (!nickDupl.data) alert(user.userNickname + "은 중복된 닉네임 입니다.");
+    else nickDuplicateCheck = true;
 
     if (user.userNickname === "") alert("닉네임을 입력해주세요!");
     else nickCheck = true;
@@ -34,7 +41,7 @@ const RegisterUser = () => {
       alert("정확한 체중을 입력해주세요.");
     else weightCheck = true;
 
-    if (nickCheck && heightCheck && weightCheck) {
+    if (nickCheck && heightCheck && weightCheck && nickDuplicateCheck) {
       registerUser(user);
       alert(user.userNickname + "님 회원가입에 성공하셨습니다!");
       navigate("/");

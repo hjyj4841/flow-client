@@ -63,3 +63,8 @@ export const findUser = async (token) => {
 export const updateUser = async (data) => {
   await instance.put("updateUser", data);
 };
+
+// 유저 닉네임 중복 체크
+export const nicknameCheck = async (userNickname) => {
+  return await instance.get(`nickNameCheck?userNickname=${userNickname}`);
+};
