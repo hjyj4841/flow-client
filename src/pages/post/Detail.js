@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import { addReportPost, addReportUser } from "../../reducers/reportReducer";
+import { reportReducer } from "../../reducers/reportReducer";
+import { useReducer, useState, useEffect } from "react";
 
 const Detail = () => {
   const DetailDiv = styled.div`
@@ -27,17 +30,44 @@ const Detail = () => {
   `;
   const { postCode } = useParams();
   const navigate = useNavigate();
+  const [state, dispatch] = useReducer(reportReducer, report);
+  const [report] = state;
+
+  const [post, setPost] = useState({});
+  const [user, setUser] = useState({});
 
   const updatePost = () => {
     navigate("/updatePost/" + postCode);
   };
+
+  const reportPost = (data) => {
+    addReportPost(dispatch, data);
+  };
+  const reportUser = (data) => {
+    addReportUser(dispatch, data);
+  };
+
   return (
     <>
       <DetailDiv>
         <h1>디테일 테스트 페이지</h1>
         <div className="report">
-          <button className="report-post-btn">글 신고버튼</button>
-          <button className="report-user-btn">유저 신고버튼</button>
+          <button
+            className="report-post-btn"
+            onClick={(data) => {
+              reportPost(data);
+            }}
+          >
+            글 신고버튼
+          </button>
+          <button
+            className="report-user-btn"
+            onClick={(data) => {
+              reportUser(data);
+            }}
+          >
+            유저 신고버튼
+          </button>
         </div>
         <button className="update-post-btn" onClick={updatePost}>
           수정
