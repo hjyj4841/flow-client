@@ -34,6 +34,9 @@ const Header = () => {
         <nav className="space-x-4">
           {token !== null ? (
             <>
+              <a href="/search" className="text-sm">
+                찾기
+              </a>
               <a href="#" className="text-sm" onClick={logout}>
                 로그아웃
               </a>
@@ -58,7 +61,7 @@ const Header = () => {
             </>
           ) : (
             <div className="quick-slot">
-              <a href="#" className="text-sm">
+              <a href="/search" className="text-sm">
                 찾기
               </a>
               <div className={"register-wrapper"}>

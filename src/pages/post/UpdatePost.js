@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { updatePost, detailPost, detailImg } from "../../api/post";
 import Post from "../../components/Post";
 import { useState, useEffect } from "react";
+import Update from "../../components/Update";
 
 const UpdatePost = () => {
   const { postCode } = useParams();
@@ -95,6 +96,8 @@ const UpdatePost = () => {
 
         <button onClick={updateForm}>수정 완료</button>
       </div>
+
+      <Update />
     </>
   );
 };
