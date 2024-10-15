@@ -18,7 +18,7 @@ const AuthRegisterNaver = () => {
   const duplicateCheck = async () => {
     userCheck({
       userEmail: userEmail,
-      userPlatform: "kakao",
+      userPlatform: "naver",
       type: "register",
     });
   };
