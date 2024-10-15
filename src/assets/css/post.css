@@ -1,12 +1,12 @@
 .upload-container {
   position: relative;
   left: 400px;
-  border: 1px solid black;
+  border: 3px solid black;
+  border-radius: 15px;
   width: 1100px;
-  height: 850px;
+  height: 860px;
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
 }
 .upload-log {
   margin-bottom: 20px;
@@ -42,25 +42,21 @@
   left: 50px;
 }
 .season {
-  border: 1px solid black;
   width: 1000px;
   position: relative;
   left: 50px;
 }
 .carrier {
-  border: 1px solid black;
   width: 1000px;
   position: relative;
   left: 50px;
 }
 .style {
-  border: 1px solid black;
   width: 1000px;
   position: relative;
   left: 50px;
 }
 .weight {
-  border: 1px solid black;
   width: 1000px;
   position: relative;
   left: 50px;
