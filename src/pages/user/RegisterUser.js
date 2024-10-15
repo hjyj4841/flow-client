@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registerUser } from "../../api/user";
+import "../../assets/css/registerUser.scss";
 
 const RegisterUser = () => {
   const [user, setUser] = useState({
@@ -9,50 +10,113 @@ const RegisterUser = () => {
       "userPlatform"
     ),
     userNickname: "",
-    userJob: "",
-    userGender: "",
-    userHeight: 0,
-    userWeight: 0,
+    userJob: "사무직",
+    userGender: "남성",
+    userHeight: 160,
+    userWeight: 80,
   });
 
   const navigate = useNavigate();
 
   const register = async () => {
-    registerUser(user);
-    navigate("/");
+    let nickCheck = false;
+    let heightCheck = false;
+    let weightCheck = false;
+
+    if (user.userNickname === "") alert("닉네임을 입력해주세요!");
+    else nickCheck = true;
+
+    if (user.userHeight < 130 || user.userHeight > 250)
+      alert("정확한 신장을 입력해주세요.");
+    else heightCheck = true;
+
+    if (user.userWeight < 30 || user.userWeight > 150)
+      alert("정확한 체중을 입력해주세요.");
+    else weightCheck = true;
+
+    if (nickCheck && heightCheck && weightCheck) {
+      registerUser(user);
+      alert(user.userNickname + "님 회원가입에 성공하셨습니다!");
+      navigate("/");
+    }
   };
 
   return (
-    <>
-      닉네임 :
-      <input
-        value={user.userNickname}
-        onChange={(e) => setUser({ ...user, userNickname: e.target.value })}
-      />
-      직종 :
-      <input
-        value={user.userJob}
-        onChange={(e) => setUser({ ...user, userJob: e.target.value })}
-      />
-      성별 :
-      <input
-        value={user.userGender}
-        onChange={(e) => setUser({ ...user, userGender: e.target.value })}
-      />
-      키 :
-      <input
-        value={user.userHeight}
-        onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
-      />
-      체중 :
-      <input
-        value={user.userWeight}
-        onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
-      />
+    <div className="con">
+      <h1>회원 가입</h1>
+      <div>
+        <input
+          type="text"
+          value={user.userNickname}
+          onChange={(e) => setUser({ ...user, userNickname: e.target.value })}
+          placeholder="닉네임"
+        />
+      </div>
+      <div>
+        직종
+        <select onChange={(e) => setUser({ ...user, userJob: e.target.value })}>
+          <option value="사무직">사무직</option>
+          <option value="연구직">연구직</option>
+          <option value="공공직">공공직</option>
+          <option value="의료직">의료직</option>
+          <option value="엔터테인먼트">엔터테인먼트</option>
+          <option value="서비스직">서비스직</option>
+          <option value="영업직">영업직</option>
+          <option value="건설직">건설직</option>
+          <option value="생산직">생산직</option>
+          <option value="농림어업직">농림어업직</option>
+          <option value="기타">기타</option>
+        </select>
+      </div>
+      <div>
+        성별
+        <label onClick={() => setUser({ ...user, userGender: "남성" })}>
+          <input type="radio" value="남성" name="gender" defaultChecked />
+          남성
+        </label>
+        <label onClick={() => setUser({ ...user, userGender: "여성" })}>
+          <input type="radio" value="여성" name="gender" />
+          여성
+        </label>
+      </div>
+      <div>
+        신장
+        <input
+          type="range"
+          min="130"
+          max="250"
+          step="1"
+          value={user.userHeight}
+          onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
+        />
+        <input
+          type="number"
+          value={user.userHeight}
+          onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
+        />
+        <span>cm</span>
+      </div>
+      <div>
+        체중
+        <input
+          type="range"
+          min="30"
+          max="150"
+          step="1"
+          value={user.userWeight}
+          onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
+        />
+        <input
+          type="number"
+          value={user.userWeight}
+          onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
+        />
+        <span>kg</span>
+      </div>
       <button type="button" onClick={register}>
         회원가입
       </button>
-    </>
+    </div>
   );
 };
 export default RegisterUser;
