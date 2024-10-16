@@ -9,7 +9,7 @@ const Search = () => {
   };
 
   const [minHeight, setMinHeight] = useState(140);
-  const [maxHeight, setMaxHeight] = useState(195);
+  const [maxHeight, setMaxHeight] = useState(220);
 
   const handleMinChange = (e) => {
     const value = Math.min(Number(e.target.value), maxHeight);
@@ -32,7 +32,7 @@ const Search = () => {
             <h1 className="text-xl font-bold">필터</h1>
             <button className="text-sm text-gray-500">초기화</button>
           </div>
-          <div className="mb-4">
+          <div className="mb-8">
             <h2 className="font-bold mb-2">HEIGHT</h2>
             <div className="flex justify-between items-center mb-2">
               <span>
@@ -43,17 +43,9 @@ const Search = () => {
               <input
                 type="range"
                 min="140"
-                max="195"
+                max="220"
                 value={minHeight}
                 onChange={handleMinChange}
-                className="absolute w-full z-10"
-              />
-              <input
-                type="range"
-                min="140"
-                max="195"
-                value={maxHeight}
-                onChange={handleMaxChange}
                 className="absolute w-full z-10"
               />
             </div>
