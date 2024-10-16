@@ -1,12 +1,3 @@
-import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import {
-  addReportPost,
-  addReportUser,
-  initState as reportState,
-} from "../../reducers/reportReducer";
-import { reportReducer } from "../../reducers/reportReducer";
-import { useReducer, useState, useEffect } from "react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -37,10 +28,12 @@ const DetailDiv = styled.div`
     margin: 10px 5px;
   }
 `;
+
 const Detail = () => {
   const { postCode } = useParams();
   const navigate = useNavigate();
-
+  const [state, dispatch] = useReducer(reportReducer, report);
+  const [report] = state;
   let loginUserCode = 0;
 
   const [post, setPost] = useState(null);
@@ -54,21 +47,6 @@ const Detail = () => {
     const userData = JSON.parse(window.atob(base64));
     loginUserCode = userData.userCode;
   }
-
-  const [state, reportDispatch] = useReducer(reportReducer, reportState);
-  const { report } = state;
-
-  const [reportPost, setReportPost] = useState({
-    reportDesc: "",
-    post: {
-      postCode: 0,
-    },
-  });
-
-  const [reportUser, setReportUser] = useState({
-    reportDesc: "",
-    userCode: 0,
-  });
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -109,14 +87,6 @@ const Detail = () => {
       );
     }
   };
-  const reportPostBtn = (data) => {
-    addReportPost(data);
-  };
-
-  // const reportUser = (data) => {
-  //   addReportUser(dispatch, data);
-  // };
-
   const handleCommentSubmit = async () => {
     await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
       content: comment,
@@ -128,41 +98,8 @@ const Detail = () => {
     <>
       <DetailDiv>
         <div className="report">
-          <input
-            className="report-post-desc"
-            type="text"
-            placeholder="설명"
-            value={reportPost.reportDesc}
-            onChange={(e) =>
-              setReportPost({ ...reportPost, reportDesc: e.target.value })
-            }
-          />
-          <button
-            className="report-post-btn"
-            onClick={() => {
-              setReportPost({ ...reportPost, post: { postCode: postCode } });
-              console.log(reportPost);
-              reportPostBtn(reportPost);
-            }}
-          >
-            글 신고버튼
-          </button>
-          <input
-            className="report-user-desc"
-            type="text"
-            placeholder="설명"
-            onChange={(e) =>
-              setReportUser({ ...reportUser, reportDesc: e.target.value })
-            }
-          />
-          <button
-            className="report-user-btn"
-            // onClick={(data) => {
-            //   reportUser(data);
-            // }}
-          >
-            유저 신고버튼
-          </button>
+          <button className="report-post-btn">글 신고버튼</button>
+          <button className="report-user-btn">유저 신고버튼</button>
         </div>
       </DetailDiv>
       <div className="max-w-4xl mx-auto p-4">
