@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
@@ -10,8 +11,8 @@ const Main = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [followedUserPosts, setFollowedUserPosts] = useState([]);
-  const [popularFeedImages, setPopularFeedImages] = useState([]);
   const navigate = useNavigate();
+  const [popularFeedImages, setPopularFeedImages] = useState([]);
 
   let userCode = "";
   let user = "";
@@ -22,242 +23,160 @@ const Main = () => {
     userCode = userData.userCode;
     user = userData;
   }
-
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
     fetchPopularFeedImages();
 
-    if (token) {
+    if (token !== null) {
       fetchLikedPosts();
       fetchSavedPosts();
-      if (userCode) fetchFollowedUserPosts();
     }
-  }, [token, userCode]);
+  }, []);
+
+  useEffect(() => {
+    if (userCode) {
+      // 로그인된 경우에만 팔로워의 피드를 가져옴
+      fetchFollowedUserPosts();
+    }
+  }, [userCode]);
 
   const fetchNewFeedImages = async () => {
     const response = await axios.get("http://localhost:8080/api/post");
+    console.log(response.data);
     setNewFeedImages(response.data);
   };
 
+  const fetchLikedPosts = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/api/likes/${userCode}/likes`
+    );
+    const likedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isLiked: true,
+    }));
+    setLikedPosts(likedPosts || []);
+  };
   const fetchPopularFeedImages = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/likes/post/ordered-by-likes"
     );
+    // console.log(response.data);
     setPopularFeedImages(response.data);
   };
 
-  const fetchFollowedUserPosts = async () => {
-    const response = await axios.get(
-      `http://localhost:8080/api/posts/followed/${userCode}`
-    );
-    setFollowedUserPosts(response.data);
+  const logout = () => {
+    localStorage.removeItem("token");
+    setToken(null);
   };
 
-  // Fetch liked posts
-  const fetchLikedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/likes/${userCode}/likes`
-      );
-      const likedPosts = response.data.postInfoList.map((post) => ({
-        ...post,
-        isLiked: true,
-      }));
-      setLikedPosts(likedPosts || []);
-    } catch (error) {
-      console.error("Error fetching liked posts", error);
-    }
+  const detail = (postCode) => {
+    navigate(`/post/${postCode}`);
   };
-
-  // Fetch saved posts
   const fetchSavedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/collection/${userCode}/collections`
-      );
-      const savedPosts = response.data.postInfoList.map((post) => ({
-        ...post,
-        isSaved: true,
-      }));
-      setSavedPosts(savedPosts || []);
-    } catch (error) {
-      console.error("Error fetching saved posts", error);
-    }
+    const response = await axios.get(
+      `http://localhost:8080/api/collection/${userCode}/collections`
+    );
+    const savedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isSaved: true,
+    }));
+    setSavedPosts(savedPosts || []);
   };
 
-  // Toggle like
   const handleLikeToggle = async (postCode) => {
     try {
       await axios.post(
         `http://localhost:8080/api/likes/toggle/${postCode}`,
         user
       );
-      fetchLikedPosts();
+      setLikedPosts((prevPosts) =>
+        prevPosts.map((item) =>
+          item.post.postCode === postCode
+            ? { ...item, isLiked: !item.isLiked }
+            : item
+        )
+      );
+      await fetchLikedPosts();
     } catch (error) {
       console.error("Error toggling like", error);
     }
   };
 
-  // Toggle save
   const handleSaveToggle = async (postCode) => {
     try {
       await axios.post(
         `http://localhost:8080/api/collection/toggle/${postCode}`,
         user
       );
-      fetchSavedPosts();
+      setSavedPosts((prevPosts) =>
+        prevPosts.map((item) =>
+          item.post.postCode === postCode
+            ? { ...item, isSaved: !item.isSaved }
+            : item
+        )
+      );
+
+      await fetchSavedPosts();
     } catch (error) {
       console.error("Error toggling save", error);
     }
   };
 
-  const detail = (postCode) => {
-    navigate(`/post/${postCode}`);
+  const fetchFollowedUserPosts = async () => {
+    if (userCode) {
+      const response = await axios.get(
+        `http://localhost:8080/api/posts/followed/${userCode}`
+      );
+      console.log(response.data);
+      setFollowedUserPosts(response.data);
+    }
   };
 
   return (
-    <div className="bg-gray-100 text-gray-800">
-      <section className="bg-white py-4 shadow-md">
-        <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="flex-none w-16 h-16 bg-gray-300 rounded-full"
-            />
-          ))}
-        </div>
-      </section>
-
-      <main className="container mx-auto px-4 py-8">
-        {/* Popular Feed Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
-          <div className="flex overflow-x-auto space-x-4 mx-4">
-            {popularFeedImages.map((post) =>
-              post.imageUrls.length > 0 ? (
-                <div
-                  key={post.postCode}
-                  className="relative w-full h-64 bg-gray-300 rounded-lg group"
-                >
-                  <img
-                    src={post.imageUrls[0]}
-                    alt={post.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p
-                      className="text-white mb-2 w-full flex justify-center items-center text-sm truncate"
-                      onClick={() => detail(post.postCode)}
-                    >
-                      {post.postDesc}
-                    </p>
-                    <div className="flex justify-center items-center">
-                      {likedPosts.some(
-                        (likedPost) => likedPost.post.postCode === post.postCode
-                      ) ? (
-                        <FaHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <FaRegHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                      {savedPosts.some(
-                        (savedPost) => savedPost.post.postCode === post.postCode
-                      ) ? (
-                        <BsCollectionFill
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "black" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <BsCollection
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : null
-            )}
+    <>
+      <div className="bg-gray-100 text-gray-800">
+        <section className="bg-white py-4 shadow-md">
+          <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
+            {[...Array(8)].map((_, i) => (
+              <div
+                key={i}
+                className="flex-none w-16 h-16 bg-gray-300 rounded-full"
+              ></div>
+            ))}
           </div>
         </section>
-
-        {/* New Feed Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {newFeedImages.map((post) =>
-              post.imageUrls.length > 0 ? (
-                <div
-                  key={post.postCode}
-                  className="relative w-full h-64 bg-gray-300 rounded-lg group"
-                >
-                  <img
-                    src={post.imageUrls[0]}
-                    alt={post.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p
-                      className="text-white mb-2"
-                      onClick={() => detail(post.postCode)}
-                    >
-                      {post.postDesc}
-                    </p>
-                    <div className="flex items-center">
-                      {likedPosts.some(
-                        (likedPost) => likedPost.post.postCode === post.postCode
-                      ) ? (
-                        <FaHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <FaRegHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                      {savedPosts.some(
-                        (savedPost) => savedPost.post.postCode === post.postCode
-                      ) ? (
-                        <BsCollectionFill
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "black" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <BsCollection
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : null
-            )}
-          </div>
-        </section>
-
-        {/* Follower's Feed Section */}
-        {token && (
+        <main className="container mx-auto px-4 py-8">
           <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4">My Follower's Feed</h2>
+            <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
+            <div className="flex overflow-x-auto space-x-4 mx-4">
+              {popularFeedImages.map((post) =>
+                post.imageUrls.length > 0 ? (
+                  <div
+                    key={post.postCode}
+                    className="w-full h-64 bg-gray-300 rounded-lg"
+                    onClick={() => detail(post.postCode)}
+                  >
+                    <img
+                      src={post.imageUrls[0]}
+                      alt={post.postDesc}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  </div>
+                ) : null
+              )}
+            </div>
+            <button className="text-2xl">&gt;</button>
+          </section>
+          <section className="mb-8">
+            <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
             <div className="grid grid-cols-4 gap-4">
-              {followedUserPosts.map((post) =>
+              {newFeedImages.map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
                     className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                    onClick={() => detail(post.postCode)}
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -265,12 +184,7 @@ const Main = () => {
                       className="w-full h-full object-cover rounded-lg"
                     />
                     <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <p
-                        className="text-white mb-2"
-                        onClick={() => detail(post.postCode)}
-                      >
-                        {post.postDesc}
-                      </p>
+                      <p className="text-white mb-2">{post.postDesc}</p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -309,9 +223,35 @@ const Main = () => {
               )}
             </div>
           </section>
-        )}
-      </main>
-    </div>
+          {token && (
+            <section>
+              <h2 className="text-xl font-bold mb-4">My Follower's FEED</h2>
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                {followedUserPosts.map(
+                  (post) =>
+                    post.imageUrls.length > 0 && (
+                      <div
+                        key={post.postCode}
+                        className="relative w-full h-64 bg-gray-300 rounded-lg"
+                        onClick={() => detail(post.postCode)}
+                      >
+                        <img
+                          src={post.imageUrls[0]}
+                          alt={post.postDesc}
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      </div>
+                    )
+                )}
+              </div>
+              <button className="px-4 py-2 border border-gray-800 rounded-full">
+                더 보러가기
+              </button>
+            </section>
+          )}
+        </main>
+      </div>
+    </>
   );
 };
 
