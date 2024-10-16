@@ -21,6 +21,7 @@ import VotePost from "./pages/post/VotePost";
 import Vote from "./pages/post/Vote";
 import Detail from "./pages/post/Detail";
 import UpdateUser from "./pages/user/UpdateUser";
+import Search from "./pages/post/Search";
 
 const router = createBrowserRouter([
   {
@@ -54,6 +55,7 @@ const router = createBrowserRouter([
       { path: "/post/:postCode", element: <Detail /> },
       { path: "/updateUser", element: <UpdateUser /> },
       { path: "/updatePost/:postCode", element: <UpdatePost /> },
+      { path: "/search", element: <Search /> },
     ],
   },
 ]);
