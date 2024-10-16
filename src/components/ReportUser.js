@@ -6,7 +6,8 @@ import {
   rUserState,
   reportReducer,
 } from "../reducers/reportReducer";
-import { delReportUser } from "../reducers/reportReducer";
+import { delReportUser, banUserReport } from "../reducers/reportReducer";
+import { useNavigate } from "react-router-dom";
 
 const ReportUser = () => {
   const [state, dispatch] = useReducer(reportReducer, rUserState);
@@ -44,6 +45,13 @@ const ReportUser = () => {
     alert("관리자에 의해 삭제되었습니다.");
   };
 
+  const banUser = (userCode, userReportCode) => {
+    // 밴 기능
+    banUserReport(dispatch, userCode);
+    delReportUser(dispatch, userReportCode);
+    alert("관리자에 의해 밴되었습니다.");
+  };
+
   return (
     <>
       <div style={{ marginBottom: 150 }}>
@@ -64,19 +72,28 @@ const ReportUser = () => {
                 </Typography>
                 <br />
                 <button
-                  className="delete-report-post-btn"
+                  className="delete-report-user-btn"
                   type="button"
                   onClick={() => deleteUser(user.userReportCode)}
                 >
                   삭제
+                </button>
+                <button
+                  className="ban-report-user-btn"
+                  type="button"
+                  onClick={() =>
+                    banUser(user.user.userCode, user.userReportCode)
+                  }
+                >
+                  밴
                 </button>
               </CardContent>
               <Divider />
             </Card>
           ))
         ) : (
-          <div className="report-post-list">
-            <h1>신고된 글이 없습니다.</h1>
+          <div className="report-user-list">
+            <h1>신고된 유저가 없습니다.</h1>
           </div>
         )}
         <Paging page={currentPage} count={count} setPage={setPage} />
