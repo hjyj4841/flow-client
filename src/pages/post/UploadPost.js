@@ -22,6 +22,12 @@ const UploadPost = () => {
     tagCodes: [],
   });
 
+  /*
+  useEffect(() => {
+    console.log(post);
+  }, [post]);
+  */
+
   const upload = async () => {
     // formData저장
     const formData = new FormData();

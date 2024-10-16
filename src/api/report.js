@@ -15,6 +15,10 @@ export const deletePost = async (postReportCode) => {
   );
 };
 
+export const reportPost = async () => {
+  return await instance.post("reportPost");
+};
+
 export const getReportUser = async () => {
   return await instance.get("showAllUserReport");
 };
@@ -24,18 +28,4 @@ export const deleteUser = async (userReportCode) => {
   return await instance.delete(
     "delUserReport?userReportCode=" + userReportCode
   );
-};
-
-export const banUser = async (userCode) => {
-  return await instance.put("banUser?userCode=" + userCode);
-};
-
-// 글 신고하기
-export const reportPost = async (data) => {
-  return await instance.post("reportPost", data);
-};
-
-// 유저 신고하기
-export const reportUser = async (data) => {
-  return await instance.post("reportUser", data);
 };

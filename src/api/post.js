@@ -38,5 +38,3 @@ export const detailPost = async (postCode) => {
 export const detailImg = async (postCode) => {
   return await instance.get(`postImg/${postCode}`);
 };
-
-// postCode로 product + tag  조회

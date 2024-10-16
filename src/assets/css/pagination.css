@@ -62,19 +62,3 @@ ul.pagination li a.active {
   font-size: 2rem;
   text-align: center;
 }
-.delete-report-user-btn {
-  background-color: #ddd;
-  padding: 10px;
-  border-radius: 15px;
-  margin: 10px 5px;
-}
-.report-user-list {
-  font-size: 2rem;
-  text-align: center;
-}
-.ban-report-user-btn {
-  background-color: #ddd;
-  padding: 10px;
-  border-radius: 15px;
-  margin: 10px 5px;
-}
