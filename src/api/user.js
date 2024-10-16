@@ -7,7 +7,9 @@ const instance = axios.create({
 // 회원 로그인 or 회원가입
 export const userCheck = async (user) => {
   const result = await instance.get(
-    `duplicateCheck?userEmail=${user.userEmail}&userPlatform=${user.userPlatform}`
+    `duplicateCheck?userEmail=${user.userEmail}&userPlatform=${
+      user.userPlatform
+    }`
   );
 
   if (!result.data) {
@@ -31,7 +33,9 @@ export const userCheck = async (user) => {
       alert("회원가입 후 이용해 주세요.");
       return null;
     } else {
-      window.location.href = `/registerUser?userEmail=${user.userEmail}&userPlatform=${user.userPlatform}`;
+      window.location.href = `/registerUser?userEmail=${
+        user.userEmail
+      }&userPlatform=${user.userPlatform}`;
     }
   }
 };
@@ -61,7 +65,11 @@ export const findUser = async (token) => {
 
 // 유저 정보 수정하기
 export const updateUser = async (data) => {
-  await instance.put("updateUser", data);
+  await instance.put("updateUser", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
 
 // 유저 닉네임 중복 체크

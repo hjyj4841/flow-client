@@ -33,11 +33,11 @@ const RegisterUser = () => {
     if (user.userNickname === "") alert("닉네임을 입력해주세요!");
     else nickCheck = true;
 
-    if (user.userHeight < 130 || user.userHeight > 250)
+    if (user.userHeight < 140 || user.userHeight > 200)
       alert("정확한 신장을 입력해주세요.");
     else heightCheck = true;
 
-    if (user.userWeight < 30 || user.userWeight > 150)
+    if (user.userWeight < 30 || user.userWeight > 120)
       alert("정확한 체중을 입력해주세요.");
     else weightCheck = true;
 
@@ -90,8 +90,8 @@ const RegisterUser = () => {
         신장
         <input
           type="range"
-          min="130"
-          max="250"
+          min="140"
+          max="200"
           step="1"
           value={user.userHeight}
           onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
@@ -108,7 +108,7 @@ const RegisterUser = () => {
         <input
           type="range"
           min="30"
-          max="150"
+          max="120"
           step="1"
           value={user.userWeight}
           onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
