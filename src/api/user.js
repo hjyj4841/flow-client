@@ -71,3 +71,8 @@ export const updateUser = async (data) => {
     },
   });
 };
+
+// 유저 닉네임 중복 체크
+export const nicknameCheck = async (userNickname) => {
+  return await instance.get(`nickNameCheck?userNickname=${userNickname}`);
+};
