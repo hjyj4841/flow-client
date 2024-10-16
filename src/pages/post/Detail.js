@@ -3,32 +3,37 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { GrNext, GrPrevious } from "react-icons/gr";
+
+const DetailDiv = styled.div`
+  .report {
+    display: flex;
+  }
+  .report-post-btn {
+    margin: 20px;
+  }
+  .report-user-btn {
+    margin: 20px;
+  }
+  .report button {
+    background-color: #f05650;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+  .update-post-btn {
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+`;
+
 const Detail = () => {
-  const DetailDiv = styled.div`
-    .report {
-      display: flex;
-    }
-    .report-post-btn {
-      margin: 20px;
-    }
-    .report-user-btn {
-      margin: 20px;
-    }
-    .report button {
-      background-color: #f05650;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-    .update-post-btn {
-      background-color: #ddd;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-  `;
   const { postCode } = useParams();
   const navigate = useNavigate();
+  const initialState = {};
+  const [dispatch] = useReducer(reportReducer, initialState);
+
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -121,7 +126,6 @@ const Detail = () => {
                   :말풍선: {post.comments ? post.comments.length : 0}
                 </span>
               </div>
-              <span className="font-bold">{post.userName}</span>
               <div className="border-t border-gray-300 pt-4">
                 <h2 className="font-bold mb-2">
                   댓글 {post.comments ? post.comments.length : 0}개
