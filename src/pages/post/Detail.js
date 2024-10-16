@@ -4,6 +4,7 @@ import { addReportPost, addReportUser } from "../../reducers/reportReducer";
 import { reportReducer } from "../../reducers/reportReducer";
 import { useReducer, useState, useEffect } from "react";
 import axios from "axios";
+import { delPost } from "../../api/post";
 
 const Detail = () => {
   const DetailDiv = styled.div`
@@ -33,10 +34,19 @@ const Detail = () => {
   const navigate = useNavigate();
   const [state, dispatch] = useReducer(reportReducer, report);
   const [report] = state;
+  let loginUserCode = 0;
 
   const [user, setUser] = useState({});
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
+
+  const token = localStorage.getItem("token");
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    loginUserCode = userData.userCode;
+  }
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -47,10 +57,20 @@ const Detail = () => {
     };
 
     fetchPost();
-  }, [postCode]);
+  }, []);
 
   const updatePost = () => {
-    navigate("/updatePost/" + postCode);
+    navigate("/post/update/" + postCode);
+  };
+
+  const deleteAPI = async () => {
+    await delPost(postCode);
+  };
+
+  const deletePost = () => {
+    deleteAPI();
+    alert("삭제 완료");
+    window.location.href = "/";
   };
 
   const reportPost = (data) => {
@@ -69,7 +89,6 @@ const Detail = () => {
   return (
     <>
       <DetailDiv>
-        <h1>디테일 페이지</h1>
         <div className="report">
           <button
             className="report-post-btn"
@@ -88,12 +107,25 @@ const Detail = () => {
             유저 신고버튼
           </button>
         </div>
-        <button className="update-post-btn" onClick={updatePost}>
-          수정
-        </button>
       </DetailDiv>
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
+          {loginUserCode === post?.userCode && (
+            <>
+              <button
+                className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
+                onClick={updatePost}
+              >
+                수정
+              </button>
+              <button
+                className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2"
+                onClick={deletePost}
+              >
+                삭제
+              </button>
+            </>
+          )}
           {post ? (
             <>
               <div className="mb-4">
