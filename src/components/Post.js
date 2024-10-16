@@ -1,3 +1,4 @@
+import { TbCirclePlus } from "react-icons/tb";
 import { useState, useEffect } from "react";
 import "../assets/css/post.css";
 
@@ -110,394 +111,48 @@ const Post = ({ upload, post, setPost }) => {
   };
 
   return (
-    <>
-      <div className="max-w-2xl mx-auto p-6 bg-white shadow-md mt-10 rounded-lg">
-        <div className="mb-4">
-          <textarea
-            id="content"
-            className="w-full border border-gray-300 rounded px-3 py-2 h-32"
-            placeholder="내용을 입력해 다른이들과 소통해보세요!"
-            value={post.postDesc}
-            onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
-          />
-        </div>
-        <div
-          className="mb-4"
-          style={{ display: "flex", flexDirection: "column" }}
-        >
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={imageUpload}
-            style={{ padding: "10px" }}
-          />
-
-          {imgPreviews.length > 0 && (
-            <>
-              <div
-                className="imgPreviews"
-                style={{ height: "130px", width: "100%", padding: "5px" }}
-              >
-                <p style={{ color: "crimson" }}>
-                  이미지 클릭해서 업로드 순서 선택
-                </p>
-
-                {imgPreviews.map((preview, index) => (
-                  <div
-                    key={index}
-                    style={{
-                      position: "relative",
-                      display: "inline-block",
-                    }}
-                    onClick={() => handleImageClick(index)} // 클릭 이벤트 추가
-                  >
-                    <img
-                      src={preview}
-                      alt={`preview-${index}`}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        objectFit: "cover",
-                        margin: "5px",
-                      }}
-                    />
-                    {click.includes(index) && (
-                      <span
-                        style={{
-                          position: "absolute",
-                          fontWeight: "bold",
-                          top: "5px",
-                          left: "5px",
-                          color: "white",
-                          backgroundColor: "rgba(0, 0, 0, 0.6)",
-                          padding: "2px 5px",
-                          borderRadius: "3px",
-                          fontSize: "14px",
-                        }}
-                      >
-                        {click.indexOf(index) + 1}
-                      </span>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-
-        <div className="mb-4">
-          {post.products?.map((item, index) => (
+    <div className="upload-container">
+      <div className="upload-photo">
+        <input type="file" accept="image/*" multiple onChange={imageUpload} />
+        {imgPreviews.length > 0 && (
+          <p style={{ color: "crimson" }}>이미지 순서 선택</p>
+        )}
+        <div className="imgPreviews">
+          {imgPreviews.map((preview, index) => (
             <div
-              className="grid grid-cols-5 gap-2 text-center text-sm"
               key={index}
+              style={{ position: "relative", display: "inline-block" }}
+              onClick={() => handleImageClick(index)} // 클릭 이벤트 추가
             >
-              <input
-                type="text"
-                placeholder="브랜드"
-                value={item.productBrand}
-                // onChange={(e) => setPost({ ...product, productBrand: e.target.value })} 바로 쓸 수 없음..
-                onChange={(e) => setBrand(e, index)}
+              <img
+                src={preview}
+                alt={`preview-${index}`}
+                style={{
+                  width: "150px",
+                  height: "150px",
+                  objectFit: "cover",
+                  margin: "5px",
+                }}
               />
-              <input
-                type="text"
-                placeholder="제품명"
-                value={item.productName}
-                onChange={(e) => setName(e, index)}
-              />
-              <input
-                type="text"
-                placeholder="제품 사이즈"
-                value={item.productSize}
-                onChange={(e) => setSize(e, index)}
-              />
-              <input
-                type="text"
-                placeholder="구매처"
-                value={item.productBuyFrom}
-                onChange={(e) => setBuyFrom(e, index)}
-              />
-              <input
-                type="text"
-                placeholder="구매 링크"
-                value={item.productLink}
-                onChange={(e) => setLink(e, index)}
-              />
+              {click.includes(index) && (
+                <span
+                  style={{
+                    position: "absolute",
+                    fontWeight: "bold",
+                    top: "5px",
+                    left: "5px",
+                    color: "white",
+                    backgroundColor: "rgba(0, 0, 0, 0.6)",
+                    padding: "2px 5px",
+                    borderRadius: "3px",
+                    fontSize: "14px",
+                  }}
+                >
+                  {click.indexOf(index) + 1}
+                </span>
+              )}
             </div>
           ))}
-          <button
-            type="button"
-            className="w-full p-2 border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
-            onClick={addProduct}
-          >
-            제품 정보 추가
-          </button>
-        </div>
-
-        <div className="mb-4 text-sm">
-          <label htmlFor="content" className="block text-sm font-medium mb-2">
-            공개 여부
-          </label>
-          <div>
-            <input
-              type="radio"
-              name="publicYn"
-              className="mr-1"
-              value="Y"
-              checked={post.postPublicYn === "Y"}
-              onChange={() => setPost({ ...post, postPublicYn: "Y" })}
-            />
-            공개
-            <input
-              type="radio"
-              name="publicYn"
-              className="mr-1"
-              value="N"
-              checked={post.postPublicYn === "N"}
-              onChange={() => setPost({ ...post, postPublicYn: "N" })}
-            />
-            비공개
-          </div>
-        </div>
-
-        {/* 태그 */}
-        <div className="mb-4">
-          <div className="text-sm">
-            <div className="mb-2">계절</div>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                봄
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="2"
-                  onChange={tagCheck}
-                />
-                여름
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="3"
-                  onChange={tagCheck}
-                />
-                가을
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="4"
-                  onChange={tagCheck}
-                />
-                겨울
-              </label>
-            </div>
-          </div>
-          <div className="text-sm mt-4">
-            <div className="mb-2">연차</div>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="5"
-                  onChange={tagCheck}
-                />
-                ~1년 미만
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="6"
-                  onChange={tagCheck}
-                />
-                1~3년차
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="7"
-                  onChange={tagCheck}
-                />
-                3년 이상
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="8"
-                  onChange={tagCheck}
-                />
-                임원
-              </label>
-            </div>
-          </div>
-          <div className="text-sm mt-4">
-            <div className="mb-2">스타일</div>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="9"
-                  onChange={tagCheck}
-                />
-                포멀
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="10"
-                  onChange={tagCheck}
-                />
-                캐주얼
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="11"
-                  onChange={tagCheck}
-                />
-                스트릿
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                아메카지
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                빈티지
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                시티보이
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                페미닌
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                미니멀
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                스포티
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                둠보이
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                기타
-              </label>
-            </div>
-          </div>
-          <div className="text-sm mt-4">
-            <div className="mb-2">체형</div>
-            <div>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                마름
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                보통
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                건장
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                빅사이즈
-              </label>
-            </div>
-          </div>
-        </div>
-        <div>
-          <button
-            type="submit"
-            className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
-            onClick={upload}
-          >
-            업로드
-          </button>
         </div>
       </div>
 
@@ -508,7 +163,7 @@ const Post = ({ upload, post, setPost }) => {
           placeholder="내용 입력"
           value={post.postDesc}
           onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
-        />
+        ></textarea>
       </div>
 
       <div className="upload-info">
@@ -614,7 +269,7 @@ const Post = ({ upload, post, setPost }) => {
       <div className="upload-button">
         <button onClick={upload}>업로드</button>
       </div>
-    </>
+    </div>
   );
 };
 

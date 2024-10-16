@@ -51,20 +51,9 @@ const router = createBrowserRouter([
         path: `mypage/follow/followMeUsers/:followerUserCode`,
         element: <FollowMeUsers />,
       },
-      {
-        path: "/post/",
-        children: [
-          {
-            path: ":postCode",
-            element: <Detail />,
-          },
-          {
-            path: "update/:postCode",
-            element: <UpdatePost />,
-          },
-        ],
-      },
+      { path: "/post/:postCode", element: <Detail /> },
       { path: "/updateUser", element: <UpdateUser /> },
+      { path: "/updatePost/:postCode", element: <UpdatePost /> },
     ],
   },
 ]);

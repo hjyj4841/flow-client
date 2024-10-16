@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import { GrNext, GrPrevious } from "react-icons/gr";
-import { delPost } from "../../api/post";
 
 const DetailDiv = styled.div`
   .report {
@@ -32,22 +31,12 @@ const DetailDiv = styled.div`
 const Detail = () => {
   const { postCode } = useParams();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reportReducer, report);
-  const [report] = state;
-  let loginUserCode = 0;
+  const initialState = {};
+  const [dispatch] = useReducer(reportReducer, initialState);
 
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-  const token = localStorage.getItem("token");
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    const userData = JSON.parse(window.atob(base64));
-    loginUserCode = userData.userCode;
-  }
-
   useEffect(() => {
     const fetchPost = async () => {
       const response = await axios.get(
@@ -57,7 +46,6 @@ const Detail = () => {
     };
     fetchPost();
   }, [postCode]);
-
   const handleNextImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex(
@@ -65,21 +53,6 @@ const Detail = () => {
       );
     }
   };
-
-  const updatePost = () => {
-    navigate("/post/update/" + postCode);
-  };
-
-  const deleteAPI = async () => {
-    await delPost(postCode);
-  };
-
-  const deletePost = () => {
-    deleteAPI();
-    alert("삭제 완료");
-    window.location.href = "/";
-  };
-
   const handlePreviousImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex((prevIndex) =>
@@ -93,33 +66,23 @@ const Detail = () => {
     });
     setComment("");
   };
-
   return (
     <>
       <DetailDiv>
+        <h1>디테일 페이지</h1>
         <div className="report">
           <button className="report-post-btn">글 신고버튼</button>
           <button className="report-user-btn">유저 신고버튼</button>
         </div>
+        <button
+          className="update-post-btn"
+          onClick={() => navigate("/updatePost/" + postCode)}
+        >
+          수정
+        </button>
       </DetailDiv>
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
-          {loginUserCode === post?.userCode && (
-            <>
-              <button
-                className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
-                onClick={updatePost}
-              >
-                수정
-              </button>
-              <button
-                className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2"
-                onClick={deletePost}
-              >
-                삭제
-              </button>
-            </>
-          )}
           {post ? (
             <>
               <div className="relative mb-4">
@@ -199,5 +162,4 @@ const Detail = () => {
     </>
   );
 };
-
 export default Detail;
