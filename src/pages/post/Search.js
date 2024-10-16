@@ -7,19 +7,6 @@ const Search = () => {
     navigate("/");
   };
 
-  const [minHeight, setMinHeight] = useState(140);
-  const [maxHeight, setMaxHeight] = useState(220);
-
-  const handleMinChange = (e) => {
-    const value = Math.min(Number(e.target.value), maxHeight);
-    setMinHeight(value);
-  };
-
-  const handleMaxChange = (e) => {
-    const value = Math.max(Number(e.target.value), minHeight);
-    setMaxHeight(value);
-  };
-
   return (
     <>
       <body class="bg-gray-100">
@@ -31,22 +18,14 @@ const Search = () => {
             <h1 class="text-xl font-bold">필터</h1>
             <button class="text-sm text-gray-500">초기화</button>
           </div>
-          <div className="mb-8">
-            <h2 className="font-bold mb-2">HEIGHT</h2>
-            <div className="flex justify-between items-center mb-2">
-              <span>
-                {minHeight}cm ~ {maxHeight}cm
-              </span>
+          <div class="mb-4">
+            <div class="flex justify-between items-center mb-2">
+              <span class="font-bold">MEN</span>
+              <input type="checkbox" class="form-checkbox h-5 w-5" />
             </div>
-            <div className="relative">
-              <input
-                type="range"
-                min="140"
-                max="220"
-                value={minHeight}
-                onChange={handleMinChange}
-                className="absolute w-full z-10"
-              />
+            <div class="flex justify-between items-center">
+              <span class="font-bold">WOMEN</span>
+              <input type="checkbox" class="form-checkbox h-5 w-5" />
             </div>
           </div>
           <div class="mb-4">
