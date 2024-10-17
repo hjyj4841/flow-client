@@ -7,8 +7,8 @@
 }
 .quick-slot * {
   margin-left: 10px;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 14px;
+  /* font-weight: bold; */
 }
 
 .login-open-btn,
