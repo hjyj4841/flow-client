@@ -48,13 +48,15 @@ const Detail = () => {
   const [reportPost, setReportPost] = useState({
     reportDesc: "",
     post: {
-      postCode: 0,
+      postCode: postCode,
     },
   });
 
   const [reportUser, setReportUser] = useState({
     reportDesc: "",
-    userCode: 0,
+    user: {
+      userCode: 0,
+    },
   });
 
   let loginUserCode = 0;
@@ -76,7 +78,6 @@ const Detail = () => {
       );
       setPost(response.data);
     };
-
     fetchPost();
   }, []);
 
@@ -85,7 +86,11 @@ const Detail = () => {
   };
 
   const reportPostBtn = (data) => {
-    addReportPost(data);
+    addReportPost(reportDispatch, data);
+  };
+
+  const reportUserBtn = (data) => {
+    addReportUser(reportDispatch, data);
   };
 
   const handleCommentSubmit = async () => {
@@ -121,6 +126,20 @@ const Detail = () => {
     }
   };
 
+  // 신고 버튼 눌렀을 때
+  useEffect(() => {
+    if (reportUser.user.userCode !== 0) {
+      alert(reportUser.user.userCode);
+      console.log(reportUser);
+      setReportUser({
+        ...reportUser,
+        user: {
+          userCode: post.user.userCode,
+        },
+      });
+    }
+  }, [reportUser.user]);
+
   return (
     <>
       <DetailDiv>
@@ -137,8 +156,6 @@ const Detail = () => {
           <button
             className="report-post-btn"
             onClick={() => {
-              setReportPost({ ...reportPost, post: { postCode: postCode } });
-              console.log(reportPost);
               reportPostBtn(reportPost);
             }}
           >
@@ -154,9 +171,10 @@ const Detail = () => {
           />
           <button
             className="report-user-btn"
-            // onClick={(data) => {
-            //   reportUser(data);
-            // }}
+            onClick={() => {
+              console.log(reportUser);
+              // reportUserBtn(reportUser);
+            }}
           >
             유저 신고버튼
           </button>
