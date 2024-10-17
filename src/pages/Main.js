@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { SlArrowDown } from "react-icons/sl";
+import { Link } from "react-router-dom";
 
 const Main = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -133,7 +135,7 @@ const Main = () => {
         {/* Popular Feed Section */}
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
-          <div className="flex overflow-x-auto space-x-4 mx-4">
+          <div className="grid grid-cols-4 gap-4">
             {popularFeedImages.map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
@@ -187,11 +189,16 @@ const Main = () => {
               ) : null
             )}
           </div>
+          <SlArrowDown />
         </section>
 
         {/* New Feed Section */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
+          <h2 className="text-xl font-bold mb-4">
+            <Link to="/newFeed" className="hover:underline">
+              NEW FEED
+            </Link>
+          </h2>
           <div className="grid grid-cols-4 gap-4">
             {newFeedImages.map((post) =>
               post.imageUrls.length > 0 ? (
@@ -243,6 +250,7 @@ const Main = () => {
               ) : null
             )}
           </div>
+          <SlArrowDown />
         </section>
 
         {/* Follower's Feed Section */}
@@ -305,6 +313,7 @@ const Main = () => {
                 ) : null
               )}
             </div>
+            <SlArrowDown />
           </section>
         )}
       </main>
