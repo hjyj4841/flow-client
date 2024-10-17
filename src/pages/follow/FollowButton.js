@@ -4,17 +4,30 @@ import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
 const FollowButton = ({user}) => {
-
-    const FollowStyleAndEffect = styled.body`
+    const FollowStyleAndEffect = styled.div`
         button {
-            background-color: green;
-            width: 4rem;
+            color: #4a4a4a;
+            margin: 1px;
+            width: 6rem;
             height: 3rem;
-            border: 1px, solid, beige;
+            border: none;
+            border-radius: 10px;
             cursor: pointer;
+            background-color:  #e1bee7;
+            box-shadow: inset -1px 1px 2px rgba(223, 205, 237, 0.8);
+            font-size: 1.2rem; /* 글자 크기 */
+            font-weight: 500; /* 글자 굵기 */
+            font-family: 'Poppins', sans-serif; /* 세련된 글꼴 */
         }
         
     `;
+        // Google Fonts를 동적으로 로드하는 useEffect 훅
+        useEffect(() => {
+          const link = document.createElement('link');
+          link.href = 'https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap';
+          link.rel = 'stylesheet';
+          document.head.appendChild(link); // <head>에 추가
+        }, []);
 
     const token = localStorage.getItem("token");
     const dispatch = useDispatch();
@@ -68,7 +81,7 @@ const FollowButton = ({user}) => {
         })
     }, [tokenCode, user.userCode, dispatch])
     return <>
-        <FollowStyleAndEffect onClick={submit}>
+        <FollowStyleAndEffect>
             <button onClick={submit}>{isFollow ? "언팔로우" : "팔로우"}</button>
         </FollowStyleAndEffect>
     </>
