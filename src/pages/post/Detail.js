@@ -1,42 +1,73 @@
-import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
-import { addReportPost, addReportUser } from "../../reducers/reportReducer";
-import { reportReducer } from "../../reducers/reportReducer";
-import { useReducer, useState, useEffect } from "react";
 import axios from "axios";
+import styled from "styled-components";
+import React, { useEffect, useState, useReducer } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { GrNext, GrPrevious } from "react-icons/gr";
+import { delPost } from "../../api/post";
+import {
+  addReportPost,
+  addReportUser,
+  initState as reportState,
+  reportReducer,
+} from "../../reducers/reportReducer";
+
+const DetailDiv = styled.div`
+  .report {
+    display: flex;
+  }
+  .report-post-btn {
+    margin: 20px;
+  }
+  .report-user-btn {
+    margin: 20px;
+  }
+  .report button {
+    background-color: #f05650;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+  .update-post-btn {
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+`;
 
 const Detail = () => {
-  const DetailDiv = styled.div`
-    .report {
-      display: flex;
-    }
-    .report-post-btn {
-      margin: 20px;
-    }
-    .report-user-btn {
-      margin: 20px;
-    }
-    .report button {
-      background-color: #f05650;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-    .update-post-btn {
-      background-color: #ddd;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-  `;
   const { postCode } = useParams();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reportReducer, report);
-  const [report] = state;
 
-  const [user, setUser] = useState({});
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
+
+  const [state, reportDispatch] = useReducer(reportReducer, reportState);
+  const { report } = state;
+
+  const [reportPost, setReportPost] = useState({
+    reportDesc: "",
+    post: {
+      postCode: 0,
+    },
+  });
+
+  const [reportUser, setReportUser] = useState({
+    reportDesc: "",
+    userCode: 0,
+  });
+
+  let loginUserCode = 0;
+  const [user, setUser] = useState({});
+  const token = localStorage.getItem("token");
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    loginUserCode = userData.userCode;
+  }
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -47,18 +78,16 @@ const Detail = () => {
     };
 
     fetchPost();
-  }, [postCode]);
+  }, []);
 
   const updatePost = () => {
-    navigate("/updatePost/" + postCode);
+    navigate("/post/update/" + postCode);
   };
 
-  const reportPost = (data) => {
-    addReportPost(dispatch, data);
+  const reportPostBtn = (data) => {
+    addReportPost(data);
   };
-  const reportUser = (data) => {
-    addReportUser(dispatch, data);
-  };
+
   const handleCommentSubmit = async () => {
     await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
       content: comment,
@@ -66,56 +95,117 @@ const Detail = () => {
     setComment("");
   };
 
+  const deleteAPI = async () => {
+    await delPost(postCode);
+  };
+
+  const deletePost = () => {
+    deleteAPI();
+    alert("삭제 완료");
+    window.location.href = "/";
+  };
+
+  const handleNextImage = () => {
+    if (post.imageUrls && post.imageUrls.length > 0) {
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % post.imageUrls.length
+      );
+    }
+  };
+
+  const handlePreviousImage = () => {
+    if (post.imageUrls && post.imageUrls.length > 0) {
+      setCurrentImageIndex((prevIndex) =>
+        prevIndex === 0 ? post.imageUrls.length - 1 : prevIndex - 1
+      );
+    }
+  };
+
   return (
     <>
       <DetailDiv>
-        <h1>디테일 페이지</h1>
         <div className="report">
+          <input
+            className="report-post-desc"
+            type="text"
+            placeholder="설명"
+            value={reportPost.reportDesc}
+            onChange={(e) =>
+              setReportPost({ ...reportPost, reportDesc: e.target.value })
+            }
+          />
           <button
             className="report-post-btn"
-            onClick={(data) => {
-              reportPost(data);
+            onClick={() => {
+              setReportPost({ ...reportPost, post: { postCode: postCode } });
+              console.log(reportPost);
+              reportPostBtn(reportPost);
             }}
           >
             글 신고버튼
           </button>
+          <input
+            className="report-user-desc"
+            type="text"
+            placeholder="설명"
+            onChange={(e) =>
+              setReportUser({ ...reportUser, reportDesc: e.target.value })
+            }
+          />
           <button
             className="report-user-btn"
-            onClick={(data) => {
-              reportUser(data);
-            }}
+            // onClick={(data) => {
+            //   reportUser(data);
+            // }}
           >
             유저 신고버튼
           </button>
         </div>
-        <button className="update-post-btn" onClick={updatePost}>
-          수정
-        </button>
       </DetailDiv>
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
+          {loginUserCode === post?.userCode && (
+            <>
+              <button
+                className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
+                onClick={updatePost}
+              >
+                수정
+              </button>
+              <button
+                className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2"
+                onClick={deletePost}
+              >
+                삭제
+              </button>
+            </>
+          )}
           {post ? (
             <>
-              <div className="mb-4">
+              <div className="relative mb-4">
                 {post.imageUrls && post.imageUrls.length > 0 ? (
-                  post.imageUrls.map((url, index) => (
+                  <>
+                    <button
+                      onClick={handlePreviousImage}
+                      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-lg"
+                    >
+                      <GrPrevious />
+                    </button>
                     <img
-                      key={index}
-                      src={url}
-                      alt={`Post Image ${index}`}
+                      src={post.imageUrls[currentImageIndex]}
+                      alt={`Post Image ${currentImageIndex}`}
                       className="w-full rounded-lg"
                     />
-                  ))
+                    <button
+                      onClick={handleNextImage}
+                      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-lg"
+                    >
+                      <GrNext />
+                    </button>
+                  </>
                 ) : (
                   <p>No images available</p>
                 )}
-              </div>
-              <div className="flex items-center mb-2">
-                <img
-                  src="https://source.unsplash.com/random/40x40"
-                  alt="User Avatar"
-                  className="w-10 h-10 rounded-full mr-2"
-                />
               </div>
               <p className="mb-2">
                 {post.postDesc}
@@ -132,9 +222,9 @@ const Detail = () => {
                 <span className="mr-4">
                   💬 {post.comments ? post.comments.length : 0}
                 </span>
-                <span>⚠️</span>
               </div>
               <span className="font-bold">{post.userName}</span>
+
               <div className="border-t border-gray-300 pt-4">
                 <h2 className="font-bold mb-2">
                   댓글 {post.comments ? post.comments.length : 0}개
@@ -142,14 +232,6 @@ const Detail = () => {
                 {post.comments && post.comments.length > 0 ? (
                   post.comments.map((comment, index) => (
                     <div key={index} className="mb-2">
-                      <div className="flex items-center mb-1">
-                        <img
-                          src="https://source.unsplash.com/random/40x40"
-                          alt="User Avatar"
-                          className="w-8 h-8 rounded-full mr-2"
-                        />
-                        <span className="font-bold">{comment.userName}</span>
-                      </div>
                       <p className="text-sm">{comment.content}</p>
                     </div>
                   ))
@@ -157,6 +239,7 @@ const Detail = () => {
                   <p>댓글이 없습니다.</p>
                 )}
               </div>
+
               <div className="mt-4">
                 <input
                   type="text"
@@ -179,5 +262,4 @@ const Detail = () => {
     </>
   );
 };
-
 export default Detail;

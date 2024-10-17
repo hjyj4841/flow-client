@@ -1,24 +1,26 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/css/header.css";
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
+import SearchModal from "./SearchModal";
 
 const Header = () => {
   const { token, logout } = useAuth();
+  const [isModalOpen, setModalOpen] = useState(false);
 
   // 유저 정보 뽑기
   let userData;
   if (token) {
-    const testToken = token;
-
-    const base64Url = testToken.split(".")[1];
+    const base64Url = token.split(".")[1];
     const base64 = base64Url.replace("-", "+").replace("_", "/");
     userData = JSON.parse(window.atob(base64));
   }
-  // const ManagerCode = userData.userManagerCode;
-  // console.log(ManagerCode);
+
+  const toggleModal = () => {
+    setModalOpen(!isModalOpen);
+  };
 
   return (
     <>
@@ -27,25 +29,21 @@ const Header = () => {
           FLOW
         </Link>
         <nav className="space-x-4">
-          {token !== null ? (
+          {token ? (
             <>
-              <a href="/search" className="text-sm">
+              <button type="button" className="text-sm" onClick={toggleModal}>
                 찾기
-              </a>
+              </button>
               <a href="#" className="text-sm" onClick={logout}>
                 로그아웃
               </a>
               <Link className="text-sm" to={"/mypage"}>
                 마이페이지
               </Link>
-              {token !== null ? (
-                userData.userManagerCode === "Y" ? (
-                  <Link to={"/reportList"}>신고리스트</Link>
-                ) : (
-                  <></>
-                )
-              ) : (
-                <></>
+              {userData.userManagerCode === "Y" && (
+                <Link to={"/reportList"} className="text-sm">
+                  신고리스트
+                </Link>
               )}
               <Link to={"/uploadPost"} className="text-sm">
                 업로드
@@ -56,11 +54,10 @@ const Header = () => {
             </>
           ) : (
             <div className="quick-slot">
-              <a href="/search" className="text-sm">
+              <a href="#" className="text-sm" onClick={toggleModal}>
                 찾기
               </a>
               <RegisterModal />
-
               <LoginModal />
               <Link to={"/votePost"} className="text-sm">
                 투표
@@ -69,8 +66,8 @@ const Header = () => {
           )}
         </nav>
       </div>
+      <SearchModal isOpen={isModalOpen} onClose={toggleModal} />
     </>
   );
 };
-
 export default Header;
