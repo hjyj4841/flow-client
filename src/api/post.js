@@ -22,11 +22,7 @@ export const addPost = async (data) => {
 
 // 게시물 수정
 export const updatePost = async (data) => {
-  return await instance.put("post", data, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
+  return await instance.put("post", data);
 };
 
 // POST_CODE로 게시물 1개 조회
