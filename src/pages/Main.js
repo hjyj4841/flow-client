@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { SlArrowDown } from "react-icons/sl";
+import { Link } from "react-router-dom";
 
 const Main = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -133,7 +135,7 @@ const Main = () => {
         {/* Popular Feed Section */}
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
-          <div className="flex overflow-x-auto space-x-4 mx-4">
+          <div className="grid grid-cols-4 gap-4">
             {popularFeedImages.map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
@@ -187,11 +189,16 @@ const Main = () => {
               ) : null
             )}
           </div>
+          <SlArrowDown />
         </section>
 
         {/* New Feed Section */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
+          <h2 className="text-xl font-bold mb-4">
+            <Link to="/newFeed" className="hover:underline">
+              NEW FEED
+            </Link>
+          </h2>
           <div className="grid grid-cols-4 gap-4">
             {newFeedImages.map((post) =>
               post.imageUrls.length > 0 ? (
@@ -206,7 +213,7 @@ const Main = () => {
                   />
                   <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
                     <p
-                      className="text-white mb-2"
+                      className="text-white mb-2 cursor-pointer"
                       onClick={() => detail(post.postCode)}
                     >
                       {post.postDesc}
@@ -218,12 +225,12 @@ const Main = () => {
                         <FaHeart
                           onClick={() => handleLikeToggle(post.postCode)}
                           style={{ color: "red" }}
-                          className="mx-2"
+                          className="mx-2 cursor-pointer"
                         />
                       ) : (
                         <FaRegHeart
                           onClick={() => handleLikeToggle(post.postCode)}
-                          className="mx-2"
+                          className="mx-2 cursor-pointer"
                         />
                       )}
                       {savedPosts.some(
@@ -232,12 +239,12 @@ const Main = () => {
                         <BsCollectionFill
                           onClick={() => handleSaveToggle(post.postCode)}
                           style={{ color: "black" }}
-                          className="mx-2"
+                          className="mx-2 cursor-pointer"
                         />
                       ) : (
                         <BsCollection
                           onClick={() => handleSaveToggle(post.postCode)}
-                          className="mx-2"
+                          className="mx-2 cursor-pointer"
                         />
                       )}
                     </div>
@@ -246,6 +253,7 @@ const Main = () => {
               ) : null
             )}
           </div>
+          <SlArrowDown />
         </section>
 
         {/* Follower's Feed Section */}
@@ -308,6 +316,7 @@ const Main = () => {
                 ) : null
               )}
             </div>
+            <SlArrowDown />
           </section>
         )}
       </main>

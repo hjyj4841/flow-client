@@ -50,3 +50,14 @@ export const delImg = async (postImgCode) => {
     data: postImgCode, // 배열 전달
   });
 };
+
+// 메인 화면 NewFeed
+export const newFeed = async (page = 1, keyword = "") => {
+  const response = await instance.get(`post`, {
+    params: {
+      page: page,
+      keyword: keyword,
+    },
+  });
+  return response.data;
+};
