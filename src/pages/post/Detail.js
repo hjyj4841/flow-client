@@ -1,43 +1,129 @@
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
+import {
+  addReportPost,
+  addReportUser,
+  initState as reportState,
+} from "../../reducers/reportReducer";
+import { reportReducer } from "../../reducers/reportReducer";
+import { useReducer, useState, useEffect } from "react";
+import axios from "axios";
 
+const DetailDiv = styled.div`
+  .report {
+    display: flex;
+  }
+  .report-post-btn {
+    margin: 20px;
+  }
+  .report-user-btn {
+    margin: 20px;
+  }
+  .report button {
+    background-color: #f05650;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+  .update-post-btn {
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+`;
 const Detail = () => {
-  const DetailDiv = styled.div`
-    .report {
-      display: flex;
-    }
-    .report-post-btn {
-      margin: 20px;
-    }
-    .report-user-btn {
-      margin: 20px;
-    }
-    .report button {
-      background-color: #f05650;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-    .update-post-btn {
-      background-color: #ddd;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-  `;
   const { postCode } = useParams();
   const navigate = useNavigate();
+
+  const [post, setPost] = useState(null);
+  const [comment, setComment] = useState("");
+
+  const [state, reportDispatch] = useReducer(reportReducer, reportState);
+  const { report } = state;
+
+  const [reportPost, setReportPost] = useState({
+    reportDesc: "",
+    post: {
+      postCode: 0,
+    },
+  });
+
+  const [reportUser, setReportUser] = useState({
+    reportDesc: "",
+    userCode: 0,
+  });
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      const response = await axios.get(
+        `http://localhost:8080/api/post/${postCode}`
+      );
+      setPost(response.data);
+    };
+
+    fetchPost();
+  }, [postCode]);
 
   const updatePost = () => {
     navigate("/updatePost/" + postCode);
   };
+
+  const reportPostBtn = (data) => {
+    addReportPost(data);
+  };
+
+  // const reportUser = (data) => {
+  //   addReportUser(dispatch, data);
+  // };
+
+  const handleCommentSubmit = async () => {
+    await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
+      content: comment,
+    });
+    setComment("");
+  };
+
   return (
     <>
       <DetailDiv>
         <h1>디테일 테스트 페이지</h1>
         <div className="report">
-          <button className="report-post-btn">글 신고버튼</button>
-          <button className="report-user-btn">유저 신고버튼</button>
+          <input
+            className="report-post-desc"
+            type="text"
+            placeholder="설명"
+            value={reportPost.reportDesc}
+            onChange={(e) =>
+              setReportPost({ ...reportPost, reportDesc: e.target.value })
+            }
+          />
+          <button
+            className="report-post-btn"
+            onClick={() => {
+              setReportPost({ ...reportPost, post: { postCode: postCode } });
+              console.log(reportPost);
+              reportPostBtn(reportPost);
+            }}
+          >
+            글 신고버튼
+          </button>
+          <input
+            className="report-user-desc"
+            type="text"
+            placeholder="설명"
+            onChange={(e) =>
+              setReportUser({ ...reportUser, reportDesc: e.target.value })
+            }
+          />
+          <button
+            className="report-user-btn"
+            // onClick={(data) => {
+            //   reportUser(data);
+            // }}
+          >
+            유저 신고버튼
+          </button>
         </div>
         <button className="update-post-btn" onClick={updatePost}>
           수정
