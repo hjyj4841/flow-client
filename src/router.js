@@ -13,7 +13,6 @@ import AuthRegisterGoogle from "./pages/auth/AuthRegisterGoogle";
 import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
 import ReportList from "./pages/ReportList";
 import MyFollower from "./pages/follow/MyFollower";
-import FollowMeUsers from "./pages/follow/FollowMeUsers";
 import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
 import UploadVotePost from "./pages/post/UploadVotePost";
 import UpdatePost from "./pages/post/UpdatePost";
@@ -47,10 +46,6 @@ const router = createBrowserRouter([
       {
         path: `mypage/follow/myFollower/:followingUserCode`,
         element: <MyFollower />,
-      },
-      {
-        path: `mypage/follow/followMeUsers/:followerUserCode`,
-        element: <FollowMeUsers />,
       },
       {
         path: "/post/",

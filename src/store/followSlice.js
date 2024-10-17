@@ -41,7 +41,8 @@ const followSlice = createSlice({
     initialState : {
         countFollower: 0,
         follower: [],
-        counter : 0
+        counter : 0,
+        followee : []
     },
     extraReducers : (builder) => {
         builder
@@ -55,9 +56,8 @@ const followSlice = createSlice({
         .addCase(followMe.fulfilled, (state, action) => {
             return {
                 ...state,
-                countFollower : action.payload.countFollower,
-                follower : action.payload.follower,
-                counter : action.payload.countFollower
+                counter : action.payload.countFollower,
+                followee : action.payload.follower
                 }
         })
         .addCase(removeFollowRelative.fulfilled, (state) => {
@@ -65,6 +65,10 @@ const followSlice = createSlice({
         })
         .addCase(createFollowRelative.fulfilled, (state) => {
             state.countFollower += 1;
+        }).addCase(createFollowRelative.rejected, (state, action) => {
+            console.log("error");
+        }).addCase(followStatus.rejected, (state,action) => {
+            console.log("error");
         })
     }
 })

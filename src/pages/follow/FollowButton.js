@@ -6,18 +6,19 @@ import styled from "styled-components";
 const FollowButton = ({user}) => {
     const FollowStyleAndEffect = styled.div`
         button {
-            color: #4a4a4a;
+            color: #006666;
             margin: 1px;
+            margin-top: 10px;
             width: 6rem;
             height: 3rem;
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            background-color:  #e1bee7;
-            box-shadow: inset -1px 1px 2px rgba(223, 205, 237, 0.8);
-            font-size: 1.2rem; /* 글자 크기 */
-            font-weight: 500; /* 글자 굵기 */
-            font-family: 'Poppins', sans-serif; /* 세련된 글꼴 */
+            background-color:  #c6fcff;
+            box-shadow: inset 5px 0px 4px rgba(203,249,252, 1.0);
+            font-size: 1.2rem;
+            font-weight: 500; 
+            font-family: 'Poppins', sans-serif;
         }
         
     `;
@@ -28,27 +29,33 @@ const FollowButton = ({user}) => {
           link.rel = 'stylesheet';
           document.head.appendChild(link); // <head>에 추가
         }, []);
-
     const token = localStorage.getItem("token");
+    const [isLogin, setIsLogin] = useState(false);
     const dispatch = useDispatch();
-
+    useEffect(() => {
+        if(token) {
+            setIsLogin(true);
+        }
+    }, []);
     function parseJwt(token) {
+        if(token !== null) {
         const base64Url = token.split('.')[1];  // 토큰의 두 번째 부분 (Payload)
         const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
         const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
             return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
         }).join(''));
-    
-        return JSON.parse(jsonPayload);  // JSON 형태로 반환
+        const result =  JSON.parse(jsonPayload);
+        const tokenCode = result.userCode;
+        return tokenCode;
+        }
     }
-    const decodedPayload = parseJwt(token);
-    const tokenCode = decodedPayload.userCode;
+    const tokenCode = parseJwt(token);
     const [follow,setFollow] = useState({
         followingUser : {
             userCode : tokenCode
         },
         followerUser : {
-            userCode : user.userCode
+            userCode : user?.userCode
         }
     });
     const [isFollow, setIsFollow] = useState(false);
@@ -74,15 +81,23 @@ const FollowButton = ({user}) => {
     useEffect(() => {
         dispatch(followStatus({
             followingUserCode : tokenCode,
-            followerUserCode : user.userCode
+            followerUserCode : user?.userCode
         })).then((response) => {
             const status = response.payload;
             setIsFollow(status);
         })
-    }, [tokenCode, user.userCode, dispatch])
+    }, [tokenCode, user?.userCode, dispatch]);
+
+    const tryRegister = () => {
+
+    }
     return <>
         <FollowStyleAndEffect>
-            <button onClick={submit}>{isFollow ? "언팔로우" : "팔로우"}</button>
+            {isLogin ? (
+                <button onClick={submit}>{isFollow ? "언팔로우" : "팔로우"}</button>
+            ) : (
+                <button onClick={tryRegister}>팔로우</button>
+            )}
         </FollowStyleAndEffect>
     </>
 }
