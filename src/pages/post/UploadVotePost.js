@@ -9,13 +9,16 @@ const UploadVotePost = () => {
 
   return (
     <>
-      <div>
-        <input type="textarea" placeholder="투표 내용 입력" />
-      </div>
-      <div>
-        <div>찬성</div>
-        <div>반대</div>
-      </div>
+      <section className="bg-white py-4 shadow-md">
+        <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="flex-none w-16 h-16 bg-gray-300 rounded-full"
+            />
+          ))}
+        </div>
+      </section>
       <Update />
     </>
   );
