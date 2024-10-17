@@ -7,7 +7,6 @@ import {
   reportReducer,
 } from "../reducers/reportReducer";
 import { delReportUser, banUserReport } from "../reducers/reportReducer";
-import { useNavigate } from "react-router-dom";
 
 const ReportUser = () => {
   const [state, dispatch] = useReducer(reportReducer, rUserState);
