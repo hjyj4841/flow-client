@@ -14,6 +14,10 @@ const Post = ({ upload, post, setPost }) => {
     productLink: "",
   };
 
+  const imageFile = {
+    postImgUrl: "",
+  };
+
   useEffect(() => {
     console.log(post);
   }, [post]);
@@ -439,7 +443,7 @@ const Post = ({ upload, post, setPost }) => {
                   value="1"
                   onChange={tagCheck}
                 />
-                둠보이
+                톰보이
               </label>
               <label>
                 <input

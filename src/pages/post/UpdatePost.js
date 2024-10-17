@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { detailPost } from "../../api/post";
+import { delImg, detailPost, updatePost } from "../../api/post";
 import { useState, useEffect } from "react";
 
 const UpdatePost = () => {
@@ -42,7 +42,7 @@ const UpdatePost = () => {
         (post) => !updatedSet.has(post.postImgCode)
       );
       // console.log(remainingImages); // 남아있는 postImgCode
-      console.log(updatedSet); // 삭제된 postImgCode
+      // console.log(updatedSet); // 삭제된 postImgCode
 
       // 상태 업데이트
       setUpdate((prev) => ({
@@ -50,7 +50,9 @@ const UpdatePost = () => {
         postImgInfo: remainingImages,
       }));
 
-      setImgCode(updatedSet); //  삭제된 postImgCode
+      const imgArray = [...updatedSet];
+      // console.log(imgArray);
+      setImgCode(imgArray); //  삭제된 postImgCode
 
       return updatedSet;
     });
@@ -58,7 +60,6 @@ const UpdatePost = () => {
 
   const tagCheck = (event) => {
     const value = parseInt(event.target.value, 10); // 체크박스의 값을 정수로 변환
-
     setUpdate((prev) => {
       // 체크된 경우
       if (event.target.checked) {
@@ -80,10 +81,24 @@ const UpdatePost = () => {
     detailView();
   }, []);
 
-  // 수정 완료 버튼
-  const updateForm = () => {
-    console.log(imgCode); // 삭제하는 이미지
+  useEffect(() => {
     console.log(update);
+  }, [update]);
+
+  // 수정 완료 버튼
+  const updateForm = async () => {
+    if (imgCode.length > 0) {
+      console.log(imgCode); // 삭제하는 이미지 코드
+      await delImg([...imgCode]);
+    }
+    try {
+      console.log(update);
+      await updatePost(update);
+      alert("수정 완료");
+      window.location.href = "/";
+    } catch (error) {
+      alert("수정 실패:" + error);
+    }
   };
 
   const setBrand = (e, i) => {
