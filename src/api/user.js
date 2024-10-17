@@ -61,5 +61,14 @@ export const findUser = async (token) => {
 
 // 유저 정보 수정하기
 export const updateUser = async (data) => {
-  await instance.put("updateUser", data);
+  await instance.put("updateUser", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
+
+// 유저 닉네임 중복 체크
+export const nicknameCheck = async (userNickname) => {
+  return await instance.get(`nickNameCheck?userNickname=${userNickname}`);
 };
