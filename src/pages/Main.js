@@ -197,50 +197,47 @@ const Main = () => {
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
-                  className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                  className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5"
                 >
                   <img
                     src={post.imageUrls[0]}
                     alt={post.postDesc}
                     className="w-full h-full object-cover rounded-lg"
                   />
-                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p
-                      className="text-white mb-2"
-                      onClick={() => detail(post.postCode)}
-                    >
-                      {post.postDesc}
-                    </p>
-                    <div className="flex items-center">
-                      {likedPosts.some(
-                        (likedPost) => likedPost.post.postCode === post.postCode
-                      ) ? (
-                        <FaHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <FaRegHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                      {savedPosts.some(
-                        (savedPost) => savedPost.post.postCode === post.postCode
-                      ) ? (
-                        <BsCollectionFill
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "black" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <BsCollection
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                    </div>
+                  <div
+                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => detail(post.postCode)}
+                  />
+                  <div className="flex items-center mt-2 width-20">
+                    <p className="text-black ml-3">{post.postDesc}</p>
+                    {likedPosts.some(
+                      (likedPost) => likedPost.post.postCode === post.postCode
+                    ) ? (
+                      <FaHeart
+                        onClick={() => handleLikeToggle(post.postCode)}
+                        style={{ color: "red" }}
+                        className=""
+                      />
+                    ) : (
+                      <FaRegHeart
+                        onClick={() => handleLikeToggle(post.postCode)}
+                        className=""
+                      />
+                    )}
+                    {savedPosts.some(
+                      (savedPost) => savedPost.post.postCode === post.postCode
+                    ) ? (
+                      <BsCollectionFill
+                        onClick={() => handleSaveToggle(post.postCode)}
+                        style={{ color: "black" }}
+                        className="ml-2"
+                      />
+                    ) : (
+                      <BsCollection
+                        onClick={() => handleSaveToggle(post.postCode)}
+                        className="ml-2"
+                      />
+                    )}
                   </div>
                 </div>
               ) : null
