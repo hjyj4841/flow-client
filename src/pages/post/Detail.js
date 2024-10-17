@@ -5,36 +5,37 @@ import { reportReducer } from "../../reducers/reportReducer";
 import { useReducer, useState, useEffect } from "react";
 import axios from "axios";
 import { delPost } from "../../api/post";
+
+const DetailDiv = styled.div`
+  .report {
+    display: flex;
+  }
+  .report-post-btn {
+    margin: 20px;
+  }
+  .report-user-btn {
+    margin: 20px;
+  }
+  .report button {
+    background-color: #f05650;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+  .update-post-btn {
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+`;
+
 const Detail = () => {
-  const DetailDiv = styled.div`
-    .report {
-      display: flex;
-    }
-    .report-post-btn {
-      margin: 20px;
-    }
-    .report-user-btn {
-      margin: 20px;
-    }
-    .report button {
-      background-color: #f05650;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-    .update-post-btn {
-      background-color: #ddd;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-  `;
   const { postCode } = useParams();
   const navigate = useNavigate();
-  const [state, dispatch] = useReducer(reportReducer, report);
-  const [report] = state;
-  let loginUserCode = 0;
-  const [user, setUser] = useState({});
+  const initialState = {};
+  const [dispatch] = useReducer(reportReducer, initialState);
+
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const token = localStorage.getItem("token");
@@ -118,26 +119,24 @@ const Detail = () => {
           )}
           {post ? (
             <>
-              <div className="mb-4">
-                {post.imageUrls && post.imageUrls.length > 0 ? (
-                  post.imageUrls.map((url, index) => (
-                    <img
-                      key={index}
-                      src={url}
-                      alt={`Post Image ${index}`}
-                      className="w-full rounded-lg"
-                    />
-                  ))
-                ) : (
-                  <p>No images available</p>
-                )}
-              </div>
               <div className="flex items-center mb-2">
                 <img
                   src="https://source.unsplash.com/random/40x40"
                   alt="User Avatar"
                   className="w-10 h-10 rounded-full mr-2"
                 />
+              </div>
+              <div className="mb-4">
+                {post.imageUrls && post.imageUrls.length > 0
+                  ? post.imageUrls.map((url, index) => (
+                      <img
+                        key={index}
+                        src={url}
+                        alt={`Post Image ${index}`}
+                        className="w-full rounded-lg"
+                      />
+                    ))
+                  : null}
               </div>
               <p className="mb-2">
                 {post.postDesc}
@@ -156,7 +155,6 @@ const Detail = () => {
                 </span>
                 <span>:경고:</span>
               </div>
-              <span className="font-bold">{post.userName}</span>
               <div className="border-t border-gray-300 pt-4">
                 <h2 className="font-bold mb-2">
                   댓글 {post.comments ? post.comments.length : 0}개

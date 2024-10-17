@@ -504,7 +504,7 @@ const Post = ({ upload, post, setPost }) => {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
