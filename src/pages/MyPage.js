@@ -4,13 +4,14 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { deleteUser } from "../api/user";
+import { useAuth } from "../contexts/AuthContext";
 
 const MyPage = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [createdPosts, setCreatedPosts] = useState([]);
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const { token, logout } = useAuth();
   let userCode = "";
   let user = "";
   if (token) {
@@ -77,7 +78,7 @@ const MyPage = () => {
     await deleteUser(token);
     localStorage.removeItem("token");
     alert("회원탈퇴!");
-    window.location.href = "/";
+    logout();
   };
 
   // Toggle like
