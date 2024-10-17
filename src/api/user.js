@@ -7,9 +7,7 @@ const instance = axios.create({
 // 회원 로그인 or 회원가입
 export const userCheck = async (user) => {
   const result = await instance.get(
-    `duplicateCheck?userEmail=${user.userEmail}&userPlatform=${
-      user.userPlatform
-    }`
+    `duplicateCheck?userEmail=${user.userEmail}&userPlatform=${user.userPlatform}`
   );
 
   if (!result.data) {
@@ -33,9 +31,7 @@ export const userCheck = async (user) => {
       alert("회원가입 후 이용해 주세요.");
       return null;
     } else {
-      window.location.href = `/registerUser?userEmail=${
-        user.userEmail
-      }&userPlatform=${user.userPlatform}`;
+      window.location.href = `/registerUser?userEmail=${user.userEmail}&userPlatform=${user.userPlatform}`;
     }
   }
 };
@@ -70,4 +66,9 @@ export const updateUser = async (data) => {
       "Content-Type": "multipart/form-data",
     },
   });
+};
+
+// 유저 닉네임 중복 체크
+export const nicknameCheck = async (userNickname) => {
+  return await instance.get(`nickNameCheck?userNickname=${userNickname}`);
 };
