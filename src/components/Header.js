@@ -4,8 +4,10 @@ import "../assets/css/header.css";
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
+
 const Header = () => {
   const { token, logout } = useAuth();
+
   // 유저 정보 뽑기
   let userData;
   if (token) {
@@ -56,6 +58,7 @@ const Header = () => {
                 찾기
               </a>
               <RegisterModal />
+
               <LoginModal />
               <Link to={"/votePost"} className="text-sm">
                 투표

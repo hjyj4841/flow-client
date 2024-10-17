@@ -24,15 +24,9 @@ export const fetchDeleteReportPost = async (dispatch, postReportCode) => {
   await deletePost(postReportCode);
   dispatch({ type: "FETCH_DELETE_REPORT_POST" });
 };
-// 유저 신고 가져오기
-export const fetchReportUser = async (dispatch) => {
-  const response = await getReportUser();
-  dispatch({ type: "FETCH_REPORT_USER", payload: response.data });
-};
-// 유저 신고 삭제하기
-export const delReportUser = async (dispatch, userReportCode) => {
-  await deleteUser(userReportCode);
-  dispatch({ type: "DELETE_REPORT_USER" });
+
+export const getReportUser = async () => {
+  return await instance.get("showAllUserReport");
 };
 // 유저 밴하기
 export const banUserReport = async (dispatch, userCode) => {
@@ -67,4 +61,18 @@ export const reportReducer = (state, action) => {
     default:
       return state;
   }
+};
+
+export const banUser = async (userCode) => {
+  return await instance.put("banUser?userCode=" + userCode);
+};
+
+// 글 신고하기
+export const reportPost = async (data) => {
+  return await instance.post("reportPost", data);
+};
+
+// 유저 신고하기
+export const reportUser = async (data) => {
+  return await instance.post("reportUser", data);
 };

@@ -21,7 +21,7 @@ export const fetchReportPost = async (dispatch) => {
 };
 // 신고글 지우기
 export const fetchDeleteReportPost = async (dispatch, postReportCode) => {
-  await deletePost(postReportCode);
+  const response = await deletePost(postReportCode);
   dispatch({ type: "FETCH_DELETE_REPORT_POST" });
 };
 // 유저 신고 가져오기
@@ -40,11 +40,11 @@ export const banUserReport = async (dispatch, userCode) => {
   dispatch({ type: "BAN_USER_REPORT" });
 };
 export const addReportPost = async (dispatch, data) => {
-  await reportPost(data);
+  const response = await reportPost(data);
   dispatch({ type: "REPORT_POST" });
 };
 export const addReportUser = async (dispatch, data) => {
-  await reportUser(data);
+  const response = await reportUser(data);
   dispatch({ type: "REPORT_USER" });
 };
 export const reportReducer = (state, action) => {

@@ -3,9 +3,11 @@ import { getKakaoCode } from "../api/kakao";
 import { getGoogleCode } from "../api/google";
 import { getNaverCode } from "../api/naver";
 import "../assets/css/header.css";
+
 const LoginModal = () => {
   const [loginOpen, setLoginOpen] = useState(false);
   const loginBackground = useRef();
+
   return (
     <>
       <button className={"login-open-btn"} onClick={() => setLoginOpen(true)}>

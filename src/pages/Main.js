@@ -142,7 +142,7 @@ const Main = () => {
               <div
                 key={i}
                 className="flex-none w-16 h-16 bg-gray-300 rounded-full"
-              />
+              ></div>
             ))}
           </div>
         </section>
