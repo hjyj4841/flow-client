@@ -65,6 +65,7 @@ const router = createBrowserRouter([
         ],
       },
       { path: "/updateUser", element: <UpdateUser /> },
+      { path: "/updatePost/:postCode", element: <UpdatePost /> },
     ],
   },
 ]);

@@ -25,15 +25,15 @@ const UpdatePost = () => {
   const [imagesToDelete, setImagesToDelete] = useState(new Set());
   const [imgCode, setImgCode] = useState([]);
 
-  // 기존 post DTO 내용 가져오기
+  // 기존 post 내용 가져오기
   const detailView = async () => {
     const result = await detailPost(postCode);
-    // console.log(result); // only post
+    // console.log(result.data);
+    setUpdate(result.data);
   };
 
   // 이미지 미리보기 삭제 버튼
   const handleDelete = (postImgCode) => {
-    // 이미지 미리보기에서 삭제
     setImagesToDelete((prev) => {
       const updatedSet = new Set(prev);
       updatedSet.add(postImgCode);
@@ -41,8 +41,8 @@ const UpdatePost = () => {
       const remainingImages = update.postImgInfo.filter(
         (post) => !updatedSet.has(post.postImgCode)
       );
-      // console.log(remainingImages); // 남은거
-      console.log(updatedSet); // 삭제된거
+      // console.log(remainingImages); // 남아있는 postImgCode
+      console.log(updatedSet); // 삭제된 postImgCode
 
       // 상태 업데이트
       setUpdate((prev) => ({

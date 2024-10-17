@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { getKakaoCode } from "../api/kakao";
-import { getGoogleCode } from "../api/google";
-import { getNaverCode } from "../api/naver";
 import "../assets/css/header.css";
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
@@ -73,5 +70,4 @@ const Header = () => {
     </>
   );
 };
-
 export default Header;

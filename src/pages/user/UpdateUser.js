@@ -10,7 +10,7 @@ const UpdateUser = () => {
     userCode: 0,
     userEmail: "",
     userPlatform: "",
-    userJob: "",
+    userJob: "사무직",
     userHeight: 0,
     userWeight: 0,
     userBodySpecYn: "",
@@ -214,6 +214,7 @@ const UpdateUser = () => {
           신체 정보 공개 여부 변경
         </button>
       </div>
+      <button onClick={updateSubmit}>수정하기</button>
     </div>
   );
 };

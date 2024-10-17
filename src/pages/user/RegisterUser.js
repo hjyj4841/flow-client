@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerUser } from "../../api/user";
+import { nicknameCheck, registerUser } from "../../api/user";
+import "../../assets/css/registerUser.scoped.scss";
 
 const RegisterUser = () => {
   const [user, setUser] = useState({
@@ -9,10 +10,12 @@ const RegisterUser = () => {
       "userPlatform"
     ),
     userNickname: "",
-    userJob: "",
-    userGender: "",
-    userHeight: 0,
-    userWeight: 0,
+    userJob: "사무직",
+    userGender: "남성",
+    userHeight: 160,
+    userWeight: 80,
+    userBodySpecYn: "Y",
+    userProfileUrl: "http://192.168.10.51:8081/userImg/defaultUser.png",
   });
 
   const navigate = useNavigate();
@@ -120,7 +123,7 @@ const RegisterUser = () => {
       <button type="button" onClick={register}>
         회원가입
       </button>
-    </>
+    </div>
   );
 };
 export default RegisterUser;

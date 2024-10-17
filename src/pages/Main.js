@@ -117,16 +117,75 @@ const Main = () => {
   };
 
   return (
-    <>
-      <div className="bg-gray-100 text-gray-800">
-        <section className="bg-white py-4 shadow-md">
-          <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
-            {[...Array(8)].map((_, i) => (
-              <div
-                key={i}
-                className="flex-none w-16 h-16 bg-gray-300 rounded-full"
-              />
-            ))}
+    <div className="bg-gray-100 text-gray-800">
+      <section className="bg-white py-4 shadow-md">
+        <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="flex-none w-16 h-16 bg-gray-300 rounded-full"
+            />
+          ))}
+        </div>
+      </section>
+
+      <main className="container mx-auto px-4 py-8">
+        {/* Popular Feed Section */}
+        <section className="mb-8">
+          <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
+          <div className="flex overflow-x-auto space-x-4 mx-4">
+            {popularFeedImages.map((post) =>
+              post.imageUrls.length > 0 ? (
+                <div
+                  key={post.postCode}
+                  className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                >
+                  <img
+                    src={post.imageUrls[0]}
+                    alt={post.postDesc}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <p
+                      className="text-white mb-2 w-full flex justify-center items-center text-sm truncate"
+                      onClick={() => detail(post.postCode)}
+                    >
+                      {post.postDesc}
+                    </p>
+                    <div className="flex justify-center items-center">
+                      {likedPosts.some(
+                        (likedPost) => likedPost.post.postCode === post.postCode
+                      ) ? (
+                        <FaHeart
+                          onClick={() => handleLikeToggle(post.postCode)}
+                          style={{ color: "red" }}
+                          className="mx-2"
+                        />
+                      ) : (
+                        <FaRegHeart
+                          onClick={() => handleLikeToggle(post.postCode)}
+                          className="mx-2"
+                        />
+                      )}
+                      {savedPosts.some(
+                        (savedPost) => savedPost.post.postCode === post.postCode
+                      ) ? (
+                        <BsCollectionFill
+                          onClick={() => handleSaveToggle(post.postCode)}
+                          style={{ color: "black" }}
+                          className="mx-2"
+                        />
+                      ) : (
+                        <BsCollection
+                          onClick={() => handleSaveToggle(post.postCode)}
+                          className="mx-2"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ) : null
+            )}
           </div>
         </section>
 
@@ -251,8 +310,8 @@ const Main = () => {
             </div>
           </section>
         )}
-      </div>
-    </>
+      </main>
+    </div>
   );
 };
 

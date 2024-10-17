@@ -37,8 +37,6 @@ const Update = () => {
           </div>
           <div className="mb-4">
             <textarea
-              id="content"
-              class="w-full border border-gray-300 rounded px-3 py-2 h-32"
               placeholder="내용을 입력해 다른이들과 소통해보세요!"
               className="w-full p-2 border border-gray-300 rounded h-32"
             />
@@ -50,7 +48,6 @@ const Update = () => {
             >
               사진 업로드
             </button>
-            <input type="file" class="hidden" />
           </div>
           <div className="mb-4">
             <div className="grid grid-cols-5 gap-2 text-center text-sm">
@@ -64,7 +61,7 @@ const Update = () => {
               type="button"
               className="w-full p-2 border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
             >
-              투표 추가하기
+              제품 정보 추가 +
             </button>
           </div>
           <div className="mb-4">
