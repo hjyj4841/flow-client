@@ -23,10 +23,10 @@ const MyPage = () => {
 
   // 팔로우 기능
   const myFollower = () => {
-    navigate(`follow/myFollower/${userCode}`);
+    navigate(`follow/myFollower/${userCode}`, {state : true});
   };
   const followMeUsers = () => {
-    navigate(`follow/followMeUsers/${userCode}`);
+    navigate(`follow/myFollower/${userCode}`, {state : false});
   };
 
   // Fetch liked posts
