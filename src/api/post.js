@@ -39,4 +39,14 @@ export const detailImg = async (postCode) => {
   return await instance.get(`postImg/${postCode}`);
 };
 
-// postCode로 product + tag  조회
+// 본인 게시물 삭제
+export const delPost = async (postCode) => {
+  return await instance.delete(`post/${postCode}`);
+};
+
+// postImgCode로 사진 삭제
+export const delImg = async (postImgCode) => {
+  return await instance.delete(`postImg`, {
+    data: postImgCode, // 배열 전달
+  });
+};
