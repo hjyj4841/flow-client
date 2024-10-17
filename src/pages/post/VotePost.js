@@ -19,6 +19,16 @@ const VotePost = () => {
   return (
     // 나중에 투표 게시물만 표시 되게 구현 .... 투표게시물 구현 중
     <>
+      <section className="bg-white py-4 shadow-md">
+        <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
+          {[...Array(8)].map((_, i) => (
+            <div
+              key={i}
+              className="flex-none w-16 h-16 bg-gray-300 rounded-full"
+            />
+          ))}
+        </div>
+      </section>
       <Link className="text-sm" to={"/uploadVotePost"}>
         투표업로드
       </Link>
