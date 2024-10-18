@@ -1,39 +1,72 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import React, { useEffect, useState, useReducer } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { GrNext, GrPrevious } from "react-icons/gr";
+import { delPost } from "../../api/post";
+import {
+  addReportPost,
+  addReportUser,
+  initState as reportState,
+  reportReducer,
+} from "../../reducers/reportReducer";
+
+const DetailDiv = styled.div`
+  .report {
+    display: flex;
+  }
+  .report-post-btn {
+    margin: 20px;
+  }
+  .report-user-btn {
+    margin: 20px;
+  }
+  .report button {
+    background-color: #f05650;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+  .update-post-btn {
+    background-color: #ddd;
+    padding: 10px;
+    border-radius: 15px;
+    margin: 10px 5px;
+  }
+`;
 
 const Detail = () => {
-  const DetailDiv = styled.div`
-    .report {
-      display: flex;
-    }
-    .report-post-btn {
-      margin: 20px;
-    }
-    .report-user-btn {
-      margin: 20px;
-    }
-    .report button {
-      background-color: #f05650;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-    .update-post-btn {
-      background-color: #ddd;
-      padding: 10px;
-      border-radius: 15px;
-      margin: 10px 5px;
-    }
-  `;
-
   const { postCode } = useParams();
   const navigate = useNavigate();
 
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
+
+  const [state, reportDispatch] = useReducer(reportReducer, reportState);
+  const { report } = state;
+
+  const [reportPost, setReportPost] = useState({
+    reportDesc: "",
+    post: {
+      postCode: 0,
+    },
+  });
+
+  const [reportUser, setReportUser] = useState({
+    reportDesc: "",
+    userCode: 0,
+  });
+
+  let loginUserCode = 0;
+  const [user, setUser] = useState({});
+  const token = localStorage.getItem("token");
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    loginUserCode = userData.userCode;
+  }
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -45,7 +78,32 @@ const Detail = () => {
     };
 
     fetchPost();
-  }, [postCode]);
+  }, []);
+
+  const updatePost = () => {
+    navigate("/post/update/" + postCode);
+  };
+
+  const reportPostBtn = (data) => {
+    addReportPost(data);
+  };
+
+  const handleCommentSubmit = async () => {
+    await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
+      content: comment,
+    });
+    setComment("");
+  };
+
+  const deleteAPI = async () => {
+    await delPost(postCode);
+  };
+
+  const deletePost = () => {
+    deleteAPI();
+    alert("삭제 완료");
+    window.location.href = "/";
+  };
 
   const handleNextImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
@@ -63,31 +121,65 @@ const Detail = () => {
     }
   };
 
-  const handleCommentSubmit = async () => {
-    await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
-      content: comment,
-    });
-    setComment("");
-  };
-
   return (
     <>
       <DetailDiv>
-        <h1>디테일 페이지</h1>
         <div className="report">
-          <button className="report-post-btn">글 신고버튼</button>
-          <button className="report-user-btn">유저 신고버튼</button>
+          <input
+            className="report-post-desc"
+            type="text"
+            placeholder="설명"
+            value={reportPost.reportDesc}
+            onChange={(e) =>
+              setReportPost({ ...reportPost, reportDesc: e.target.value })
+            }
+          />
+          <button
+            className="report-post-btn"
+            onClick={() => {
+              setReportPost({ ...reportPost, post: { postCode: postCode } });
+              console.log(reportPost);
+              reportPostBtn(reportPost);
+            }}
+          >
+            글 신고버튼
+          </button>
+          <input
+            className="report-user-desc"
+            type="text"
+            placeholder="설명"
+            onChange={(e) =>
+              setReportUser({ ...reportUser, reportDesc: e.target.value })
+            }
+          />
+          <button
+            className="report-user-btn"
+            // onClick={(data) => {
+            //   reportUser(data);
+            // }}
+          >
+            유저 신고버튼
+          </button>
         </div>
-        <button
-          className="update-post-btn"
-          onClick={() => navigate("/updatePost/" + postCode)}
-        >
-          수정
-        </button>
       </DetailDiv>
-
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
+          {loginUserCode === post?.userCode && (
+            <>
+              <button
+                className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
+                onClick={updatePost}
+              >
+                수정
+              </button>
+              <button
+                className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2"
+                onClick={deletePost}
+              >
+                삭제
+              </button>
+            </>
+          )}
           {post ? (
             <>
               <div className="relative mb-4">
@@ -170,5 +262,4 @@ const Detail = () => {
     </>
   );
 };
-
 export default Detail;

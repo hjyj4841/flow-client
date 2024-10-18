@@ -9,13 +9,47 @@
 
   .updateImgBox {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 20px 0 0 0;
     img {
       width: 200px;
       height: 200px;
       object-fit: cover;
       border-radius: 50%;
+    }
+    > div {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
+
+      .fileSelector {
+        width: 150px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        input,
+        button {
+          position: absolute;
+        }
+        input {
+          z-index: 2;
+          opacity: 0;
+        }
+        button {
+          z-index: 1;
+        }
+      }
+      input[type="file"],
+      button {
+        background-color: #ddd;
+        padding: 10px;
+        cursor: pointer;
+        width: 150px;
+        height: 40px;
+        border-radius: 10px;
+      }
     }
   }
 
@@ -52,10 +86,16 @@
     }
   }
   .usreBodySpecPublic {
-    color: red;
+    display: flex;
+    align-items: center;
 
+    svg {
+      display: inline;
+      margin-left: 20px;
+    }
     button {
-      margin-left: 50px;
+      display: inline;
+      margin-left: 30px;
       padding: 10px 20px;
       color: white;
       background-color: #999;
@@ -68,4 +108,11 @@
     background-color: black;
     color: white;
   }
+}
+
+.redFont {
+  color: red;
+}
+.greenFont {
+  color: green;
 }
