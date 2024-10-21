@@ -140,56 +140,54 @@ const Main = () => {
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
-                  className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                  className="relative w-full h-350 bg-gray-300 rounded-lg group mb-5"
                 >
                   <img
                     src={post.imageUrls[0]}
                     alt={post.postDesc}
                     className="w-full h-full object-cover rounded-lg"
                   />
-                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p
-                      className="text-white mb-2 w-full flex justify-center items-center text-sm truncate"
-                      onClick={() => detail(post.postCode)}
-                    >
+                  <div
+                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={() => detail(post.postCode)}
+                  />
+                  <div className="flex items-center width-30 mt-1">
+                    <p className="text-black w-full text-sm truncate">
                       {post.postDesc}
                     </p>
-                    <div className="flex justify-center items-center">
-                      {likedPosts.some(
-                        (likedPost) => likedPost.post.postCode === post.postCode
-                      ) ? (
-                        <FaHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <FaRegHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                      {savedPosts.some(
-                        (savedPost) => savedPost.post.postCode === post.postCode
-                      ) ? (
-                        <BsCollectionFill
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "black" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <BsCollection
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          className="mx-2"
-                        />
-                      )}
-                    </div>
+                    {likedPosts.some(
+                      (likedPost) => likedPost.post.postCode === post.postCode
+                    ) ? (
+                      <FaHeart
+                        onClick={() => handleLikeToggle(post.postCode)}
+                        style={{ color: "red" }}
+                        className="w-5 h-5"
+                      />
+                    ) : (
+                      <FaRegHeart
+                        onClick={() => handleLikeToggle(post.postCode)}
+                        className="w-5 h-5"
+                      />
+                    )}
+                    {savedPosts.some(
+                      (savedPost) => savedPost.post.postCode === post.postCode
+                    ) ? (
+                      <BsCollectionFill
+                        onClick={() => handleSaveToggle(post.postCode)}
+                        style={{ color: "black" }}
+                        className="ml-3 mr-2 w-5 h-5"
+                      />
+                    ) : (
+                      <BsCollection
+                        onClick={() => handleSaveToggle(post.postCode)}
+                        className="ml-3 mr-2 w-5 h-5"
+                      />
+                    )}
                   </div>
                 </div>
               ) : null
             )}
           </div>
-          <SlArrowDown />
         </section>
 
         {/* New Feed Section */}
@@ -215,20 +213,22 @@ const Main = () => {
                     className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
                     onClick={() => detail(post.postCode)}
                   />
-                  <div className="flex items-center mt-2 width-20">
-                    <p className="text-black ml-3">{post.postDesc}</p>
+                  <div className="flex items-center width-20 mt-1">
+                    <p className="text-black w-full text-sm truncate">
+                      {post.postDesc}
+                    </p>
                     {likedPosts.some(
                       (likedPost) => likedPost.post.postCode === post.postCode
                     ) ? (
                       <FaHeart
                         onClick={() => handleLikeToggle(post.postCode)}
                         style={{ color: "red" }}
-                        className=""
+                        className="w-5 h-5"
                       />
                     ) : (
                       <FaRegHeart
                         onClick={() => handleLikeToggle(post.postCode)}
-                        className=""
+                        className="w-5 h-5"
                       />
                     )}
                     {savedPosts.some(
@@ -237,12 +237,12 @@ const Main = () => {
                       <BsCollectionFill
                         onClick={() => handleSaveToggle(post.postCode)}
                         style={{ color: "black" }}
-                        className="ml-2"
+                        className="ml-4 mr-2 w-5 h-5"
                       />
                     ) : (
                       <BsCollection
                         onClick={() => handleSaveToggle(post.postCode)}
-                        className="ml-2"
+                        className="ml-4 mr-2 w-5 h-5"
                       />
                     )}
                   </div>
