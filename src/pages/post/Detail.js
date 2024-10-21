@@ -11,6 +11,11 @@ import {
   reportReducer,
 } from "../../reducers/reportReducer";
 import FollowButton from "../follow/FollowButton";
+import { useAuth } from "../../contexts/AuthContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { addComment as addCommentAPI, getAllComment } from "../../api/comment";
+import { createComment, fetchComments } from "../../store/commentSlice";
+import Comment from "../../components/Comment";
 
 const DetailDiv = styled.div`
   .report {
@@ -141,6 +146,26 @@ const Detail = () => {
     }
   }, [reportUser.user]);
 
+  const [newComment, setNewComment] = useState({
+    commentCode: 0,
+    commentDesc: "",
+    postCode: postCode,
+    user: user,
+  });
+
+  // 댓글 조회
+  const { data: comments, isLoading: commentLoading } = useQuery({
+    queryKey: ["comments", postCode],
+    queryFn: () => getAllComment(postCode),
+    refetchInterval: 1000,
+  });
+
+  // // 댓글 작성
+  // const handleCommentSubmit = async () => {
+  //   await addMutation.mutateAsync(newComment);
+  //   setComment("");
+  // };
+
   return (
     <>
       <FollowButton />
@@ -253,7 +278,7 @@ const Detail = () => {
                 {post.comments && post.comments.length > 0 ? (
                   post.comments.map((comment, index) => (
                     <div key={index} className="mb-2">
-                      <p className="text-sm">{comment.content}</p>
+                      <p className="text-sm">{comment.commentDesc}</p>
                     </div>
                   ))
                 ) : (
@@ -265,7 +290,7 @@ const Detail = () => {
                 <input
                   type="text"
                   placeholder="내용을 작성해주세요!"
-                  value={comment}
+                  value={newComment.commentDesc}
                   onChange={(e) => setComment(e.target.value)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                 />

@@ -11,22 +11,22 @@ const authorize = axios.create({
   },
 });
 
-// 댓글 작성
-export const addComment = async (data) => {
-  return await authorize.post("comment", data);
-};
-
 // 댓글 조회
 export const getAllComment = async (postCode) => {
-  return await instance.get(`post/${postCode}/comment`);
+  return await instance.get(`/${postCode}/comment`);
 };
 
-// 댓글 수정
-export const updateComment = async (data) => {
-  return await authorize.put("comment", data);
+// 댓글 작성
+export const addComment = async (data) => {
+  return await authorize.post(`/${data.postCode}/comments`, data);
 };
 
-// 댓글 삭제
-export const deleteComment = async (commentCode) => {
-  return await authorize.delete(`comment/${commentCode}`);
-};
+// // 댓글 수정
+// export const updateComment = async (data) => {
+//   return await authorize.put("comment", data);
+// };
+
+// // 댓글 삭제
+// export const deleteComment = async (commentCode) => {
+//   return await authorize.delete(`comment/${commentCode}`);
+// };
