@@ -11,6 +11,8 @@ import {
   reportReducer,
 } from "../../reducers/reportReducer";
 import FollowButton from "../follow/FollowButton";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { BsCollection, BsCollectionFill } from "react-icons/bs";
 
 const DetailDiv = styled.div`
   .report {
@@ -60,27 +62,38 @@ const Detail = () => {
     },
   });
 
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+  const [likeRendering, setLikeRendering] = useState([]);
+  const [saveRendering, setSaveRendering] = useState([]);
+
   let loginUserCode = 0;
   const [user, setUser] = useState({});
   const token = localStorage.getItem("token");
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    const userData = JSON.parse(window.atob(base64));
-    loginUserCode = userData.userCode;
-  }
+  useEffect(() => {
+    fetchPost();
+  }, []);
+
+  useEffect(() => {
+    if (token) {
+      const base64Url = token.split(".")[1];
+      const base64 = base64Url.replace("-", "+").replace("_", "/");
+      const userData = JSON.parse(window.atob(base64));
+      setUser(userData);
+      loginUserCode = userData.userCode;
+      fetchLikedPosts();
+      fetchSavedPosts();
+    }
+  }, [token, likeRendering, saveRendering]); // 의존성 배열 추가
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      const response = await axios.get(
-        `http://localhost:8080/api/post/${postCode}`
-      );
-      setPost(response.data);
-    };
-    fetchPost();
-  }, []);
+  const fetchPost = async () => {
+    const response = await axios.get(
+      `http://localhost:8080/api/post/${postCode}`
+    );
+    setPost(response.data);
+  };
 
   const updatePost = () => {
     navigate("/post/update/" + postCode);
@@ -124,6 +137,75 @@ const Detail = () => {
       setCurrentImageIndex((prevIndex) =>
         prevIndex === 0 ? post.imageUrls.length - 1 : prevIndex - 1
       );
+    }
+  };
+
+  // Fetch liked posts
+  const fetchLikedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/likes/${loginUserCode}/likes`
+      );
+      const likedPosts = response.data.postInfoList.map((post) => ({
+        ...post,
+        isLiked: true,
+      }));
+      setLikedPosts(likedPosts || []);
+    } catch (error) {
+      console.error("Error fetching liked posts", error);
+    }
+  };
+
+  // Fetch saved posts
+  const fetchSavedPosts = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/collection/${loginUserCode}/collections`
+      );
+      const savedPosts = response.data.postInfoList.map((post) => ({
+        ...post,
+        isSaved: true,
+      }));
+      setSavedPosts(savedPosts || []);
+    } catch (error) {
+      console.error("Error fetching saved posts", error);
+    }
+  };
+
+  // Toggle like
+  const handleLikeToggle = async (postCode) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/likes/toggle/${postCode}`,
+        user
+      );
+      setLikedPosts((prevLikedPosts) =>
+        prevLikedPosts.map((post) =>
+          post.post.postCode === postCode
+            ? { ...post, isLiked: !post.isLiked }
+            : post
+        )
+      );
+      fetchLikedPosts();
+      fetchPost();
+      setLikeRendering(likeRendering + 1);
+    } catch (error) {
+      console.error("Error toggling like", error);
+    }
+  };
+
+  // Toggle save
+  const handleSaveToggle = async (postCode) => {
+    try {
+      await axios.post(
+        `http://localhost:8080/api/collection/toggle/${postCode}`,
+        user
+      );
+      fetchSavedPosts();
+      fetchPost();
+      setSaveRendering(saveRendering + 1);
+    } catch (error) {
+      console.error("Error toggling save", error);
     }
   };
 
@@ -239,7 +321,49 @@ const Detail = () => {
                 </span>
               </p>
               <div className="flex items-center text-sm text-gray-600 mb-4">
-                <span className="mr-4">❤️ {post.likes}</span>
+                <span className="flex items-center space-x-2 mr-4">
+                  {" "}
+                  {likedPosts.find(
+                    (likedPost) => likedPost.post.postCode === post.postCode
+                  ) ? (
+                    <>
+                      <FaHeart
+                        onClick={() => handleLikeToggle(post.postCode)}
+                        style={{ color: "red" }}
+                        className="mx-2"
+                      />
+                      <p>{post.likeCount}</p>
+                    </>
+                  ) : (
+                    <>
+                      <FaRegHeart
+                        onClick={() => handleLikeToggle(post.postCode)}
+                        className="mx-2"
+                      />
+                      <p>{post.likeCount}</p>
+                    </>
+                  )}
+                  {savedPosts.some(
+                    (savedPost) => savedPost.post.postCode === post.postCode
+                  ) ? (
+                    <>
+                      <BsCollectionFill
+                        onClick={() => handleSaveToggle(post.postCode)}
+                        style={{ color: "black" }}
+                        className="mx-2"
+                      />
+                      <p>{post.collectionCount}</p>
+                    </>
+                  ) : (
+                    <>
+                      <BsCollection
+                        onClick={() => handleSaveToggle(post.postCode)}
+                        className="mx-2"
+                      />
+                      <p>{post.collectionCount}</p>
+                    </>
+                  )}
+                </span>
                 <span className="mr-4">
                   💬 {post.comments ? post.comments.length : 0}
                 </span>
