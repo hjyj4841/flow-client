@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ReportPost from "../components/ReportPost";
 import ReportUser from "../components/ReportUser";
 import { useState } from "react";
+import ReportComment from "../components/ReportComment";
 
 const ReportList = () => {
   const ReportBtnDiv = styled.div`
@@ -24,7 +25,9 @@ const ReportList = () => {
   const showRpost = () => {
     setType("ReportPost");
   };
-  const showRcomment = () => {};
+  const showRcomment = () => {
+    setType("ReportComment");
+  };
   const showRuser = () => {
     setType("ReportUser");
   };
@@ -48,6 +51,8 @@ const ReportList = () => {
         <ReportPost />
       ) : type == "ReportUser" ? (
         <ReportUser />
+      ) : type == "ReportComment" ? (
+        <ReportComment />
       ) : (
         <></>
       )}

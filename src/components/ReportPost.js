@@ -6,7 +6,10 @@ import {
   initState as reportPostState,
   reportReducer,
 } from "../reducers/reportReducer";
-import { fetchDeleteReportPost } from "../reducers/reportReducer";
+import {
+  fetchDeleteReportPost,
+  banUserReport,
+} from "../reducers/reportReducer";
 import "../assets/css/reportPost.css";
 
 const ReportPost = () => {
@@ -44,6 +47,13 @@ const ReportPost = () => {
     alert("관리자에 의해 삭제되었습니다.");
   };
 
+  const banUser = (userCode, postReportCode) => {
+    // 밴 기능
+    banUserReport(dispatch, userCode);
+    fetchDeleteReportPost(dispatch, postReportCode);
+    alert("관리자에 의해 밴되었습니다.");
+  };
+
   return (
     <>
       <div className="fullContainer">
@@ -70,6 +80,15 @@ const ReportPost = () => {
                     onClick={() => deletePost(post.postReportCode)}
                   >
                     삭제
+                  </button>
+                  <button
+                    className="ban-report-user-btn"
+                    type="button"
+                    onClick={() =>
+                      banUser(post.post.user.userCode, post.postReportCode)
+                    }
+                  >
+                    밴
                   </button>
                 </div>
               </CardContent>

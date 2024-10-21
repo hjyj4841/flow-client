@@ -31,3 +31,6 @@ export const reportPost = async (data) => {
 export const reportUser = async (data) => {
   return await instance.post("reportUser", data);
 };
+export const getReportComment = async () => {
+  return await instance.get("showAllCommentReport");
+};
