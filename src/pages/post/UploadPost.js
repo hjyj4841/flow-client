@@ -22,6 +22,9 @@ const UploadPost = () => {
     tagCodes: [],
   });
 
+  const [careerTag, setCarrerTag] = useState(0);
+  const [bodyTag, setBodyTag] = useState(0);
+
   const upload = async () => {
     // formData저장
     const formData = new FormData();
@@ -62,9 +65,18 @@ const UploadPost = () => {
     }
 
     // tag 리스트
+    //setPost((prevPost) => ({
+    //  ...prevPost,
+    //  tagCodes: [...prevPost.tagCodes, careerTag, bodyTag],
+    // }));
+
     for (let i = 0; i < post.tagCodes.length; i++) {
+      console.log(post.tagCodes[i]);
       formData.append(`tagCodes[${i}]`, post.tagCodes[i]);
     }
+
+    formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag);
+    formData.append(`tagCodes[${post.tagCodes.length + 1}]`, bodyTag);
 
     formData.append("userCode", userCode);
     formData.append("postDesc", post.postDesc);
@@ -73,7 +85,7 @@ const UploadPost = () => {
     try {
       await addPost(formData);
       alert("업로드 완료");
-      window.location.href = "/";
+      // window.location.href = "/";
     } catch (error) {
       alert("업로드 실패:" + error);
     }
@@ -81,7 +93,15 @@ const UploadPost = () => {
 
   return (
     <div className="post-form">
-      <Post upload={upload} post={post} setPost={setPost} />
+      <Post
+        upload={upload}
+        post={post}
+        setPost={setPost}
+        bodyTag={bodyTag}
+        setBodyTag={setBodyTag}
+        careerTag={careerTag}
+        setCarrerTag={setCarrerTag}
+      />
     </div>
   );
 };

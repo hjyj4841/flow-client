@@ -21,7 +21,7 @@ export const addPost = async (data) => {
 };
 
 // 게시물 수정
-export const updatePost = async (data) => {
+export const editPost = async (data) => {
   return await instance.put("post", data);
 };
 

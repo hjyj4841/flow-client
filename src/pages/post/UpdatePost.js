@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { delImg, detailPost, updatePost } from "../../api/post";
+import { delImg, detailPost, editPost } from "../../api/post";
 import { useState, useEffect } from "react";
 
 const UpdatePost = () => {
@@ -24,6 +24,8 @@ const UpdatePost = () => {
 
   const [imagesToDelete, setImagesToDelete] = useState(new Set());
   const [imgCode, setImgCode] = useState([]);
+  const [bodyTag, setBodyTag] = useState(0);
+  const [careerTag, setCarrerTag] = useState(0);
 
   // 기존 post 내용 가져오기
   const detailView = async () => {
@@ -58,6 +60,35 @@ const UpdatePost = () => {
     });
   };
 
+  const careerCheck = (e) => {
+    const value = e.target.value;
+
+    const checkCareer = document.getElementsByName("career");
+    for (let i = 0; i < checkCareer.length; i++) {
+      if (checkCareer[i].value !== value) {
+        // console.log(checkCareer[i].value);
+        checkCareer[i].checked = false;
+      }
+    }
+
+    console.log(value);
+    setCarrerTag(Number(value));
+  };
+
+  const bodyCheck = (e) => {
+    const value = e.target.value;
+    const checkBody = document.getElementsByName("bodyType");
+    for (let i = 0; i < checkBody.length; i++) {
+      if (checkBody[i].value !== value) {
+        // console.log(checkBody[i].value);
+        checkBody[i].checked = false;
+      }
+    }
+
+    console.log(value);
+    setBodyTag(Number(value));
+  };
+
   const tagCheck = (event) => {
     const value = parseInt(event.target.value, 10); // 체크박스의 값을 정수로 변환
     setUpdate((prev) => {
@@ -82,6 +113,10 @@ const UpdatePost = () => {
   }, []);
 
   useEffect(() => {
+    update.tagCodes.forEach((item, index) => {
+      if (5 <= item && item <= 8) setCarrerTag(item);
+      if (20 <= item && item <= 23) setBodyTag(item);
+    });
     console.log(update);
   }, [update]);
 
@@ -92,10 +127,14 @@ const UpdatePost = () => {
       await delImg([...imgCode]);
     }
     try {
+      setUpdate((prevPost) => ({
+        ...prevPost,
+        tagCodes: [...prevPost.tagCodes, careerTag, bodyTag],
+      }));
       console.log(update);
-      await updatePost(update);
+      await editPost(update);
       alert("수정 완료");
-      window.location.href = "/";
+      // window.location.href = "/";
     } catch (error) {
       alert("수정 실패:" + error);
     }
@@ -252,7 +291,10 @@ const UpdatePost = () => {
       </div>
 
       <div className="mb-4 text-sm">
-        <label htmlFor="content" className="block text-sm font-medium mb-2">
+        <label
+          htmlFor="content"
+          className="block text-sm font-bold font-medium mb-2"
+        >
           공개 여부
         </label>
         <div>
@@ -272,6 +314,7 @@ const UpdatePost = () => {
             value="N"
             checked={update.postPublicYn === "N"}
             onChange={() => setUpdate({ ...update, postPublicYn: "N" })}
+            style={{ marginLeft: "15px" }}
           />
           비공개
         </div>
@@ -280,7 +323,7 @@ const UpdatePost = () => {
       {/* 태그 */}
       <div className="mb-4">
         <div className="text-sm">
-          <div className="mb-2">계절</div>
+          <div className="mb-2 font-bold">SEASON</div>
           <div>
             <label>
               <input
@@ -299,6 +342,7 @@ const UpdatePost = () => {
                 value="2"
                 checked={update.tagCodes.includes(2)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               여름
             </label>
@@ -309,6 +353,7 @@ const UpdatePost = () => {
                 value="3"
                 checked={update.tagCodes.includes(3)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               가을
             </label>
@@ -319,59 +364,67 @@ const UpdatePost = () => {
                 value="4"
                 checked={update.tagCodes.includes(4)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               겨울
             </label>
           </div>
         </div>
         <div className="text-sm mt-4">
-          <div className="mb-2">연차</div>
+          <div className="mb-2 font-bold">CAREER</div>
           <div>
             <label>
               <input
                 type="checkbox"
+                name="career"
                 className="mr-1"
                 value="5"
-                checked={update.tagCodes.includes(5)}
-                onChange={tagCheck}
+                checked={careerTag === 5}
+                onChange={careerCheck}
               />
               ~1년 미만
             </label>
             <label>
               <input
                 type="checkbox"
+                name="career"
                 className="mr-1"
                 value="6"
-                checked={update.tagCodes.includes(6)}
-                onChange={tagCheck}
+                checked={careerTag === 6}
+                onChange={careerCheck}
+                style={{ marginLeft: "15px" }}
               />
               1~3년차
             </label>
             <label>
               <input
                 type="checkbox"
+                name="career"
                 className="mr-1"
                 value="7"
-                checked={update.tagCodes.includes(7)}
-                onChange={tagCheck}
+                checked={careerTag === 7}
+                onChange={careerCheck}
+                style={{ marginLeft: "15px" }}
               />
               3년 이상
             </label>
             <label>
               <input
                 type="checkbox"
+                name="career"
                 className="mr-1"
                 value="8"
-                checked={update.tagCodes.includes(8)}
-                onChange={tagCheck}
+                checked={careerTag === 8}
+                onChange={careerCheck}
+                style={{ marginLeft: "15px" }}
               />
               임원
             </label>
           </div>
         </div>
         <div className="text-sm mt-4">
-          <div className="mb-2">스타일</div>
-          <div style={{ width: "80%" }}>
+          <div className="mb-2 font-bold">MOOD</div>
+          <div style={{ width: "85%" }}>
             <label>
               <input
                 type="checkbox"
@@ -389,6 +442,7 @@ const UpdatePost = () => {
                 value="10"
                 checked={update.tagCodes.includes(10)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               캐주얼
             </label>
@@ -399,6 +453,7 @@ const UpdatePost = () => {
                 value="11"
                 checked={update.tagCodes.includes(11)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               스트릿
             </label>
@@ -409,6 +464,7 @@ const UpdatePost = () => {
                 value="12"
                 checked={update.tagCodes.includes(12)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               아메카지
             </label>
@@ -419,6 +475,7 @@ const UpdatePost = () => {
                 value="13"
                 checked={update.tagCodes.includes(13)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               빈티지
             </label>
@@ -429,6 +486,7 @@ const UpdatePost = () => {
                 value="14"
                 checked={update.tagCodes.includes(14)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               시티보이
             </label>
@@ -439,6 +497,7 @@ const UpdatePost = () => {
                 value="15"
                 checked={update.tagCodes.includes(15)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               페미닌
             </label>
@@ -459,6 +518,7 @@ const UpdatePost = () => {
                 value="17"
                 checked={update.tagCodes.includes(17)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               스포티
             </label>
@@ -469,6 +529,7 @@ const UpdatePost = () => {
                 value="18"
                 checked={update.tagCodes.includes(18)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               톰보이
             </label>
@@ -479,21 +540,23 @@ const UpdatePost = () => {
                 value="19"
                 checked={update.tagCodes.includes(19)}
                 onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
               />
               기타
             </label>
           </div>
         </div>
         <div className="text-sm mt-4">
-          <div className="mb-2">체형</div>
+          <div className="mb-2 font-bold">BODY TYPE</div>
           <div>
             <label>
               <input
                 type="checkbox"
                 className="mr-1"
+                name="bodyType"
                 value="20"
-                checked={update.tagCodes.includes(20)}
-                onChange={tagCheck}
+                checked={bodyTag === 20}
+                onChange={bodyCheck}
               />
               마름
             </label>
@@ -501,9 +564,11 @@ const UpdatePost = () => {
               <input
                 type="checkbox"
                 className="mr-1"
+                name="bodyType"
                 value="21"
-                checked={update.tagCodes.includes(21)}
-                onChange={tagCheck}
+                checked={bodyTag === 21}
+                onChange={bodyCheck}
+                style={{ marginLeft: "15px" }}
               />
               보통
             </label>
@@ -511,9 +576,11 @@ const UpdatePost = () => {
               <input
                 type="checkbox"
                 className="mr-1"
+                name="bodyType"
                 value="22"
-                checked={update.tagCodes.includes(22)}
-                onChange={tagCheck}
+                checked={bodyTag === 22}
+                onChange={bodyCheck}
+                style={{ marginLeft: "15px" }}
               />
               건장
             </label>
@@ -521,9 +588,11 @@ const UpdatePost = () => {
               <input
                 type="checkbox"
                 className="mr-1"
+                name="bodyType"
                 value="23"
-                checked={update.tagCodes.includes(23)}
-                onChange={tagCheck}
+                checked={bodyTag === 23}
+                onChange={bodyCheck}
+                style={{ marginLeft: "15px" }}
               />
               빅사이즈
             </label>
