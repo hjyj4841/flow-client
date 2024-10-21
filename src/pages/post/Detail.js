@@ -254,20 +254,6 @@ const Detail = () => {
     }
   };
 
-  // 신고 버튼 눌렀을 때
-  useEffect(() => {
-    if (reportUser.user.userCode !== 0) {
-      alert(reportUser.user.userCode);
-      console.log(reportUser);
-      setReportUser({
-        ...reportUser,
-        user: {
-          userCode: post.user.userCode,
-        },
-      });
-    }
-  }, [reportUser.user]);
-
   const [newComment, setNewComment] = useState({
     commentCode: 0,
     commentDesc: "",
@@ -292,8 +278,7 @@ const Detail = () => {
     <>
       {/* <FollowButton user={user} /> */}
       {!isSelf ? <FollowButton user={user} /> : <></>}
-      {check ? <>같은 경우</> : <>다른 경우</>}
-      {Number.loginUserCode !== Number.postUserCode ? (
+      {check ? (
         <></>
       ) : (
         <DetailDiv>
