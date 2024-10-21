@@ -1,346 +1,296 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { BsCollection, BsCollectionFill } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-import { deleteUser } from "../api/user";
+import {
+  fetchCreatedPosts,
+  fetchLikedPosts,
+  fetchSavedPosts,
+} from "../api/post";
+import { useNavigate, useParams } from "react-router-dom";
+import { findUser, findUserByCode } from "../api/user";
 import { useAuth } from "../contexts/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  myFollower,
+  followMe,
+  followStatus,
+  createFollowRelative,
+  removeFollowRelative,
+} from "../store/followSlice";
+import { LiaPollSolid } from "react-icons/lia";
+import "../assets/css/mypage.scoped.scss";
+import {
+  PiGridFourThin,
+  PiHeartStraightLight,
+  PiBookmarksThin,
+  PiMicrophoneStageFill,
+} from "react-icons/pi";
+import { MdAccountBalance, MdBusinessCenter } from "react-icons/md";
+import { FaBriefcaseMedical, FaCog, FaRocketchat } from "react-icons/fa";
+import { RiServiceFill, RiPlantFill } from "react-icons/ri";
+import { FaHelmetSafety, FaComputer } from "react-icons/fa6";
+import { HiBeaker } from "react-icons/hi2";
 
 const MyPage = () => {
-  const [likedPosts, setLikedPosts] = useState([]);
-  const [savedPosts, setSavedPosts] = useState([]);
-  const [createdPosts, setCreatedPosts] = useState([]);
+  const [pageState, setPageState] = useState("created");
+  const [createdPosts, setCreatedPosts] = useState({
+    postInfoList: [],
+    totalPosts: 0,
+  });
+  const { mypageUserCode } = useParams();
   const navigate = useNavigate();
-  const { token, logout } = useAuth();
-  let userCode = "";
-  let user = "";
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    const userData = JSON.parse(window.atob(base64));
-    userCode = userData.userCode;
-    user = userData;
-  }
+  const { token } = useAuth();
+  const followerCount = useSelector((state) => state.follow.counter);
+  const followingCount = useSelector((state) => state.follow.countFollower);
+  const statusByFollow = useSelector((state) => state.follow.followBool);
+  const dispatch = useDispatch();
+  // 현재 접속한 유저 정보
+  const [user, setUser] = useState({
+    userCode: 0,
+  });
+  // 마이페이지 유저 정보
+  const [mypageUser, setMypageUser] = useState({
+    userCode: 0,
+    userEmail: "",
+    userPlatform: "",
+    userJob: "",
+    userHeight: 0,
+    userWeight: 0,
+    userBodySpecYn: "",
+    userProfileUrl: "",
+    userNickname: "",
+    userGender: "",
+  });
 
   // 팔로우 기능
-  const myFollower = () => {
-    navigate(`follow/myFollower/${userCode}`, {state : true});
-  };
-  const followMeUsers = () => {
-    navigate(`follow/myFollower/${userCode}`, {state : false});
-  };
-
-  // Fetch liked posts
-  const fetchLikedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/likes/${userCode}/likes`
-      );
-      const likedPosts = response.data.postInfoList.map((post) => ({
-        ...post,
-        isLiked: true,
-      }));
-      setLikedPosts(likedPosts || []);
-    } catch (error) {
-      console.error("Error fetching liked posts", error);
-    }
+  const addFollow = () => {
+    dispatch(
+      createFollowRelative({
+        followingUser: {
+          userCode: user.userCode,
+        },
+        followerUser: {
+          userCode: mypageUser.userCode,
+        },
+      })
+    );
   };
 
-  // Fetch saved posts
-  const fetchSavedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/collection/${userCode}/collections`
-      );
-      const savedPosts = response.data.postInfoList.map((post) => ({
-        ...post,
-        isSaved: true,
-      }));
-      setSavedPosts(savedPosts || []);
-    } catch (error) {
-      console.error("Error fetching saved posts", error);
-    }
+  // 언팔로우 기능
+  const removefollow = () => {
+    dispatch(
+      removeFollowRelative({
+        followingUserCode: user.userCode,
+        followerUserCode: mypageUser.userCode,
+      })
+    );
   };
 
-  // Fetch created posts
-  const fetchCreatedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/${userCode}/post`
-      );
-      setCreatedPosts(response.data.postInfoList || []);
-    } catch (error) {
-      console.error("Error fetching created posts", error);
-    }
+  // 유저가 작성한 게시물 조회
+  const getCreatePosts = async () => {
+    const response = await fetchCreatedPosts(mypageUser.userCode);
+    setCreatedPosts(response.data);
+    setPageState("created");
   };
 
-  const withOutUser = async () => {
-    await deleteUser(token);
-    localStorage.removeItem("token");
-    alert("회원탈퇴!");
-    logout();
+  // 유저가 좋아요한 게시물 조회
+  const getLikedPosts = async () => {
+    const response = await fetchLikedPosts(mypageUser.userCode);
+    setCreatedPosts({
+      ...createdPosts,
+      postInfoList: response.data.postInfoList,
+    });
+    setPageState("liked");
   };
 
-  // Toggle like
-  const handleLikeToggle = async (postCode) => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/likes/toggle/${postCode}`,
-        user
-      );
-      await fetchLikedPosts(); // Re-fetch to update UI
-      await fetchSavedPosts();
-      await fetchCreatedPosts();
-    } catch (error) {
-      console.error("Error toggling like", error);
-    }
+  // 유저가 북마크한 게시물 조회
+  const getBookmarkedPosts = async () => {
+    const response = await fetchSavedPosts(mypageUser.userCode);
+    setCreatedPosts({
+      ...createdPosts,
+      postInfoList: response.data.postInfoList,
+    });
+    setPageState("bookmarked");
   };
 
-  // Toggle save
-  const handleSaveToggle = async (postCode) => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/collection/toggle/${postCode}`,
-        user
-      );
-      await fetchSavedPosts(); // Re-fetch to update UI
-      await fetchLikedPosts();
-      await fetchCreatedPosts();
-    } catch (error) {
-      console.error("Error toggling save", error);
-    }
+  // 회원 정보 가져오기
+  const getUserInfo = async () => {
+    setMypageUser((await findUserByCode(mypageUserCode)).data);
+    setUser((await findUser(token)).data);
   };
 
-  // Navigate to post detail
+  // 디테일 화면으로 이동
   const detail = (postCode) => {
     navigate(`/post/${postCode}`);
   };
 
   useEffect(() => {
-    fetchLikedPosts();
-    fetchSavedPosts();
-    fetchCreatedPosts();
+    getUserInfo();
   }, []);
 
+  useEffect(() => {
+    if (mypageUser.userCode !== 0 && user.userCode !== 0) {
+      getCreatePosts();
+      dispatch(myFollower(mypageUser.userCode));
+      dispatch(followMe(mypageUser.userCode));
+      dispatch(
+        followStatus({
+          followingUserCode: user.userCode,
+          followerUserCode: mypageUser.userCode,
+        })
+      );
+    }
+  }, [mypageUser.userCode, user.userCode]);
+
   return (
-    <div className="bg-gray-100 text-gray-800">
+    <div className="text-gray-800">
       <section className="bg-white py-4 shadow-md">
         <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
           {/* Profile & Follow buttons */}
         </div>
       </section>
 
-      <main className="container mx-auto px-4 py-8">
-        {/* Liked Posts Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Liked Posts</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {likedPosts.map((item) => (
-              <div
-                key={item.post.postCode}
-                className="relative w-full h-64 bg-gray-300 rounded-lg group"
+      <main className="container mx-auto py-8">
+        <div className="mypageTop">
+          <div className="mypageImg">
+            <img src={mypageUser.userProfileUrl} />
+          </div>
+          <div className="mypageDesc">
+            <div>{mypageUser.userNickname}</div>
+            <div className="mypageFollow">
+              <span>
+                게시물 <span>{createdPosts.totalPosts}</span>
+              </span>
+              <span
+                onClick={() =>
+                  navigate(`follow/myFollower/${user.userCode}`, {
+                    state: true,
+                  })
+                }
               >
-                {item.imageFiles && item.imageFiles.length > 0 ? (
-                  <img
-                    src={item.imageFiles[0]?.postImgUrl || "default.jpg"}
-                    alt={item.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-gray-200 flex justify-center items-center text-gray-500">
-                    No Image
-                  </div>
-                )}
-                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p
-                    className="text-white mb-2"
-                    onClick={() => detail(item.post.postCode)}
-                  >
-                    {item.post.postDesc}
-                  </p>
-                  <div className="flex items-center">
-                    {likedPosts.some(
-                      (likedPost) =>
-                        likedPost.post.postCode === item.post.postCode
-                    ) ? (
-                      <FaHeart
-                        onClick={() => handleLikeToggle(item.post.postCode)}
-                        style={{ color: "red" }}
-                        className="mx-2"
-                      />
-                    ) : (
-                      <FaRegHeart
-                        onClick={() => handleLikeToggle(item.post.postCode)}
-                        className="mx-2"
-                      />
-                    )}
-                    {savedPosts.some(
-                      (savedPost) =>
-                        savedPost.post.postCode === item.post.postCode
-                    ) ? (
-                      <BsCollectionFill
-                        onClick={() => handleSaveToggle(item.post.postCode)}
-                        style={{ color: "black" }}
-                        className="mx-2"
-                      />
-                    ) : (
-                      <BsCollection
-                        onClick={() => handleSaveToggle(item.post.postCode)}
-                        className="mx-2"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Saved Posts Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Saved Posts</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {savedPosts.map((item) => (
-              <div
-                key={item.post.postCode}
-                className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                팔로워 <span>{followerCount}</span>
+              </span>
+              <span
+                onClick={() =>
+                  navigate(`follow/myFollower/${user.userCode}`, {
+                    state: false,
+                  })
+                }
               >
-                {item.imageFiles && item.imageFiles.length > 0 ? (
-                  <img
-                    src={item.imageFiles[0]?.postImgUrl || "default.jpg"}
-                    alt={item.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
+                팔로잉 <span>{followingCount}</span>
+              </span>
+            </div>
+            <div className="myJobBox">
+              <i>
+                {mypageUser.userJob === "사무직" ? (
+                  <FaComputer />
+                ) : mypageUser.userJob === "연구직" ? (
+                  <HiBeaker />
+                ) : mypageUser.userJob === "공공직" ? (
+                  <MdAccountBalance />
+                ) : mypageUser.userJob === "의료직" ? (
+                  <FaBriefcaseMedical />
+                ) : mypageUser.userJob === "엔터테인먼트" ? (
+                  <PiMicrophoneStageFill />
+                ) : mypageUser.userJob === "서비스직" ? (
+                  <RiServiceFill />
+                ) : mypageUser.userJob === "영업직" ? (
+                  <MdBusinessCenter />
+                ) : mypageUser.userJob === "건설직" ? (
+                  <FaHelmetSafety />
+                ) : mypageUser.userJob === "생산직" ? (
+                  <FaCog />
+                ) : mypageUser.userJob === "농림어업직" ? (
+                  <RiPlantFill />
                 ) : (
-                  <div className="w-full h-full bg-gray-200 flex justify-center items-center text-gray-500">
-                    No Image
-                  </div>
+                  <FaRocketchat />
                 )}
-                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p
-                    className="text-white mb-2"
-                    onClick={() => detail(item.post.postCode)}
-                  >
-                    {item.post.postDesc}
-                  </p>
-                  <div className="flex items-center">
-                    {likedPosts.some(
-                      (likedPost) =>
-                        likedPost.post.postCode === item.post.postCode
-                    ) ? (
-                      <FaHeart
-                        onClick={() => handleLikeToggle(item.post.postCode)}
-                        style={{ color: "red" }}
-                        className="mx-2"
-                      />
-                    ) : (
-                      <FaRegHeart
-                        onClick={() => handleLikeToggle(item.post.postCode)}
-                        className="mx-2"
-                      />
-                    )}
-                    {savedPosts.some(
-                      (savedPost) =>
-                        savedPost.post.postCode === item.post.postCode
-                    ) ? (
-                      <BsCollectionFill
-                        onClick={() => handleSaveToggle(item.post.postCode)}
-                        style={{ color: "black" }}
-                        className="mx-2"
-                      />
-                    ) : (
-                      <BsCollection
-                        onClick={() => handleSaveToggle(item.post.postCode)}
-                        className="mx-2"
-                      />
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+              </i>
+              <span>{mypageUser.userJob}</span>
+            </div>
+            <div>
+              {user.userCode === mypageUser.userCode ? (
+                <button onClick={() => navigate("/updateUser")}>
+                  정보수정
+                </button>
+              ) : statusByFollow === false ? (
+                <button className="followButton" onClick={addFollow}>
+                  Follw
+                </button>
+              ) : (
+                <button className="followButton" onClick={removefollow}>
+                  UnFollow
+                </button>
+              )}
+            </div>
           </div>
-        </section>
-
-        {/* Created Posts Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">Created Posts</h2>
-          <div className="grid grid-cols-4 gap-4">
-            {createdPosts.map((item) => (
-              <div
-                key={item.post.postCode}
-                className="relative w-full h-64 bg-gray-300 rounded-lg group"
-              >
-                {item.imageFiles && item.imageFiles.length > 0 ? (
-                  <img
-                    src={item.imageFiles[0]?.postImgUrl || "default.jpg"}
-                    alt={item.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
+        </div>
+        <div className="mypageBottom">
+          <div className="mypageButtonBox">
+            <button
+              onClick={getCreatePosts}
+              style={
+                pageState === "created"
+                  ? { borderTop: "1px solid black" }
+                  : { borderTop: "1px solid white" }
+              }
+            >
+              <PiGridFourThin />
+              게시물
+            </button>
+            <button>
+              <LiaPollSolid />
+              투표현황
+            </button>
+            <button
+              onClick={getLikedPosts}
+              style={
+                pageState === "liked"
+                  ? { borderTop: "1px solid black" }
+                  : { borderTop: "1px solid white" }
+              }
+            >
+              <PiHeartStraightLight />
+              좋아요
+            </button>
+            <button
+              onClick={getBookmarkedPosts}
+              style={
+                pageState === "bookmarked"
+                  ? { borderTop: "1px solid black" }
+                  : { borderTop: "1px solid white" }
+              }
+            >
+              <PiBookmarksThin />
+              북마크
+            </button>
+          </div>
+          {/* 게시물 나오는 부분 */}
+          <section className="postList">
+            <div className="grid grid-cols-3">
+              {createdPosts.postInfoList.map((item) => (
+                <div
+                  key={item.post.postCode}
+                  className="relative rounded-lg group postBox"
+                >
+                  {item.imageFiles && item.imageFiles.length > 0 ? (
+                    <img
+                      src={item.imageFiles[0]?.postImgUrl || "default.jpg"}
+                      alt={item.postDesc}
+                      className="object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="bg-gray-200 flex justify-center items-center text-gray-500">
+                      No Image
+                    </div>
+                  )}
+                  <div
+                    onClick={() => detail(item.post.postCode)}
+                    className="cursor-pointer absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
                   />
-                ) : (
-                  <div className="w-full h-full bg-gray-200 flex justify-center items-center text-gray-500">
-                    No Image
-                  </div>
-                )}
-                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p
-                    className="text-white mb-2"
-                    onClick={() => detail(item.post.postCode)}
-                  >
-                    {item.post.postDesc}
-                  </p>
-                  <div className="flex items-center">
-                    {likedPosts.some(
-                      (likedPost) =>
-                        likedPost.post.postCode === item.post.postCode
-                    ) ? (
-                      <FaHeart
-                        onClick={() => handleLikeToggle(item.post.postCode)}
-                        style={{ color: "red" }}
-                        className="mx-2"
-                      />
-                    ) : (
-                      <FaRegHeart
-                        onClick={() => handleLikeToggle(item.post.postCode)}
-                        className="mx-2"
-                      />
-                    )}
-                    {savedPosts.some(
-                      (savedPost) =>
-                        savedPost.post.postCode === item.post.postCode
-                    ) ? (
-                      <BsCollectionFill
-                        onClick={() => handleSaveToggle(item.post.postCode)}
-                        style={{ color: "black" }}
-                        className="mx-2"
-                      />
-                    ) : (
-                      <BsCollection
-                        onClick={() => handleSaveToggle(item.post.postCode)}
-                        className="mx-2"
-                      />
-                    )}
-                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* 팔로우 섹션 */}
-        <section>
-          <button onClick={() => myFollower(userCode)}>
-            내가 팔로우한 사람들
-          </button>
-          <button onClick={() => followMeUsers(userCode)}>
-            나를 팔로우한 사람들
-          </button>
-          <div>
-            <button onClick={withOutUser}>회원탈퇴</button>
-          </div>
-          <div>
-            <button onClick={() => navigate("/updateUser")}>회원 수정</button>
-          </div>
-        </section>
+              ))}
+            </div>
+          </section>
+        </div>
       </main>
     </div>
   );

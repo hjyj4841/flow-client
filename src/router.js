@@ -31,7 +31,7 @@ const router = createBrowserRouter([
       { path: "/register", element: <Register /> },
       { path: "/registerUser", element: <RegisterUser /> },
       { path: "/login", element: <Login /> },
-      { path: "/mypage", element: <Mypage /> },
+      { path: "/mypage/:mypageUserCode", element: <Mypage /> },
       { path: "/authRegisterKakao", element: <AuthRegisterKakao /> },
       { path: "/authLoginKakao", element: <AuthLoginKakao /> },
       { path: "/authRegisterNaver", element: <AuthRegisterNaver /> },

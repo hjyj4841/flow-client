@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
-import { findUser, updateUser } from "../../api/user";
+import { deleteUser, findUser, updateUser } from "../../api/user";
 import { useNavigate } from "react-router-dom";
 import "../../assets/css/updateUser.scoped.scss";
 import { MdOutlinePublic, MdOutlinePublicOff } from "react-icons/md";
+import { useAuth } from "../../contexts/AuthContext";
 
 const UpdateUser = () => {
   const navigate = useNavigate();
+  const { token, logout } = useAuth();
   const [user, setUser] = useState({
     userCode: 0,
     userEmail: "",
@@ -25,7 +27,7 @@ const UpdateUser = () => {
   }, []);
 
   const getUserInfo = async () => {
-    setUser((await findUser(localStorage.getItem("token"))).data);
+    setUser((await findUser(token)).data);
   };
 
   // 이미지 선택시 미리보기
@@ -46,6 +48,15 @@ const UpdateUser = () => {
     });
   };
 
+  // 회원 탈퇴
+  const withOutUser = async () => {
+    await deleteUser(token);
+    logout();
+    alert("회원탈퇴!");
+    logout();
+  };
+
+  // 회원 수정
   const updateSubmit = async () => {
     const formData = new FormData();
     formData.append("userCode", user.userCode);
@@ -60,7 +71,7 @@ const UpdateUser = () => {
     formData.append("userGender", user.userGender);
     if (user.imgFile != null) formData.append("imgFile", user.imgFile);
     await updateUser(formData);
-    navigate("/");
+    navigate(`/mypage/${user.userCode}`);
   };
 
   return (
@@ -215,6 +226,9 @@ const UpdateUser = () => {
         </button>
       </div>
       <button onClick={updateSubmit}>수정하기</button>
+      <button onClick={withOutUser} className="deleteUser">
+        회원탈퇴
+      </button>
     </div>
   );
 };

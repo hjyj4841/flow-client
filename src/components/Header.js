@@ -1,26 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../assets/css/header.css";
 import { useAuth } from "../contexts/AuthContext";
 import LoginModal from "./LoginModal";
 import RegisterModal from "./RegisterModal";
 import SearchModal from "./SearchModal";
+import { findUser } from "../api/user";
 
 const Header = () => {
   const { token, logout } = useAuth();
   const [isModalOpen, setModalOpen] = useState(false);
-
-  // 유저 정보 뽑기
-  let userData;
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    userData = JSON.parse(window.atob(base64));
-  }
+  const [user, setUser] = useState({
+    userCode: 0,
+    userEmail: "",
+    userPlatform: "",
+    userJob: "",
+    userHeight: 0,
+    userWeight: 0,
+    userBodySpecYn: "",
+    userProfileUrl: "",
+    userNickname: "",
+    userGender: "",
+    userManagerCode: "",
+  });
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
+
+  // 유저 정보 뽑기
+  const getUserInfo = async () => {
+    setUser((await findUser(token)).data);
+  };
+
+  // useEffect(() => {
+  //   if (token !== null) {
+  //     getUserInfo();
+  //   }
+  // }, []);
+
+  useEffect(() => {
+    if (token !== null) {
+      getUserInfo();
+    }
+  }, [token]);
 
   return (
     <>
@@ -37,10 +60,15 @@ const Header = () => {
               <a href="#" className="text-sm" onClick={logout}>
                 로그아웃
               </a>
-              <Link className="text-sm" to={"/mypage"}>
+              <button
+                className="text-sm"
+                onClick={() =>
+                  (window.location.href = `/mypage/${user.userCode}`)
+                }
+              >
                 마이페이지
-              </Link>
-              {userData.userManagerCode === "Y" && (
+              </button>
+              {user.userManagerCode === "Y" && (
                 <Link to={"/reportList"} className="text-sm">
                   신고리스트
                 </Link>

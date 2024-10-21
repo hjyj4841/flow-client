@@ -57,3 +57,30 @@ export const newFeed = async (page = 1, keyword = "") => {
   });
   return response.data;
 };
+
+// 해당 유저가 작성한 게시물 조회 (게시물[], 게시물 수)
+export const fetchCreatedPosts = async (userCode) => {
+  try {
+    return await instance.get(`${userCode}/post`);
+  } catch (error) {
+    console.error("Error fetching created posts", error);
+  }
+};
+
+// 해당 유저가 좋아요한 게시물 조회
+export const fetchLikedPosts = async (userCode) => {
+  try {
+    return await instance.get(`likes/${userCode}/likes`);
+  } catch (error) {
+    console.error("Error fetching liked posts", error);
+  }
+};
+
+// 해당 유저가 북마크한 게시물 조회
+export const fetchSavedPosts = async (userCode) => {
+  try {
+    return await instance.get(`collection/${userCode}/collections`);
+  } catch (error) {
+    console.error("Error fetching saved posts", error);
+  }
+};

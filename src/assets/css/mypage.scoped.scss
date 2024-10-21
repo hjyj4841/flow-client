@@ -1,0 +1,95 @@
+.mypageTop {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+  border-bottom: 1px solid gainsboro;
+
+  .mypageImg {
+    padding-right: 80px;
+
+    img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+
+  .mypageDesc {
+    display: flex;
+    flex-direction: column;
+
+    div {
+      padding: 15px;
+      span,
+      button {
+        font-size: 0.9rem;
+      }
+      > span {
+        padding-right: 20px;
+        > span {
+          font-weight: bold;
+        }
+      }
+    }
+    div:nth-child(1) {
+      font-weight: bold;
+    }
+    .myJobBox {
+      display: flex;
+      i {
+        display: inline-block;
+        padding-right: 10px;
+      }
+    }
+
+    button {
+      background-color: gainsboro;
+      padding: 8px;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: lightgray;
+    }
+    .followButton {
+      background-color: rgb(94, 176, 253);
+      color: white;
+    }
+    .followButton:hover {
+      background-color: rgb(50, 154, 252);
+    }
+  }
+}
+
+.mypageBottom {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .mypageButtonBox {
+    display: flex;
+
+    button {
+      padding: 20px;
+      border: 1px solid white;
+      display: flex;
+      outline: none;
+
+      svg {
+        margin-right: 5px;
+      }
+    }
+  }
+  .postList {
+    .postBox {
+      max-width: 300px;
+      aspect-ratio: 1 / 1;
+      img {
+        max-width: 100%;
+        width: 300px;
+        aspect-ratio: 1 / 1;
+      }
+    }
+  }
+}
