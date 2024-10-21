@@ -84,3 +84,23 @@ export const fetchSavedPosts = async (userCode) => {
     console.error("Error fetching saved posts", error);
   }
 };
+
+// 메인 화면 PopularFeed
+export const popularFeed = async (page = 1) => {
+  const response = await instance.get(`likes/post/ordered-by-likes`, {
+    params: {
+      page: page,
+    },
+  });
+  return response.data;
+};
+
+// 메인 화면 MyFollowerFeed
+export const myFollowerFeed = async (userCode, page = 1) => {
+  const response = await instance.get(`/posts/followed/${userCode}`, {
+    params: {
+      page: page,
+    },
+  });
+  return response.data;
+};

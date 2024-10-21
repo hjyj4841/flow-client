@@ -21,6 +21,8 @@ import Vote from "./pages/post/Vote";
 import Detail from "./pages/post/Detail";
 import UpdateUser from "./pages/user/UpdateUser";
 import NewFeed from "./pages/post/NewFeed";
+import PopularFeed from "./pages/post/PopularFeed";
+import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
 
 const router = createBrowserRouter([
   {
@@ -63,6 +65,8 @@ const router = createBrowserRouter([
       { path: "/updateUser", element: <UpdateUser /> },
       { path: "/updatePost/:postCode", element: <UpdatePost /> },
       { path: "/newFeed", element: <NewFeed /> },
+      { path: "/popularFeed", element: <PopularFeed /> },
+      { path: "/myFollowerFeed", element: <MyFollowerFeed /> },
     ],
   },
 ]);
