@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
-import { SlArrowDown } from "react-icons/sl";
 import { Link } from "react-router-dom";
 
 const Main = () => {
@@ -46,6 +45,7 @@ const Main = () => {
     const response = await axios.get(
       "http://localhost:8080/api/likes/post/ordered-by-likes"
     );
+    console.log(response.data);
     setPopularFeedImages(response.data);
   };
 
@@ -134,9 +134,13 @@ const Main = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Popular Feed Section */}
         <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
+          <h2 className="text-xl font-bold mb-4">
+            <Link to="/popularFeed" className="hover:underline">
+              POPULAR FEED
+            </Link>
+          </h2>
           <div className="grid grid-cols-4 gap-4">
-            {popularFeedImages.map((post) =>
+            {popularFeedImages.slice(0, 8).map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
@@ -189,7 +193,6 @@ const Main = () => {
               ) : null
             )}
           </div>
-          <SlArrowDown />
         </section>
 
         {/* New Feed Section */}
@@ -200,7 +203,7 @@ const Main = () => {
             </Link>
           </h2>
           <div className="grid grid-cols-4 gap-4">
-            {newFeedImages.map((post) =>
+            {newFeedImages.slice(0, 8).map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
@@ -250,15 +253,18 @@ const Main = () => {
               ) : null
             )}
           </div>
-          <SlArrowDown />
         </section>
 
         {/* Follower's Feed Section */}
         {token && (
           <section className="mb-8">
-            <h2 className="text-xl font-bold mb-4">My Follower's Feed</h2>
+            <h2 className="text-xl font-bold mb-4">
+              <Link to="/myFollowerFeed" className="hover:underline">
+                MY FOLLOWER'S FEED
+              </Link>
+            </h2>
             <div className="grid grid-cols-4 gap-4">
-              {followedUserPosts.map((post) =>
+              {followedUserPosts.slice(0, 8).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
@@ -313,7 +319,6 @@ const Main = () => {
                 ) : null
               )}
             </div>
-            <SlArrowDown />
           </section>
         )}
       </main>
