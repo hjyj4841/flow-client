@@ -114,7 +114,19 @@ const Main = () => {
     }
   };
 
-  const detail = (postCode) => {
+  const detail = (postCode, e) => {
+    // 막고 싶은 태그 리스트
+    const blockedClasses = ["mx-2"];
+
+    // 이벤트가 발생한 요소의 className 체크
+    if (
+      blockedClasses.some((className) => e.target.classList.contains(className))
+    ) {
+      e.stopPropagation(); // 해당 태그일 경우 이벤트를 막음
+      return;
+    }
+
+    // 나머지 태그에서는 네비게이션 동작
     navigate(`/post/${postCode}`);
   };
 
@@ -147,25 +159,26 @@ const Main = () => {
                     alt={post.postDesc}
                     className="w-full h-full object-cover rounded-lg"
                   />
-                  <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p
-                      className="text-white mb-2 w-full flex justify-center items-center text-sm truncate"
-                      onClick={() => detail(post.postCode)}
-                    >
+                  <div
+                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                    onClick={(e) => detail(post.postCode, e)}
+                  >
+                    <p className="text-white mb-2 w-full flex justify-center items-center text-sm truncate">
                       {post.postDesc}
                     </p>
-                    <div className="flex justify-center items-center">
+                    <div className="flex items-center">
                       {likedPosts.some(
                         (likedPost) => likedPost.post.postCode === post.postCode
                       ) ? (
                         <FaHeart
                           onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red" }}
+                          style={{ color: "red", fontSize: "30px" }}
                           className="mx-2"
                         />
                       ) : (
                         <FaRegHeart
                           onClick={() => handleLikeToggle(post.postCode)}
+                          style={{ fontSize: "30px" }}
                           className="mx-2"
                         />
                       )}
@@ -174,12 +187,13 @@ const Main = () => {
                       ) ? (
                         <BsCollectionFill
                           onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "black" }}
+                          style={{ color: "white", fontSize: "30px" }}
                           className="mx-2"
                         />
                       ) : (
                         <BsCollection
                           onClick={() => handleSaveToggle(post.postCode)}
+                          style={{ fontSize: "30px" }}
                           className="mx-2"
                         />
                       )}
@@ -213,38 +227,43 @@ const Main = () => {
                   />
                   <div
                     className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
-                    onClick={() => detail(post.postCode)}
-                  />
-                  <div className="flex items-center mt-2 width-20">
-                    <p className="text-black ml-3">{post.postDesc}</p>
-                    {likedPosts.some(
-                      (likedPost) => likedPost.post.postCode === post.postCode
-                    ) ? (
-                      <FaHeart
-                        onClick={() => handleLikeToggle(post.postCode)}
-                        style={{ color: "red" }}
-                        className=""
-                      />
-                    ) : (
-                      <FaRegHeart
-                        onClick={() => handleLikeToggle(post.postCode)}
-                        className=""
-                      />
-                    )}
-                    {savedPosts.some(
-                      (savedPost) => savedPost.post.postCode === post.postCode
-                    ) ? (
-                      <BsCollectionFill
-                        onClick={() => handleSaveToggle(post.postCode)}
-                        style={{ color: "black" }}
-                        className="ml-2"
-                      />
-                    ) : (
-                      <BsCollection
-                        onClick={() => handleSaveToggle(post.postCode)}
-                        className="ml-2"
-                      />
-                    )}
+                    onClick={(e) => detail(post.postCode, e)}
+                  >
+                    <p className="text-white mb-2 w-full flex justify-center items-center text-sm truncate">
+                      {post.postDesc}
+                    </p>
+                    <div className="flex items-center">
+                      {likedPosts.some(
+                        (likedPost) => likedPost.post.postCode === post.postCode
+                      ) ? (
+                        <FaHeart
+                          onClick={() => handleLikeToggle(post.postCode)}
+                          style={{ color: "red", fontSize: "30px" }}
+                          className="mx-2"
+                        />
+                      ) : (
+                        <FaRegHeart
+                          onClick={() => handleLikeToggle(post.postCode)}
+                          style={{ fontSize: "30px" }}
+                          className="mx-2"
+                        />
+                      )}
+                      {savedPosts.some(
+                        (savedPost) => savedPost.post.postCode === post.postCode
+                      ) ? (
+                        <BsCollectionFill
+                          onClick={() => handleSaveToggle(post.postCode)}
+                          style={{ color: "white", fontSize: "30px" }}
+                          className="mx-2"
+                        />
+                      ) : (
+                        <BsCollection
+                          onClick={() => handleSaveToggle(post.postCode)}
+                          style={{ fontSize: "30px" }}
+                          className="mx-2"
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
               ) : null
@@ -269,13 +288,11 @@ const Main = () => {
                       alt={post.postDesc}
                       className="w-full h-full object-cover rounded-lg"
                     />
-                    <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <p
-                        className="text-white mb-2"
-                        onClick={() => detail(post.postCode)}
-                      >
-                        {post.postDesc}
-                      </p>
+                    <div
+                      className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                      onClick={(e) => detail(post.postCode, e)}
+                    >
+                      <p className="text-white mb-2">{post.postDesc}</p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -283,12 +300,13 @@ const Main = () => {
                         ) ? (
                           <FaHeart
                             onClick={() => handleLikeToggle(post.postCode)}
-                            style={{ color: "red" }}
+                            style={{ color: "red", fontSize: "30px" }}
                             className="mx-2"
                           />
                         ) : (
                           <FaRegHeart
                             onClick={() => handleLikeToggle(post.postCode)}
+                            style={{ fontSize: "30px" }}
                             className="mx-2"
                           />
                         )}
@@ -298,12 +316,13 @@ const Main = () => {
                         ) ? (
                           <BsCollectionFill
                             onClick={() => handleSaveToggle(post.postCode)}
-                            style={{ color: "black" }}
+                            style={{ color: "white", fontSize: "30px" }}
                             className="mx-2"
                           />
                         ) : (
                           <BsCollection
                             onClick={() => handleSaveToggle(post.postCode)}
+                            style={{ fontSize: "30px" }}
                             className="mx-2"
                           />
                         )}
