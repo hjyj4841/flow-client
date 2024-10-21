@@ -42,17 +42,15 @@ const DetailDiv = styled.div`
     margin: 10px 5px;
   }
 `;
-
 const Detail = () => {
   const { postCode } = useParams();
   const navigate = useNavigate();
-
+  const [isToken, setIsToken] = useState(false);
+  let isSelf = false;
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
-
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
   const { report } = state;
-
   const [reportPost, setReportPost] = useState({
     postReportDesc: "",
     post: {
@@ -75,9 +73,14 @@ const Detail = () => {
   let postUserCode = 0;
   let loginUserCode = 0;
   const [check, setCheck] = useState(false);
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({
+    userCode: 0,
+  });
   const token = localStorage.getItem("token");
   useEffect(() => {
+    if (token !== null) {
+      setIsToken(true);
+    }
     fetchPost();
   }, []);
 
@@ -102,6 +105,23 @@ const Detail = () => {
     setPost(response.data);
   };
 
+  useEffect(() => {
+    const fetchPost = async () => {
+      const response = await axios.get(
+        `http://localhost:8080/api/post/${postCode}`
+      );
+      setPost(response.data);
+      setUser({
+        userCode: response.data.userCode,
+      });
+    };
+    fetchPost();
+  }, [isToken]);
+
+  if (loginUserCode === user.userCode) {
+    isSelf = true;
+  }
+
   // 포스트 안에 있는 유저 코드
   useEffect(() => {
     if (post?.userCode !== undefined) {
@@ -120,7 +140,6 @@ const Detail = () => {
   const updatePost = () => {
     navigate("/post/update/" + postCode);
   };
-
   const reportPostBtn = (data) => {
     addReportPost(reportDispatch, data);
     alert("신고가 완료되었습니다.");
@@ -129,7 +148,6 @@ const Detail = () => {
       postReportDesc: "",
     });
   };
-
   const reportUserBtn = (data) => {
     addReportUser(reportDispatch, data);
     alert("신고가 완료되었습니다.");
@@ -138,24 +156,20 @@ const Detail = () => {
       userReportDesc: "",
     });
   };
-
   const handleCommentSubmit = async () => {
     await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
       content: comment,
     });
     setComment("");
   };
-
   const deleteAPI = async () => {
     await delPost(postCode);
   };
-
   const deletePost = () => {
     deleteAPI();
     alert("삭제 완료");
     window.location.href = "/";
   };
-
   const handleNextImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex(
@@ -163,7 +177,6 @@ const Detail = () => {
       );
     }
   };
-
   const handlePreviousImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex((prevIndex) =>
@@ -277,8 +290,10 @@ const Detail = () => {
 
   return (
     <>
-      <FollowButton />
-      {check ? (
+      {/* <FollowButton user={user} /> */}
+      {!isSelf ? <FollowButton user={user} /> : <></>}
+      {check ? <>같은 경우</> : <>다른 경우</>}
+      {Number.loginUserCode !== Number.postUserCode ? (
         <></>
       ) : (
         <DetailDiv>
@@ -431,11 +446,10 @@ const Detail = () => {
                   )}
                 </span>
                 <span className="mr-4">
-                  💬 {post.comments ? post.comments.length : 0}
+                  :말풍선: {post.comments ? post.comments.length : 0}
                 </span>
               </div>
               <span className="font-bold">{post.userName}</span>
-
               <div className="border-t border-gray-300 pt-4">
                 <h2 className="font-bold mb-2">
                   댓글 {post.comments ? post.comments.length : 0}개
@@ -450,7 +464,6 @@ const Detail = () => {
                   <p>댓글이 없습니다.</p>
                 )}
               </div>
-
               <div className="mt-4">
                 <input
                   type="text"

@@ -78,14 +78,14 @@ const followSlice = createSlice({
         state.countFollower += 1;
         state.followBool = true;
       })
-      .addCase(followStatus.fulfilled, (state, action) => {
-        state.followBool = action.payload;
-      })
       .addCase(createFollowRelative.rejected, (state, action) => {
         console.log("error");
       })
       .addCase(followStatus.rejected, (state, action) => {
         console.log("error");
+      })
+      .addCase(followStatus.fulfilled, (state, action) => {
+        state.followBool = action.payload;
       });
   },
 });
