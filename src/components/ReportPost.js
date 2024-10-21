@@ -7,6 +7,7 @@ import {
   reportReducer,
 } from "../reducers/reportReducer";
 import { fetchDeleteReportPost } from "../reducers/reportReducer";
+import "../assets/css/reportPost.css";
 
 const ReportPost = () => {
   const [state, dispatch] = useReducer(reportReducer, reportPostState);
@@ -45,32 +46,33 @@ const ReportPost = () => {
 
   return (
     <>
-      <div style={{ marginBottom: 150 }}>
+      <div className="fullContainer">
         {currentPosts && reportPosts.length > 0 ? (
           currentPosts.map((post) => (
             <Card
+              className="card"
               key={post.postReportCode}
               sx={{ minWidth: 275 }}
               variant="outlined"
             >
-              <CardContent>
-                <Typography variant="h5" component="div">
+              <CardContent className="reportContainer">
+                <Typography variant="h5" component="div" className="reportName">
                   신고번호: {post.postReportCode}
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body" className="reportInfo">
                   신고내용 : {post.postReportDesc}
-                  <br />
                 </Typography>
-                <br />
-                <button
-                  className="delete-report-post-btn"
-                  type="button"
-                  onClick={() => deletePost(post.postReportCode)}
-                >
-                  삭제
-                </button>
+
+                <div className="buttonContainer">
+                  <button
+                    className="delete-report-post-btn"
+                    type="button"
+                    onClick={() => deletePost(post.postReportCode)}
+                  >
+                    삭제
+                  </button>
+                </div>
               </CardContent>
-              <Divider />
             </Card>
           ))
         ) : (

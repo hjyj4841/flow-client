@@ -156,7 +156,7 @@ const Main = () => {
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
-                  className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                  className="relative w-full h-350 bg-gray-300 rounded-lg group mb-5"
                 >
                   <img
                     src={post.imageUrls[0]}

@@ -1,0 +1,37 @@
+.card {
+  border: none !important;
+  width: 1800px;
+}
+.fullContainer {
+  margin-bottom: 20px;
+}
+.reportContainer {
+  border: 1px solid black;
+  border-radius: 30px;
+  margin-top: 20px;
+  margin-left: 90px;
+  padding-bottom: 16px !important;
+  height: 135px;
+}
+.reportName {
+  font-size: 30px !important;
+  margin-left: 10px !important;
+  width: 200px;
+}
+.reportInfo {
+  position: relative;
+  left: 250px;
+  bottom: 33px;
+  font-size: 24px;
+}
+.buttonContainer {
+  position: relative;
+  bottom: 5px;
+  width: 75px;
+}
+.buttonContainer button {
+  width: 90px;
+  background-color: rgb(255, 55, 55);
+  color: white;
+  font-weight: bold;
+}
