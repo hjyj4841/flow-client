@@ -11,7 +11,6 @@ import {
   reportReducer,
 } from "../../reducers/reportReducer";
 import FollowButton from "../follow/FollowButton";
-
 const DetailDiv = styled.div`
   .report {
     display: flex;
@@ -23,7 +22,7 @@ const DetailDiv = styled.div`
     margin: 20px;
   }
   .report button {
-    background-color: #f05650;
+    background-color: #F05650;
     padding: 10px;
     border-radius: 15px;
     margin: 10px 5px;
@@ -35,82 +34,109 @@ const DetailDiv = styled.div`
     margin: 10px 5px;
   }
 `;
-
 const Detail = () => {
   const { postCode } = useParams();
   const navigate = useNavigate();
-
+  const [isToken, setIsToken] = useState(false);
+  let isSelf = false;
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
-
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
   const { report } = state;
-
   const [reportPost, setReportPost] = useState({
-    reportDesc: "",
+    postReportDesc: "",
     post: {
       postCode: postCode,
     },
   });
-
+  
   const [reportUser, setReportUser] = useState({
-    reportDesc: "",
+    userReportDesc: "",
     user: {
       userCode: 0,
     },
   });
-
+  let postUserCode = 0;
   let loginUserCode = 0;
-  const [user, setUser] = useState({});
+  const [check, setCheck] = useState(false);
+  const [user, setUser] = useState({
+    userCode : 0
+  });
   const token = localStorage.getItem("token");
+  useEffect(() => {
+    if(token!==null) {
+      setIsToken(true);
+    }
+  }, []);
   if (token) {
     const base64Url = token.split(".")[1];
     const base64 = base64Url.replace("-", "+").replace("_", "/");
     const userData = JSON.parse(window.atob(base64));
     loginUserCode = userData.userCode;
   }
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
   useEffect(() => {
     const fetchPost = async () => {
       const response = await axios.get(
         `http://localhost:8080/api/post/${postCode}`
       );
       setPost(response.data);
+      setUser({
+        userCode : response.data.userCode
+      });
     };
     fetchPost();
-  }, []);
-
+  }, [isToken]);
+  if(loginUserCode === user.userCode) {
+    isSelf = true;
+  }
+  // 포스트 안에 있는 유저 코드
+  useEffect(() => {
+    if (post?.userCode !== undefined) {
+      // alert(post?.userCode);
+      setReportUser({
+        ...reportUser,
+        user: {
+          userCode: post.userCode,
+        },
+      });
+      postUserCode = post.userCode;
+      setCheck(postUserCode === loginUserCode);
+    }
+  }, [post?.userCode]);
   const updatePost = () => {
     navigate("/post/update/" + postCode);
   };
-
   const reportPostBtn = (data) => {
     addReportPost(reportDispatch, data);
+    alert("신고가 완료되었습니다.");
+    setReportPost({
+      ...reportPost,
+      postReportDesc: "",
+    });
   };
-
   const reportUserBtn = (data) => {
     addReportUser(reportDispatch, data);
+    alert("신고가 완료되었습니다.");
+    setReportUser({
+      ...reportUser,
+      userReportDesc: "",
+    });
   };
-
   const handleCommentSubmit = async () => {
     await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
       content: comment,
     });
     setComment("");
   };
-
   const deleteAPI = async () => {
     await delPost(postCode);
   };
-
   const deletePost = () => {
     deleteAPI();
     alert("삭제 완료");
     window.location.href = "/";
   };
-
   const handleNextImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex(
@@ -118,7 +144,6 @@ const Detail = () => {
       );
     }
   };
-
   const handlePreviousImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex((prevIndex) =>
@@ -126,63 +151,63 @@ const Detail = () => {
       );
     }
   };
-
-  // 신고 버튼 눌렀을 때
-  useEffect(() => {
-    if (reportUser.user.userCode !== 0) {
-      alert(reportUser.user.userCode);
-      console.log(reportUser);
-      setReportUser({
-        ...reportUser,
-        user: {
-          userCode: post.user.userCode,
-        },
-      });
-    }
-  }, [reportUser.user]);
-
   return (
     <>
-      <FollowButton />
-      <DetailDiv>
-        <div className="report">
-          <input
-            className="report-post-desc"
-            type="text"
-            placeholder="설명"
-            value={reportPost.reportDesc}
-            onChange={(e) =>
-              setReportPost({ ...reportPost, reportDesc: e.target.value })
-            }
-          />
-          <button
-            className="report-post-btn"
-            onClick={() => {
-              reportPostBtn(reportPost);
-            }}
-          >
-            글 신고버튼
-          </button>
-          <input
-            className="report-user-desc"
-            type="text"
-            placeholder="설명"
-            onChange={(e) =>
-              setReportUser({ ...reportUser, reportDesc: e.target.value })
-            }
-          />
-          <button
-            className="report-user-btn"
-            onClick={() => {
-              console.log(reportUser);
-              // reportUserBtn(reportUser);
-            }}
-          >
-            유저 신고버튼
-          </button>
-        </div>
-      </DetailDiv>
-
+      {/* <FollowButton user={user} /> */}
+      {!isSelf ? <FollowButton user={user}/> : <></>}
+      {check ? <>같은 경우</> : <>다른 경우</>}
+      {Number.loginUserCode !== Number.postUserCode ? (
+        <></>
+      ) : (
+        <DetailDiv>
+          <div className="report">
+            <div className="report-post">
+              <input
+                className="report-post-desc"
+                type="text"
+                placeholder="설명"
+                value={reportPost.postReportDesc}
+                onChange={(e) =>
+                  setReportPost({
+                    ...reportPost,
+                    postReportDesc: e.target.value,
+                  })
+                }
+              />
+              <button
+                className="report-post-btn"
+                onClick={() => {
+                  reportPostBtn(reportPost);
+                }}
+              >
+                글 신고버튼
+              </button>
+            </div>
+            <div className="report-user">
+              <input
+                className="report-user-desc"
+                type="text"
+                placeholder="설명"
+                value={reportUser.userReportDesc}
+                onChange={(e) =>
+                  setReportUser({
+                    ...reportUser,
+                    userReportDesc: e.target.value,
+                  })
+                }
+              />
+              <button
+                className="report-user-btn"
+                onClick={() => {
+                  reportUserBtn(reportUser);
+                }}
+              >
+                유저 신고버튼
+              </button>
+            </div>
+          </div>
+        </DetailDiv>
+      )}
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
           {loginUserCode === post?.userCode && (
@@ -239,13 +264,12 @@ const Detail = () => {
                 </span>
               </p>
               <div className="flex items-center text-sm text-gray-600 mb-4">
-                <span className="mr-4">❤️ {post.likes}</span>
+                <span className="mr-4">:하트2: {post.likes}</span>
                 <span className="mr-4">
-                  💬 {post.comments ? post.comments.length : 0}
+                  :말풍선: {post.comments ? post.comments.length : 0}
                 </span>
               </div>
               <span className="font-bold">{post.userName}</span>
-
               <div className="border-t border-gray-300 pt-4">
                 <h2 className="font-bold mb-2">
                   댓글 {post.comments ? post.comments.length : 0}개
@@ -260,7 +284,6 @@ const Detail = () => {
                   <p>댓글이 없습니다.</p>
                 )}
               </div>
-
               <div className="mt-4">
                 <input
                   type="text"

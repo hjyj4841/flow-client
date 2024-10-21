@@ -42,7 +42,8 @@ const followSlice = createSlice({
         countFollower: 0,
         follower: [],
         counter : 0,
-        followee : []
+        followee : [],
+        followBool : false
     },
     extraReducers : (builder) => {
         builder
@@ -69,6 +70,8 @@ const followSlice = createSlice({
             console.log("error");
         }).addCase(followStatus.rejected, (state,action) => {
             console.log("error");
+        }).addCase(followStatus.fulfilled, (state, action) => {
+            state.followBool =  action.payload;
         })
     }
 })

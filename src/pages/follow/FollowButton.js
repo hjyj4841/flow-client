@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo, useCallback} from "react";
 import {
   createFollowRelative,
   removeFollowRelative,
-  followStatus,
+  followStatus
 } from "../../store/followSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { getKakaoCode } from "../../api/kakao";
+import { getGoogleCode } from "../../api/google";
+import { getNaverCode } from "../../api/naver";
 
 const FollowButton = ({ user }) => {
   const FollowStyleAndEffect = styled.div`
@@ -24,6 +27,37 @@ const FollowButton = ({ user }) => {
       font-weight: 500;
       font-family: "Poppins", sans-serif;
     }
+    .loginAndRegister-container {
+    position: fixed;
+    top: 0px;
+    left: -16px;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    .modal-content {
+      display: flex;
+      width: 500px;
+      height: 700px;
+      flex-direction: column;
+      background-color: white;
+      align-items: center;
+      justify-content: center;
+      border-radius: 10px;
+        .register span{
+          margin: 4px;
+        }
+        .register .registerLink {
+          color: skyblue;
+          text-decoration: underline;
+          cursor: pointer;
+        }
+    }
+  }
+  
   `;
   // Google Fonts를 동적으로 로드하는 useEffect 훅
   useEffect(() => {
@@ -35,7 +69,9 @@ const FollowButton = ({ user }) => {
   }, []);
   const token = localStorage.getItem("token");
   const [isLogin, setIsLogin] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
+  const followBool = useSelector((state) => state.follow.counter);
   useEffect(() => {
     if (token) {
       setIsLogin(true);
@@ -61,26 +97,54 @@ const FollowButton = ({ user }) => {
   const tokenCode = parseJwt(token);
   const [follow, setFollow] = useState({
     followingUser: {
-      userCode: tokenCode,
+      userCode: 0,
     },
     followerUser: {
-      userCode: user?.userCode,
+      userCode: 0,
     },
   });
-  const [isFollow, setIsFollow] = useState(false);
+  useEffect(() => {
+    if (user?.userCode) {
+      setFollow({
+        followingUser: {
+          userCode: tokenCode,
+        },
+        followerUser: {
+          userCode: Number(user.userCode) || 0, // 숫자로 변환되거나 0으로 처리
+        },
+      });
+    }
+  }, [token, user]);
+
+  const [isFollow, setIsFollow] = useState(followBool);
+
   const addFollowRelative = () => {
-    dispatch(createFollowRelative(follow));
     setIsFollow(true);
+    dispatch(createFollowRelative(follow));
   };
+  
   const unfollow = () => {
+    setIsFollow(false);
     dispatch(
       removeFollowRelative({
         followingUserCode: follow.followingUser.userCode,
         followerUserCode: follow.followerUser.userCode,
       })
     );
-    setIsFollow(false);
   };
+
+  const statusFollow = useCallback(() => {
+    dispatch(
+      followStatus({
+        followingUserCode: tokenCode,
+        followerUserCode: user?.userCode,
+      })
+    );
+  }, [tokenCode, user?.userCode, dispatch])
+
+  useEffect(() => {
+    statusFollow();
+  }, []);
 
   const submit = () => {
     if (!isFollow) {
@@ -89,27 +153,60 @@ const FollowButton = ({ user }) => {
       unfollow();
     }
   };
-  useEffect(() => {
-    dispatch(
-      followStatus({
-        followingUserCode: tokenCode,
-        followerUserCode: user?.userCode,
-      })
-    ).then((response) => {
-      const status = response.payload;
-      setIsFollow(status);
-    });
-  }, [tokenCode, user?.userCode, dispatch]);
+  const tryRegister = () => {
+    setShowModal(true);
+  };
+  const toRegister = () => {
 
-  const tryRegister = () => {};
+  }
   return (
     <>
       <FollowStyleAndEffect>
         {isLogin ? (
-          <button onClick={submit}>{isFollow ? "언팔로우" : "팔로우"}</button>
+          <>
+          {followBool ? (<button onClick={submit}>언팔로우</button>) : (<button onClick={submit}>팔로우</button>)}
+          </>
         ) : (
           <button onClick={tryRegister}>팔로우</button>
         )}
+      {showModal && (
+        <div className={"loginAndRegister-container"}>
+          <div className={"modal-content"}>
+            <h1></h1>
+            <p>네이버, 구글, 카카오 계정으로 간편하게!</p>
+            <button
+              type="button"
+              className="google"
+              onClick={() => getGoogleCode("login")}
+            >
+              <span className="blue">G</span>
+              <span className="red">o</span>
+              <span className="yellow">o</span>
+              <span className="blue">g</span>
+              <span className="green">l</span>
+              <span className="red">e</span>
+            </button>
+            <button
+              type="button"
+              className="kakao"
+              onClick={() => getKakaoCode("login")}
+            >
+              Kakao
+            </button>
+            <button
+              type="button"
+              className="naver"
+              onClick={() => getNaverCode("login")}
+            >
+              NAVER
+            </button>
+            <button onClick={() => setShowModal(false)}>
+              닫기
+            </button>
+            <div className="register"><span>아직 회원이 아니신가요?</span><span className="registerLink" onClick={toRegister}>가입</span></div>
+          </div>
+        </div>
+      )}
       </FollowStyleAndEffect>
     </>
   );
