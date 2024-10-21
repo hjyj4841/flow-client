@@ -2,18 +2,14 @@ import React, { useState, useEffect, useReducer } from "react";
 import { Card, CardContent, Divider, Typography } from "@mui/material";
 import Paging from "./Paging";
 import {
-  fetchReportPost,
-  initState as reportPostState,
+  fetchReportComment,
+  rCommentState,
   reportReducer,
 } from "../reducers/reportReducer";
-import {
-  fetchDeleteReportPost,
-  banUserReport,
-} from "../reducers/reportReducer";
 
-const ReportPost = () => {
-  const [state, dispatch] = useReducer(reportReducer, reportPostState);
-  const { reportPosts } = state;
+const ReportComment = () => {
+  const [state, dispatch] = useReducer(reportReducer, rCommentState);
+  const { reportComments } = state;
 
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,16 +19,16 @@ const ReportPost = () => {
   const [currentPosts, setCurrentPosts] = useState(0);
 
   useEffect(() => {
-    fetchReportPost(dispatch);
-    setCount(reportPosts.length);
+    fetchReportComment(dispatch);
+    setCount(reportComments.length);
     setIndexOfLastPost(currentPage * postPerPage);
     setIndexOfFirstPost(indexOfLastPost - postPerPage);
-    setCurrentPosts(reportPosts.slice(indexOfFirstPost, indexOfLastPost));
+    setCurrentPosts(reportComments.slice(indexOfFirstPost, indexOfLastPost));
   }, [
     currentPage,
     indexOfLastPost,
     indexOfFirstPost,
-    reportPosts,
+    reportComments,
     postPerPage,
   ]);
 
@@ -40,51 +36,38 @@ const ReportPost = () => {
     setCurrentPage(error);
   };
 
-  const deletePost = (postReportCode) => {
-    // 삭제 기능
-    fetchDeleteReportPost(dispatch, postReportCode);
-    alert("관리자에 의해 삭제되었습니다.");
-  };
-
-  const banUser = (userCode, postReportCode) => {
-    // 밴 기능
-    banUserReport(dispatch, userCode);
-    fetchDeleteReportPost(dispatch, postReportCode);
-    alert("관리자에 의해 밴되었습니다.");
-  };
-
   return (
     <>
       <div style={{ marginBottom: 150 }}>
-        {currentPosts && reportPosts.length > 0 ? (
-          currentPosts.map((post) => (
+        {currentPosts && reportComments.length > 0 ? (
+          currentPosts.map((comment) => (
             <Card
-              key={post.postReportCode}
+              key={comment.commentReportCode}
               sx={{ minWidth: 275 }}
               variant="outlined"
             >
               <CardContent>
                 <Typography variant="h5" component="div">
-                  신고번호: {post.postReportCode}
+                  신고번호: {comment.commentReportCode}
                 </Typography>
                 <Typography variant="body2">
-                  신고내용 : {post.postReportDesc}
+                  신고내용 : {comment.commentReportDesc}
                   <br />
                 </Typography>
                 <br />
                 <button
                   className="delete-report-post-btn"
                   type="button"
-                  onClick={() => deletePost(post.postReportCode)}
+                  //   onClick={() => deletePost(post.postReportCode)}
                 >
                   삭제
                 </button>
                 <button
                   className="ban-report-user-btn"
                   type="button"
-                  onClick={() =>
-                    banUser(post.post.user.userCode, post.postReportCode)
-                  }
+                  //   onClick={() =>
+                  //     banUser(post.post.user.userCode, post.postReportCode)
+                  //   }
                 >
                   밴
                 </button>
@@ -103,4 +86,4 @@ const ReportPost = () => {
   );
 };
 
-export default ReportPost;
+export default ReportComment;

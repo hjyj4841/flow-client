@@ -47,20 +47,22 @@ const Detail = () => {
   const { report } = state;
 
   const [reportPost, setReportPost] = useState({
-    reportDesc: "",
+    postReportDesc: "",
     post: {
       postCode: postCode,
     },
   });
 
   const [reportUser, setReportUser] = useState({
-    reportDesc: "",
+    userReportDesc: "",
     user: {
       userCode: 0,
     },
   });
 
+  let postUserCode = 0;
   let loginUserCode = 0;
+  const [check, setCheck] = useState(false);
   const [user, setUser] = useState({});
   const token = localStorage.getItem("token");
   if (token) {
@@ -82,16 +84,41 @@ const Detail = () => {
     fetchPost();
   }, []);
 
+  // 포스트 안에 있는 유저 코드
+  useEffect(() => {
+    if (post?.userCode !== undefined) {
+      // alert(post?.userCode);
+      setReportUser({
+        ...reportUser,
+        user: {
+          userCode: post.userCode,
+        },
+      });
+      postUserCode = post.userCode;
+      setCheck(postUserCode === loginUserCode);
+    }
+  }, [post?.userCode]);
+
   const updatePost = () => {
     navigate("/post/update/" + postCode);
   };
 
   const reportPostBtn = (data) => {
     addReportPost(reportDispatch, data);
+    alert("신고가 완료되었습니다.");
+    setReportPost({
+      ...reportPost,
+      postReportDesc: "",
+    });
   };
 
   const reportUserBtn = (data) => {
     addReportUser(reportDispatch, data);
+    alert("신고가 완료되었습니다.");
+    setReportUser({
+      ...reportUser,
+      userReportDesc: "",
+    });
   };
 
   const handleCommentSubmit = async () => {
@@ -127,61 +154,61 @@ const Detail = () => {
     }
   };
 
-  // 신고 버튼 눌렀을 때
-  useEffect(() => {
-    if (reportUser.user.userCode !== 0) {
-      alert(reportUser.user.userCode);
-      console.log(reportUser);
-      setReportUser({
-        ...reportUser,
-        user: {
-          userCode: post.user.userCode,
-        },
-      });
-    }
-  }, [reportUser.user]);
-
   return (
     <>
       <FollowButton />
-      <DetailDiv>
-        <div className="report">
-          <input
-            className="report-post-desc"
-            type="text"
-            placeholder="설명"
-            value={reportPost.reportDesc}
-            onChange={(e) =>
-              setReportPost({ ...reportPost, reportDesc: e.target.value })
-            }
-          />
-          <button
-            className="report-post-btn"
-            onClick={() => {
-              reportPostBtn(reportPost);
-            }}
-          >
-            글 신고버튼
-          </button>
-          <input
-            className="report-user-desc"
-            type="text"
-            placeholder="설명"
-            onChange={(e) =>
-              setReportUser({ ...reportUser, reportDesc: e.target.value })
-            }
-          />
-          <button
-            className="report-user-btn"
-            onClick={() => {
-              console.log(reportUser);
-              // reportUserBtn(reportUser);
-            }}
-          >
-            유저 신고버튼
-          </button>
-        </div>
-      </DetailDiv>
+      {check ? (
+        <></>
+      ) : (
+        <DetailDiv>
+          <div className="report">
+            <div className="report-post">
+              <input
+                className="report-post-desc"
+                type="text"
+                placeholder="설명"
+                value={reportPost.postReportDesc}
+                onChange={(e) =>
+                  setReportPost({
+                    ...reportPost,
+                    postReportDesc: e.target.value,
+                  })
+                }
+              />
+              <button
+                className="report-post-btn"
+                onClick={() => {
+                  reportPostBtn(reportPost);
+                }}
+              >
+                글 신고버튼
+              </button>
+            </div>
+            <div className="report-user">
+              <input
+                className="report-user-desc"
+                type="text"
+                placeholder="설명"
+                value={reportUser.userReportDesc}
+                onChange={(e) =>
+                  setReportUser({
+                    ...reportUser,
+                    userReportDesc: e.target.value,
+                  })
+                }
+              />
+              <button
+                className="report-user-btn"
+                onClick={() => {
+                  reportUserBtn(reportUser);
+                }}
+              >
+                유저 신고버튼
+              </button>
+            </div>
+          </div>
+        </DetailDiv>
+      )}
 
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">

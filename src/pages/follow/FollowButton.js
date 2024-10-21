@@ -7,24 +7,25 @@ import {
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 
+const FollowStyleAndEffect = styled.div`
+  button {
+    color: #006666;
+    margin: 1px;
+    margin-top: 10px;
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #c6fcff;
+    box-shadow: inset 5px 0px 4px rgba(203, 249, 252, 1);
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-family: "Poppins", sans-serif;
+  }
+`;
+
 const FollowButton = ({ user }) => {
-  const FollowStyleAndEffect = styled.div`
-    button {
-      color: #006666;
-      margin: 1px;
-      margin-top: 10px;
-      width: 6rem;
-      height: 3rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #c6fcff;
-      box-shadow: inset 5px 0px 4px rgba(203, 249, 252, 1);
-      font-size: 1.2rem;
-      font-weight: 500;
-      font-family: "Poppins", sans-serif;
-    }
-  `;
   // Google Fonts를 동적으로 로드하는 useEffect 훅
   useEffect(() => {
     const link = document.createElement("link");

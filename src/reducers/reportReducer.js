@@ -6,12 +6,16 @@ import {
   banUser,
   reportPost,
   reportUser,
+  getReportComment,
 } from "../api/report";
 export const initState = {
   reportPosts: [],
 };
 export const rUserState = {
   reportUsers: [],
+};
+export const rCommentState = {
+  reportComments: [],
 };
 // 액션함수
 // 신고받은 글 가져오기
@@ -47,6 +51,11 @@ export const addReportUser = async (dispatch, data) => {
   const response = await reportUser(data);
   dispatch({ type: "REPORT_USER" });
 };
+export const fetchReportComment = async (dispatch) => {
+  const response = await getReportComment();
+  dispatch({ type: "FETCH_REPORT_COMMENT", payload: response.data });
+};
+
 export const reportReducer = (state, action) => {
   switch (action.type) {
     // 신고받은 글 가져오기
@@ -64,6 +73,8 @@ export const reportReducer = (state, action) => {
       return state;
     case "REPORT_USER":
       return state;
+    case "FETCH_REPORT_COMMENT":
+      return { ...state, reportComments: action.payload };
     default:
       return state;
   }
