@@ -5,7 +5,7 @@ const instance = axios.create({
 });
 
 const authorize = axios.create({
-  baseURL: "http://localhost:8080/api/private/",
+  baseURL: "http://localhost:8080/api/private",
   headers: {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   },
@@ -18,7 +18,8 @@ export const getAllComment = async (postCode) => {
 
 // 댓글 작성
 export const addComment = async (data) => {
-  return await authorize.post(`/${data.postCode}/comments`, data);
+  console.log(data);
+  return await instance.post(`/addcomment`, data);
 };
 
 // // 댓글 수정
