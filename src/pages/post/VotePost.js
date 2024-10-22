@@ -29,7 +29,7 @@ const VotePost = () => {
           ))}
         </div>
       </section>
-      <Link className="text-sm" to={"/uploadVotePost"}>
+      <Link className="text-sm" to={"/uploadVote"}>
         투표업로드
       </Link>
       <section className="mb-8">

@@ -99,6 +99,16 @@ export const fetchSavedPosts = async (userCode) => {
   }
 };
 
+// 해당 유저가 업로드한 게시물 조회
+export const uploadPostVote = async (userCode) => {
+    return await instance.get(`${userCode}/postVote`);
+}
+
+// 해당 유저가 투표한 게시물 조회
+export const fetchVotedPosts = async (userCode) => {
+    return await instance.get(`vote/${userCode}/vote`);
+};
+
 // 메인 화면 PopularFeed
 export const popularFeed = async (page = 1) => {
   const response = await instance.get(`likes/post/ordered-by-likes`, {

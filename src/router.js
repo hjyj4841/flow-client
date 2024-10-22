@@ -14,7 +14,7 @@ import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
 import ReportList from "./pages/ReportList";
 import MyFollower from "./pages/follow/MyFollower";
 import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
-import UploadVotePost from "./pages/post/UploadVotePost";
+
 import UpdatePost from "./pages/post/UpdatePost";
 import VotePost from "./pages/post/VotePost";
 import Vote from "./pages/post/Vote";
@@ -23,6 +23,8 @@ import UpdateUser from "./pages/user/UpdateUser";
 import NewFeed from "./pages/post/NewFeed";
 import PopularFeed from "./pages/post/PopularFeed";
 import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
+
+import UploadVote from "./pages/post/UploadVote.js";
 
 const router = createBrowserRouter([
   {
@@ -41,9 +43,9 @@ const router = createBrowserRouter([
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
-      { path: "/votePost", element: <VotePost /> },
-      { path: "/uploadVotePost", element: <UploadVotePost /> },
-      { path: "/Vote/:voteCode", element: <Vote /> },
+      { path: "/votePost", element: <VotePost /> }, // 투표게시물 전체 보기
+      { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드
+      { path: "/Vote/:postCode", element: <Vote /> }, // 투표 게시물
       { path: "/uploadPost", element: <UploadPost /> },
       {
         path: `mypage/:followingUserCode/follow/myFollower/:followingUserCode`,
