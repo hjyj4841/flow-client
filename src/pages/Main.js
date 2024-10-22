@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import "../assets/css/main.css";
 
 const Main = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -145,18 +146,18 @@ const Main = () => {
 
       <main className="container mx-auto px-4 py-8">
         {/* Popular Feed Section */}
-        <section className="mb-8">
+        <section className="mb-8 con">
           <h2 className="text-xl font-bold mb-4">
             <Link to="/popularFeed" className="hover:underline">
               POPULAR FEED
             </Link>
           </h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="pf-con grid grid-cols-5 gap-4 flex justify-center content-center">
             {popularFeedImages.slice(0, 8).map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
-                  className="relative w-full h-350 bg-gray-300 rounded-lg group mb-5"
+                  className="relative bg-gray-300 rounded-lg group mb-5 p-feed"
                 >
                   <img
                     src={post.imageUrls[0]}
@@ -179,7 +180,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleLikeToggle(post.postCode);
                           }}
-                          style={{ color: "red", fontSize: "50px" }}
+                          style={{ color: "red", fontSize: "30px" }}
                           className="mx-2"
                         />
                       ) : (
@@ -188,7 +189,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleLikeToggle(post.postCode);
                           }}
-                          style={{ fontSize: "50px" }}
+                          style={{ fontSize: "30px" }}
                           className="mx-2"
                         />
                       )}
@@ -200,7 +201,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleSaveToggle(post.postCode);
                           }}
-                          style={{ color: "white", fontSize: "50px" }}
+                          style={{ color: "white", fontSize: "30px" }}
                           className="mx-2"
                         />
                       ) : (
@@ -209,7 +210,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleSaveToggle(post.postCode);
                           }}
-                          style={{ fontSize: "50px" }}
+                          style={{ fontSize: "30px" }}
                           className="mx-2"
                         />
                       )}
@@ -228,12 +229,12 @@ const Main = () => {
               NEW FEED
             </Link>
           </h2>
-          <div className="grid grid-cols-4 gap-4">
+          <div className="nf-con grid grid-cols-5 gap-4">
             {newFeedImages.slice(0, 8).map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
-                  className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5"
+                  className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed"
                 >
                   <img
                     src={post.imageUrls[0]}
@@ -256,7 +257,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleLikeToggle(post.postCode);
                           }}
-                          style={{ color: "red", fontSize: "50px" }}
+                          style={{ color: "red", fontSize: "30px" }}
                           className="mx-2"
                         />
                       ) : (
@@ -265,7 +266,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleLikeToggle(post.postCode);
                           }}
-                          style={{ fontSize: "50px" }}
+                          style={{ fontSize: "30px" }}
                           className="mx-2"
                         />
                       )}
@@ -277,7 +278,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleSaveToggle(post.postCode);
                           }}
-                          style={{ color: "white", fontSize: "50px" }}
+                          style={{ color: "white", fontSize: "30px" }}
                           className="mx-2"
                         />
                       ) : (
@@ -286,7 +287,7 @@ const Main = () => {
                             e.stopPropagation(); // 이벤트 전파 막기
                             handleSaveToggle(post.postCode);
                           }}
-                          style={{ fontSize: "50px" }}
+                          style={{ fontSize: "30px" }}
                           className="mx-2"
                         />
                       )}
@@ -306,12 +307,12 @@ const Main = () => {
                 MY FOLLOWER'S FEED
               </Link>
             </h2>
-            <div className="grid grid-cols-4 gap-4">
+            <div className="mff-con grid grid-cols-4 gap-4">
               {followedUserPosts.slice(0, 8).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative w-full h-64 bg-gray-300 rounded-lg group"
+                    className="relative w-full h-64 bg-gray-300 rounded-lg group mf-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -333,7 +334,7 @@ const Main = () => {
                               e.stopPropagation(); // 이벤트 전파 막기
                               handleLikeToggle(post.postCode);
                             }}
-                            style={{ color: "red", fontSize: "50px" }}
+                            style={{ color: "red", fontSize: "30px" }}
                             className="mx-2"
                           />
                         ) : (
@@ -342,7 +343,7 @@ const Main = () => {
                               e.stopPropagation(); // 이벤트 전파 막기
                               handleLikeToggle(post.postCode);
                             }}
-                            style={{ fontSize: "50px" }}
+                            style={{ fontSize: "30px" }}
                             className="mx-2"
                           />
                         )}
@@ -355,7 +356,7 @@ const Main = () => {
                               e.stopPropagation(); // 이벤트 전파 막기
                               handleSaveToggle(post.postCode);
                             }}
-                            style={{ color: "white", fontSize: "50px" }}
+                            style={{ color: "white", fontSize: "30px" }}
                             className="mx-2"
                           />
                         ) : (
@@ -364,7 +365,7 @@ const Main = () => {
                               e.stopPropagation(); // 이벤트 전파 막기
                               handleSaveToggle(post.postCode);
                             }}
-                            style={{ fontSize: "50px" }}
+                            style={{ fontSize: "30px" }}
                             className="mx-2"
                           />
                         )}

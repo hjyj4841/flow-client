@@ -1,0 +1,27 @@
+.p-feed {
+  width: 200px;
+  height: 350px;
+}
+.n-feed {
+  width: 200px;
+  height: 350px;
+}
+.mf-feed {
+  width: 200px;
+  height: 350px;
+}
+.pf-con {
+  margin-top: 50px;
+  margin-left: 170px;
+  width: 1100px;
+}
+.nf-con {
+  margin-top: 50px;
+  margin-left: 170px;
+  width: 1100px;
+}
+.mff-con {
+  margin-top: 50px;
+  margin-left: 170px;
+  width: 880px;
+}
