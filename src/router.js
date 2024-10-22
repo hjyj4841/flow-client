@@ -46,7 +46,7 @@ const router = createBrowserRouter([
       { path: "/Vote/:voteCode", element: <Vote /> },
       { path: "/uploadPost", element: <UploadPost /> },
       {
-        path: `mypage/:followingUserCode/follow/myFollower/:followingUserCode`,
+        path: `mypage/follow/myFollower/:followingUserCode`,
         element: <MyFollower />,
       },
       {

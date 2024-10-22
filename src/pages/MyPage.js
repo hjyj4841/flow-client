@@ -63,24 +63,45 @@ const MyPage = () => {
   // 투표 생성 유무 조회
   const [isVote, setIsVote] = useState(false);
 
+  /*팔로우 기능 테스트*/
+  const [isSelf, setIsSelf] = useState(false);
+  useEffect(() => {
+    if (user.userCode !== 0 && mypageUserCode !== 0) {
+      setIsSelf(user.userCode === mypageUserCode);
+    }
+  }, [user.userCode, mypageUserCode]); 
   // 팔로우 기능
+  const [follow, setFollow] = useState({
+    followingUser: {
+      userCode: 0,
+    },
+    followerUser: {
+      userCode: 0,
+    }
+  });
+  useEffect(() => {
+    setFollow({
+      followingUser: {
+        userCode: user.userCode,
+      },
+      followerUser: {
+        userCode: mypageUser.userCode,
+      }
+    })
+  }, [user.userCode, mypageUser.userCode]);
   const addFollow = () => {
     dispatch(
       createFollowRelative({
-        followingUser: {
-          userCode: user.userCode,
-        },
-        followerUser: {
-          userCode: mypageUser.userCode,
-        },
-      })
+        isSelf,
+        follow
+        })
     );
   };
-
   // 언팔로우 기능
   const removefollow = () => {
     dispatch(
       removeFollowRelative({
+        isSelf,
         followingUserCode: user.userCode,
         followerUserCode: mypageUser.userCode,
       })
@@ -184,8 +205,8 @@ const MyPage = () => {
               </span>
               <span
                 onClick={() =>
-                  navigate(`follow/myFollower/${user.userCode}`, {
-                    state: true,
+                  navigate((mypageUserCode === user.userCode ? `/mypage/follow/myFollower/${user.userCode}` : `/mypage/follow/myFollower/${mypageUserCode}`), {
+                    state: false,
                   })
                 }
               >
@@ -193,8 +214,8 @@ const MyPage = () => {
               </span>
               <span
                 onClick={() =>
-                  navigate(`follow/myFollower/${user.userCode}`, {
-                    state: false,
+                  navigate((mypageUserCode === user.userCode ? `/mypage/follow/myFollower/${user.userCode}` : `/mypage/follow/myFollower/${mypageUserCode}`), {
+                    state: true,
                   })
                 }
               >
