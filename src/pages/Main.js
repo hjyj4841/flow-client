@@ -306,7 +306,7 @@ const Main = () => {
                 MY FOLLOWER'S FEED
               </Link>
             </h2>
-            <div className="mff-con grid grid-cols-4 gap-4">
+            <div className="mff-con grid grid-cols-5 gap-4">
               {followedUserPosts.slice(0, 8).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
