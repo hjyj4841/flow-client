@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import "../assets/css/SearchModal.css";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const SearchModal = ({ isOpen, onClose }) => {
-  const [heightRange, setHeightRange] = useState([140, 220]);
+  const navigate = useNavigate();
+  const [heightRange, setHeightRange] = useState([140, 200]);
+  const [weightRange, setWeightRange] = useState([30, 120]);
   const [gender, setGender] = useState("");
   const [job, setJob] = useState({
     사무직: false,
@@ -40,8 +42,12 @@ const SearchModal = ({ isOpen, onClose }) => {
     기타: false,
   });
 
-  const handleSliderChange = (value) => {
+  const handleSlider1Change = (value) => {
     setHeightRange(value);
+  };
+
+  const handleSlider2Change = (value) => {
+    setWeightRange(value);
   };
 
   const handleGenderChange = (event) => {
@@ -53,7 +59,8 @@ const SearchModal = ({ isOpen, onClose }) => {
   };
 
   const handleReset = () => {
-    setHeightRange([140, 220]);
+    setHeightRange([140, 200]);
+    setWeightRange([30, 120]);
     setGender("");
     setJob({
       사무직: false,
@@ -97,22 +104,16 @@ const SearchModal = ({ isOpen, onClose }) => {
     const params = {
       heightMin: heightRange[0],
       heightMax: heightRange[1],
+      weightMin: weightRange[0],
+      weightMax: weightRange[1],
       gender,
       jobs: selectedJobs,
       seasons: selectedSeasons,
       moods: selectedMoods,
     };
 
-    try {
-      const response = await axios.get("http://localhost:8080/api/post", {
-        params: {
-          gender,
-        },
-      });
-      console.log(response.data);
-    } catch (error) {
-      console.error("Error fetching posts:", error);
-    }
+    navigate("/searched", { state: { params } });
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -140,9 +141,25 @@ const SearchModal = ({ isOpen, onClose }) => {
             <Slider
               range
               min={140}
-              max={220}
+              max={200}
               value={heightRange}
-              onChange={handleSliderChange}
+              onChange={handleSlider1Change}
+              className="mb-4"
+            />
+          </div>
+          <div className="mb-4">
+            <h2 className="section-title">WEIGHT</h2>
+            <div className="flex justify-between items-center mb-2">
+              <span>
+                {weightRange[0]}kg ~ {weightRange[1]}kg
+              </span>
+            </div>
+            <Slider
+              range
+              min={30}
+              max={120}
+              value={weightRange}
+              onChange={handleSlider2Change}
               className="mb-4"
             />
           </div>
