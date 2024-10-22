@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState } from "react";
 import {
   createFollowRelative,
   removeFollowRelative,
@@ -10,26 +10,8 @@ import { getKakaoCode } from "../../api/kakao";
 import { getGoogleCode } from "../../api/google";
 import { getNaverCode } from "../../api/naver";
 
-const FollowStyleAndEffect = styled.div`
-  button {
-    color: #006666;
-    margin: 1px;
-    margin-top: 10px;
-    width: 6rem;
-    height: 3rem;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background-color: #c6fcff;
-    box-shadow: inset 5px 0px 4px rgba(203, 249, 252, 1);
-    font-size: 1.2rem;
-    font-weight: 500;
-    font-family: "Poppins", sans-serif;
-  }
-`;
 
-const FollowButton = ({ user }) => {
-  const FollowStyleAndEffect = styled.div`
+const FollowStyleAndEffect = styled.div`
     button {
       color: #006666;
       margin: 1px;
@@ -76,6 +58,7 @@ const FollowButton = ({ user }) => {
       }
     }
   `;
+const FollowButton = ({ user, bool }) => {
   // Google Fonts를 동적으로 로드하는 useEffect 훅
   useEffect(() => {
     const link = document.createElement("link");
@@ -88,7 +71,6 @@ const FollowButton = ({ user }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const dispatch = useDispatch();
-  const followBool = useSelector((state) => state.follow.counter);
   useEffect(() => {
     if (token) {
       setIsLogin(true);
@@ -133,7 +115,7 @@ const FollowButton = ({ user }) => {
     }
   }, [token, user]);
 
-  const [isFollow, setIsFollow] = useState(followBool);
+  const [isFollow, setIsFollow] = useState(bool);
 
   const addFollowRelative = () => {
     setIsFollow(true);
@@ -149,37 +131,25 @@ const FollowButton = ({ user }) => {
       })
     );
   };
-
-  const statusFollow = useCallback(() => {
-    dispatch(
-      followStatus({
-        followingUserCode: tokenCode,
-        followerUserCode: user?.userCode,
-      })
-    );
-  }, [tokenCode, user?.userCode, dispatch]);
-
-  useEffect(() => {
-    statusFollow();
-  }, []);
-
   const submit = () => {
     if (!isFollow) {
+      setIsFollow(true);
       addFollowRelative();
     } else {
+      setIsFollow(false);
       unfollow();
     }
   };
+  const toRegister = () => {};
   const tryRegister = () => {
     setShowModal(true);
-  };
-  const toRegister = () => {};
+  }
   return (
     <>
       <FollowStyleAndEffect>
         {isLogin ? (
           <>
-            {followBool ? (
+            {isFollow ? (
               <button onClick={submit}>언팔로우</button>
             ) : (
               <button onClick={submit}>팔로우</button>
