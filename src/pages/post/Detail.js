@@ -15,11 +15,16 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { useAuth } from "../../contexts/AuthContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { addComment as addCommentAPI, getAllComment } from "../../api/comment";
+import {
+  addComment as addCommentAPI,
+  getAllComment,
+  addComment,
+} from "../../api/comment";
 import { createComment, fetchComments } from "../../store/commentSlice";
 import Comment from "../../components/Comment";
 import { useDispatch, useSelector } from "react-redux";
 import { followStatus } from "../../store/followSlice";
+import { findUser } from "../../api/user";
 
 const DetailDiv = styled.div`
   .report {
@@ -50,7 +55,7 @@ const Detail = () => {
   const [isToken, setIsToken] = useState(false);
   let isSelf = false;
   const [post, setPost] = useState(null);
-  const [comment, setComment, commentDesc] = useState("");
+  const [comment, setComment] = useState({ commentDesc: "" });
   const [isComment, setIsComment] = useState(false);
   const queryClient = useQueryClient();
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
@@ -84,6 +89,13 @@ const Detail = () => {
     userCode: 0,
   });
   const [followUser, setFollowUser] = useState({
+    userCode: 0,
+  });
+
+  const [newComment, setNewComment] = useState({
+    commentCode: null,
+    commentDesc: "",
+    postCode: postCode,
     userCode: 0,
   });
   const token = localStorage.getItem("token");
@@ -189,12 +201,12 @@ const Detail = () => {
       userReportDesc: "",
     });
   };
-  // const handleCommentSubmit = async () => {
-  //   await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
-  //     content: comment,
-  //   });
-  //   setComment("");
-  // };
+  const handleCommentSubmit = async () => {
+    await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
+      content: comment,
+    });
+    setComment("");
+  };
   const deleteAPI = async () => {
     await delPost(postCode);
   };
@@ -287,13 +299,6 @@ const Detail = () => {
     }
   };
 
-  const [newComment, setNewComment] = useState({
-    commentCode: 0,
-    commentDesc: "",
-    postCode: postCode,
-    user: user,
-  });
-
   // 댓글 조회
   const { data: comments, isLoading, error } = useQuery({
     queryKey: ["comments", postCode],
@@ -308,10 +313,34 @@ const Detail = () => {
     },
   });
 
-  const handleCommentSubmit = async () => {
-    await addMutation.mutationAsync(newComment);
+  const addComment = async () => {
+    const commentUser = await findUser(token);
+
+    console.log(commentUser.data.userCode);
+
+    setNewComment({
+      ...newComment,
+      userCode: commentUser.data.userCode,
+    });
+  };
+
+  useEffect(() => {
+    if (newComment.userCode !== 0) {
+      goComment();
+    }
+  }, [newComment.userCode]);
+
+  const goComment = () => {
+    console.log(newComment);
+    addMutation.mutate(newComment);
+    setIsComment(false);
     setNewComment({ ...newComment, commentDesc: "" });
   };
+
+  // const handleCommentSubmit = async () => {
+  //   await addMutation.mutationAsync(newComment);
+  //   setNewComment({ ...newComment, commentDesc: "" });
+  // };
 
   if (isLoading) return <>로딩중...</>;
   if (error) return <>에러 발생...</>;
@@ -500,17 +529,22 @@ const Detail = () => {
                 <input
                   type="text"
                   placeholder="내용을 작성해주세요!"
-                  value={comment.commentDesc}
+                  value={newComment.commentDesc}
                   onChange={(e) =>
-                    setComment({ ...newComment, commentDesc: e.target.value })
+                    setNewComment({
+                      ...newComment,
+                      commentDesc: e.target.value,
+                    })
                   }
+                  onClick={() => setIsComment(true)}
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                 />
+
                 <button
                   className="w-full bg-black text-white py-2 rounded"
-                  onClick={handleCommentSubmit}
+                  onClick={addComment}
                 >
-                  작성 완료
+                  댓글 등록
                 </button>
               </div>
             </>

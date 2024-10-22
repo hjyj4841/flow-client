@@ -12,13 +12,14 @@ const Comment = ({ comment, postCode }) => {
     commentDesc: "",
     postCode: postCode,
     user: user,
+    parentCommentCode: 0,
   });
 
   // 댓글 작성
   const addMutation = useMutation({
     mutationFn: addComment,
     onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postCode]);
+      queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
     },
   });
 };
