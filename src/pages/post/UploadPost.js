@@ -75,8 +75,10 @@ const UploadPost = () => {
       formData.append(`tagCodes[${i}]`, post.tagCodes[i]);
     }
 
-    formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag);
-    formData.append(`tagCodes[${post.tagCodes.length + 1}]`, bodyTag);
+    if (careerTag != 0)
+      formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag);
+    if (bodyTag != 0)
+      formData.append(`tagCodes[${post.tagCodes.length + 1}]`, bodyTag);
 
     formData.append("userCode", userCode);
     formData.append("postDesc", post.postDesc);
@@ -85,9 +87,10 @@ const UploadPost = () => {
     try {
       await addPost(formData);
       alert("업로드 완료");
-      // window.location.href = "/";
+      window.location.href = "/";
     } catch (error) {
       alert("업로드 실패:" + error);
+      console.log(post);
     }
   };
 

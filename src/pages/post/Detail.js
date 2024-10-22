@@ -80,6 +80,15 @@ const Detail = () => {
     userCode: 0,
   });
   const token = localStorage.getItem("token");
+  /*
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    setUser(userData);
+    loginUserCode = userData.userCode;
+  }
+*/
   useEffect(() => {
     if (token !== null) {
       setIsToken(true);
@@ -97,7 +106,7 @@ const Detail = () => {
       fetchLikedPosts();
       fetchSavedPosts();
     }
-  }, [token, likeRendering, saveRendering]); // 의존성 배열 추가
+  }, [post, token, likeRendering, saveRendering]); // 의존성 배열 추가
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
@@ -345,7 +354,9 @@ const Detail = () => {
 
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
-          {loginUserCode === post?.userCode && (
+          loginuser : {loginUserCode} / user.userCode : {user.userCode} /
+          postUser : {post?.userCode}
+          {user.userCode === post?.userCode && (
             <>
               <button
                 className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
