@@ -53,7 +53,6 @@ const Detail = () => {
   const [comment, setComment, commentDesc] = useState("");
   const [isComment, setIsComment] = useState(false);
   const queryClient = useQueryClient();
-  const { userCode } = useAuth();
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
   const dispatch = useDispatch();
   const followBool = useSelector((state) => state.follow.followBool);
@@ -125,7 +124,7 @@ const Detail = () => {
     );
     setPost(response.data);
   };
- 
+
   useEffect(() => {
     const fetchPost = async () => {
       const response = await axios.get(
@@ -133,21 +132,22 @@ const Detail = () => {
       );
       setPost(response.data);
       setFollowUser({
-        userCode : response.data.userCode
-      })
+        userCode: response.data.userCode,
+      });
     };
     fetchPost();
   }, [token]);
-   // 팔로우 여부 확인 코드
-   useEffect(() => {
-    if(userCode !== 0 && followUser.userCode !== 0) {
-      dispatch(followStatus({
-        followingUserCode: userCode,
-        followerUserCode: followUser.userCode  // userCode가 있는 경우에만 실행
-      }));
+  // 팔로우 여부 확인 코드
+  useEffect(() => {
+    if (userCode !== 0 && followUser.userCode !== 0) {
+      dispatch(
+        followStatus({
+          followingUserCode: userCode,
+          followerUserCode: followUser.userCode, // userCode가 있는 경우에만 실행
+        })
+      );
       setFollowCheck(followBool);
     }
-      
   }, [userCode, followUser.userCode, followBool]);
 
   // 자기 자신의 글을 볼때 팔로우 버튼 생성 방지
@@ -318,7 +318,7 @@ const Detail = () => {
 
   return (
     <>
-      {!isSelf ? <FollowButton user={followUser} bool={followBool}/> : <></>}
+      {!isSelf ? <FollowButton user={followUser} bool={followBool} /> : <></>}
       {check ? (
         <></>
       ) : (
