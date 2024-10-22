@@ -182,9 +182,11 @@ const Detail = () => {
     }
   }, [post?.userCode]);
 
+  // 수정버튼
   const updatePost = () => {
     navigate("/post/update/" + postCode);
   };
+
   const reportPostBtn = (data) => {
     addReportPost(reportDispatch, data);
     alert("신고가 완료되었습니다.");
@@ -201,20 +203,24 @@ const Detail = () => {
       userReportDesc: "",
     });
   };
-  const handleCommentSubmit = async () => {
-    await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
-      content: comment,
-    });
-    setComment("");
-  };
+  // const handleCommentSubmit = async () => {
+  //   await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
+  //     content: comment,
+  //   });
+  //   setComment("");
+  // };
+
+  // 삭제버튼
   const deleteAPI = async () => {
     await delPost(postCode);
   };
+
   const deletePost = () => {
     deleteAPI();
     alert("삭제 완료");
     window.location.href = "/";
   };
+
   const handleNextImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
       setCurrentImageIndex(
@@ -403,23 +409,23 @@ const Detail = () => {
 
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
-          loginuser : {loginUserCode} / user.userCode : {user.userCode} /
-          postUser : {post?.userCode}
           {user.userCode === post?.userCode && (
-            <>
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
               <button
                 className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
+                style={{ margin: "5px" }}
                 onClick={updatePost}
               >
                 수정
               </button>
               <button
                 className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2"
+                style={{ margin: "5px" }}
                 onClick={deletePost}
               >
                 삭제
               </button>
-            </>
+            </div>
           )}
           {post ? (
             <>

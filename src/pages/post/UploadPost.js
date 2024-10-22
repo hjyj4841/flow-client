@@ -64,12 +64,6 @@ const UploadPost = () => {
       );
     }
 
-    // tag 리스트
-    //setPost((prevPost) => ({
-    //  ...prevPost,
-    //  tagCodes: [...prevPost.tagCodes, careerTag, bodyTag],
-    // }));
-
     for (let i = 0; i < post.tagCodes.length; i++) {
       console.log(post.tagCodes[i]);
       formData.append(`tagCodes[${i}]`, post.tagCodes[i]);
@@ -89,8 +83,8 @@ const UploadPost = () => {
       alert("업로드 완료");
       window.location.href = "/";
     } catch (error) {
-      alert("업로드 실패:" + error);
-      console.log(post);
+      alert("업로드 실패" + error);
+      window.location.reload();
     }
   };
 
