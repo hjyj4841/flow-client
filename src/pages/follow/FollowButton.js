@@ -9,7 +9,7 @@ import styled from "styled-components";
 import { getKakaoCode } from "../../api/kakao";
 import { getGoogleCode } from "../../api/google";
 import { getNaverCode } from "../../api/naver";
-
+import { useParams } from "react-router-dom";
 
 const FollowStyleAndEffect = styled.div`
     button {
@@ -67,6 +67,7 @@ const FollowButton = ({ user, bool }) => {
     link.rel = "stylesheet";
     document.head.appendChild(link); // <head>에 추가
   }, []);
+  const {followingUserCode} = useParams();
   const token = localStorage.getItem("token");
   const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -115,28 +116,37 @@ const FollowButton = ({ user, bool }) => {
     }
   }, [token, user]);
 
-  const [isFollow, setIsFollow] = useState(bool);
-
+  const [isFollow, setIsFollow] = useState(false);
+  useEffect(() => {
+    setIsFollow(bool);
+  }, [bool]);
+  let isSelf = false;
   const addFollowRelative = () => {
+    if(tokenCode !==0 && followingUserCode !==0) {
+      isSelf = (tokenCode === parseInt(followingUserCode));
+    } // isSelf 계산
+    dispatch(createFollowRelative({isSelf, 
+      follow}));
     setIsFollow(true);
-    dispatch(createFollowRelative(follow));
   };
 
   const unfollow = () => {
-    setIsFollow(false);
+    if(tokenCode !==0 && followingUserCode !==0) {
+      isSelf = (tokenCode === parseInt(followingUserCode));
+    } // isSelf 계산
     dispatch(
       removeFollowRelative({
+        isSelf,
         followingUserCode: follow.followingUser.userCode,
         followerUserCode: follow.followerUser.userCode,
       })
     );
+    setIsFollow(false);
   };
   const submit = () => {
     if (!isFollow) {
-      setIsFollow(true);
       addFollowRelative();
     } else {
-      setIsFollow(false);
       unfollow();
     }
   };

@@ -9,8 +9,9 @@ import {
 
 export const createFollowRelative = createAsyncThunk(
   "follow/createFollowRelative",
-  async (follow) => {
+  async ({isSelf, follow}) => {
     await addFollowRelative(follow);
+    return {isSelf};
   }
 );
 
@@ -70,12 +71,17 @@ const followSlice = createSlice({
           followee: action.payload.follower,
         };
       })
-      .addCase(removeFollowRelative.fulfilled, (state) => {
-        state.countFollower -= 1;
+      .addCase(removeFollowRelative.fulfilled, (state,action) => {
+        const { isSelf } = action.meta.arg;
+        if(isSelf) state.countFollower -= 1;
+        else state.counter -= 1;
         state.followBool = false;
       })
-      .addCase(createFollowRelative.fulfilled, (state) => {
-        state.countFollower += 1;
+      .addCase(createFollowRelative.fulfilled, (state,action) => {
+        const { isSelf } = action.meta.arg;
+        console.log(isSelf);
+        if(isSelf) state.countFollower += 1;
+        else state.counter += 1;
         state.followBool = true;
       })
       .addCase(createFollowRelative.rejected, (state, action) => {

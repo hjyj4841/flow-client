@@ -1,6 +1,6 @@
 import axios from "axios";
 import styled from "styled-components";
-import React, { useEffect, useState, useReducer } from "react";
+import React, { useEffect, useState, useReducer, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { delPost } from "../../api/post";
@@ -60,8 +60,6 @@ const Detail = () => {
   const queryClient = useQueryClient();
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
   const dispatch = useDispatch();
-  const followBool = useSelector((state) => state.follow.followBool);
-  const [followCheck, setFollowCheck] = useState(null);
   const { report } = state;
   const [reportPost, setReportPost] = useState({
     postReportDesc: "",
@@ -150,23 +148,32 @@ const Detail = () => {
     fetchPost();
   }, [token]);
   // 팔로우 여부 확인 코드
-  useEffect(() => {
+  const followBool = useSelector((state) => state.follow.followBool);
+  const [followCheck, setFollowCheck] = useState(null);
+
+  const dispatchFollowStatus = useCallback(() => {
     if (userCode !== 0 && followUser.userCode !== 0) {
-      dispatch(
-        followStatus({
-          followingUserCode: userCode,
-          followerUserCode: followUser.userCode, // userCode가 있는 경우에만 실행
-        })
-      );
-      setFollowCheck(followBool);
+      dispatch(followStatus({
+        followingUserCode: userCode,
+        followerUserCode: followUser.userCode
+      }));
     }
-  }, [userCode, followUser.userCode, followBool]);
+  }, [dispatch, userCode, followUser.userCode]);
+  
+  useEffect(() => {
+    dispatchFollowStatus();
+  }, [dispatchFollowStatus]);
+
+  useEffect(() => {
+    if (followBool !== undefined && followBool !== followCheck)
+      setFollowCheck(followBool);
+  }, [followBool]);
 
   // 자기 자신의 글을 볼때 팔로우 버튼 생성 방지
-  if (loginUserCode === user.userCode) {
+  if (userCode === post?.userCode) {
     isSelf = true;
   }
-
+  // {!isSelf && followCheck !== null ? <FollowButton user={followUser} bool={followCheck} /> : <></>}
   // 포스트 안에 있는 유저 코드
   useEffect(() => {
     if (post?.userCode !== undefined) {
@@ -353,7 +360,7 @@ const Detail = () => {
 
   return (
     <>
-      {!isSelf ? <FollowButton user={followUser} bool={followBool} /> : <></>}
+      {!isSelf && followCheck !== null ? <FollowButton user={followUser} bool={followCheck} /> : <></>}
       {check ? (
         <></>
       ) : (

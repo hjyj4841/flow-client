@@ -49,7 +49,7 @@ const router = createBrowserRouter([
       { path: "/Vote/:postCode", element: <Vote /> }, // 투표 게시물
       { path: "/uploadPost", element: <UploadPost /> },
       {
-        path: `mypage/:followingUserCode/follow/myFollower/:followingUserCode`,
+        path: `mypage/follow/myFollower/:followingUserCode`,
         element: <MyFollower />,
       },
       {

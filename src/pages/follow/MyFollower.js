@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { myFollower, followMe, followStatus} from "../../store/followSlice";
 import { useEffect, useState, useCallback, useMemo} from "react";
 import "../../assets/css/mypage_follow.css"
+import { useAuth } from "../../contexts/AuthContext";
 
 const MyFollower = () => {
     const location = useLocation();
@@ -16,6 +17,18 @@ const MyFollower = () => {
     const followee = useSelector((state) => state.follow.followee);
     const [bool, setBool] = useState(logic);
     const [statusList, setStatusList] = useState([]);
+    const {token} = useAuth();
+    const [code, setCode] = useState(0);
+
+    useEffect(() => {
+      if (token) {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace("-", "+").replace("_", "/");
+        const userData = JSON.parse(window.atob(base64));
+        setCode(userData.userCode);
+      }
+    }, [token]); // 의존성 배열 추가
+
     const warp1 = useCallback(() => {
       setBool(true);
     }, []);
@@ -46,7 +59,7 @@ const MyFollower = () => {
           const result = await Promise.all(
             users.map(async (e) => {
               const response = await dispatch(followStatus({
-                followingUserCode,
+                followingUserCode: code === followingUserCode ? followingUserCode : code,
                 followerUserCode: e.userCode,
               }));
               return response.payload; // true 또는 false 값을 반환
@@ -55,7 +68,7 @@ const MyFollower = () => {
           setStatusList(result); // 결과를 상태로 저장
         };
         fetchStatusList();
-      }, [users, bool, statusList]);
+      }, [dispatch ,users, bool, statusList, followingUserCode]);
     const userList = 
     useMemo(
       () =>
@@ -64,7 +77,7 @@ const MyFollower = () => {
             <img src={user.userProfileUrl} alt={user.userNickname} />
             <p>{user.userNickname}</p>
             <p>{user.userEmail}</p>
-            {statusList?.length > 0 && (
+            {(statusList?.length > 0 && code!==user.userCode) && (
               <>
             <FollowButton user={user} key={user.userCode} bool={statusList[index]} />
             </>
