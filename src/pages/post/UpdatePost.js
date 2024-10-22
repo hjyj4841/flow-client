@@ -114,8 +114,20 @@ const UpdatePost = () => {
 
   useEffect(() => {
     update.tagCodes.forEach((item, index) => {
-      if (5 <= item && item <= 8) setCarrerTag(item);
-      if (20 <= item && item <= 23) setBodyTag(item);
+      if (5 <= item && item <= 8) {
+        setUpdate({
+          ...update,
+          tagCodes: update.tagCodes.filter((value) => value !== item),
+        });
+        setCarrerTag(item);
+      }
+      if (20 <= item && item <= 23) {
+        setUpdate({
+          ...update,
+          tagCodes: update.tagCodes.filter((value) => value !== item),
+        });
+        setBodyTag(item);
+      }
     });
     console.log(update);
   }, [update]);
@@ -127,14 +139,13 @@ const UpdatePost = () => {
       await delImg([...imgCode]);
     }
     try {
-      setUpdate((prevPost) => ({
-        ...prevPost,
-        tagCodes: [...prevPost.tagCodes, careerTag, bodyTag],
-      }));
       console.log(update);
-      await editPost(update);
+      await editPost({
+        ...update,
+        tagCodes: [...update.tagCodes, careerTag, bodyTag],
+      });
       alert("수정 완료");
-      // window.location.href = "/";
+      window.location.href = "/";
     } catch (error) {
       alert("수정 실패:" + error);
     }
