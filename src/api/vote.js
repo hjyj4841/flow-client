@@ -38,3 +38,8 @@ export const countY = async (voteYn) => {
 export const countN = async (voteYn) => {
   return await instance.get("postVote", voteYn);
 };
+
+// 투표 생성 유무 조회
+export const haveVote = async (userCode) => {
+  return await instance.get(`postVote/haveVote?userCode=${userCode}`);
+};

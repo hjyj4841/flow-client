@@ -28,6 +28,7 @@ import { FaBriefcaseMedical, FaCog, FaRocketchat } from "react-icons/fa";
 import { RiServiceFill, RiPlantFill } from "react-icons/ri";
 import { FaHelmetSafety, FaComputer } from "react-icons/fa6";
 import { HiBeaker } from "react-icons/hi2";
+import { haveVote } from "../api/vote";
 
 const MyPage = () => {
   const [pageState, setPageState] = useState("created");
@@ -59,6 +60,8 @@ const MyPage = () => {
     userNickname: "",
     userGender: "",
   });
+  // 투표 생성 유무 조회
+  const [isVote, setIsVote] = useState(false);
 
   // 팔로우 기능
   const addFollow = () => {
@@ -122,12 +125,18 @@ const MyPage = () => {
     navigate(`/post/${postCode}`);
   };
 
+  // 마이페이지 회원의 투표 존재 유무 확인
+  const getVote = async () => {
+    setIsVote((await haveVote(mypageUserCode)).data);
+  };
+
   useEffect(() => {
     getUserInfo();
   }, []);
 
   useEffect(() => {
     if (mypageUser.userCode !== 0 && user.userCode !== 0) {
+      getVote();
       getCreatePosts();
       dispatch(myFollower(mypageUser.userCode));
       dispatch(followMe(mypageUser.userCode));
@@ -152,6 +161,20 @@ const MyPage = () => {
         <div className="mypageTop">
           <div className="mypageImg">
             <img src={mypageUser.userProfileUrl} />
+            <div
+              className="mypageImgBack"
+              style={
+                isVote
+                  ? {
+                      backgroundImage:
+                        "linear-gradient(#fff, #fff), linear-gradient(to bottom right, #B292CA 0%, #99ABD0 29%, #7EC6D7 67%, #5FE5DE 100%)",
+                    }
+                  : {
+                      backgroundImage:
+                        "linear-gradient(#fff, #fff), linear-gradient(to bottom right, #2e3440 0%, #3b4252 29%, #434c5e 67%, #4c566a 100%)",
+                    }
+              }
+            />
           </div>
           <div className="mypageDesc">
             <div>{mypageUser.userNickname}</div>
