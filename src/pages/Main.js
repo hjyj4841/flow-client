@@ -175,14 +175,20 @@ const Main = () => {
                         (likedPost) => likedPost.post.postCode === post.postCode
                       ) ? (
                         <FaHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red", fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleLikeToggle(post.postCode);
+                          }}
+                          style={{ color: "red", fontSize: "50px" }}
                           className="mx-2"
                         />
                       ) : (
                         <FaRegHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleLikeToggle(post.postCode);
+                          }}
+                          style={{ fontSize: "50px" }}
                           className="mx-2"
                         />
                       )}
@@ -190,14 +196,20 @@ const Main = () => {
                         (savedPost) => savedPost.post.postCode === post.postCode
                       ) ? (
                         <BsCollectionFill
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "white", fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleSaveToggle(post.postCode);
+                          }}
+                          style={{ color: "white", fontSize: "50px" }}
                           className="mx-2"
                         />
                       ) : (
                         <BsCollection
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleSaveToggle(post.postCode);
+                          }}
+                          style={{ fontSize: "50px" }}
                           className="mx-2"
                         />
                       )}
@@ -240,14 +252,20 @@ const Main = () => {
                         (likedPost) => likedPost.post.postCode === post.postCode
                       ) ? (
                         <FaHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ color: "red", fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleLikeToggle(post.postCode);
+                          }}
+                          style={{ color: "red", fontSize: "50px" }}
                           className="mx-2"
                         />
                       ) : (
                         <FaRegHeart
-                          onClick={() => handleLikeToggle(post.postCode)}
-                          style={{ fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleLikeToggle(post.postCode);
+                          }}
+                          style={{ fontSize: "50px" }}
                           className="mx-2"
                         />
                       )}
@@ -255,14 +273,20 @@ const Main = () => {
                         (savedPost) => savedPost.post.postCode === post.postCode
                       ) ? (
                         <BsCollectionFill
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ color: "white", fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleSaveToggle(post.postCode);
+                          }}
+                          style={{ color: "white", fontSize: "50px" }}
                           className="mx-2"
                         />
                       ) : (
                         <BsCollection
-                          onClick={() => handleSaveToggle(post.postCode)}
-                          style={{ fontSize: "30px" }}
+                          onClick={(e) => {
+                            e.stopPropagation(); // 이벤트 전파 막기
+                            handleSaveToggle(post.postCode);
+                          }}
+                          style={{ fontSize: "50px" }}
                           className="mx-2"
                         />
                       )}
@@ -305,14 +329,20 @@ const Main = () => {
                             likedPost.post.postCode === post.postCode
                         ) ? (
                           <FaHeart
-                            onClick={() => handleLikeToggle(post.postCode)}
-                            style={{ color: "red", fontSize: "30px" }}
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleLikeToggle(post.postCode);
+                            }}
+                            style={{ color: "red", fontSize: "50px" }}
                             className="mx-2"
                           />
                         ) : (
                           <FaRegHeart
-                            onClick={() => handleLikeToggle(post.postCode)}
-                            style={{ fontSize: "30px" }}
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleLikeToggle(post.postCode);
+                            }}
+                            style={{ fontSize: "50px" }}
                             className="mx-2"
                           />
                         )}
@@ -321,14 +351,20 @@ const Main = () => {
                             savedPost.post.postCode === post.postCode
                         ) ? (
                           <BsCollectionFill
-                            onClick={() => handleSaveToggle(post.postCode)}
-                            style={{ color: "white", fontSize: "30px" }}
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleSaveToggle(post.postCode);
+                            }}
+                            style={{ color: "white", fontSize: "50px" }}
                             className="mx-2"
                           />
                         ) : (
                           <BsCollection
-                            onClick={() => handleSaveToggle(post.postCode)}
-                            style={{ fontSize: "30px" }}
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleSaveToggle(post.postCode);
+                            }}
+                            style={{ fontSize: "50px" }}
                             className="mx-2"
                           />
                         )}
