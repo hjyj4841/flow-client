@@ -48,7 +48,10 @@ const Detail = () => {
   const [isToken, setIsToken] = useState(false);
   let isSelf = false;
   const [post, setPost] = useState(null);
-  const [comment, setComment] = useState("");
+  const [comment, setComment, commentDesc] = useState("");
+  const [isComment, setIsComment] = useState(false);
+  const queryClient = useQueryClient();
+  const { userCode } = useAuth();
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
   const { report } = state;
   const [reportPost, setReportPost] = useState({
@@ -156,12 +159,12 @@ const Detail = () => {
       userReportDesc: "",
     });
   };
-  const handleCommentSubmit = async () => {
-    await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
-      content: comment,
-    });
-    setComment("");
-  };
+  // const handleCommentSubmit = async () => {
+  //   await axios.post(`http://localhost:8080/api/post/${postCode}/comments`, {
+  //     content: comment,
+  //   });
+  //   setComment("");
+  // };
   const deleteAPI = async () => {
     await delPost(postCode);
   };
@@ -262,17 +265,26 @@ const Detail = () => {
   });
 
   // 댓글 조회
-  const { data: comments, isLoading: commentLoading } = useQuery({
+  const { data: comments, isLoading, error } = useQuery({
     queryKey: ["comments", postCode],
     queryFn: () => getAllComment(postCode),
-    refetchInterval: 1000,
   });
 
-  // // 댓글 작성
-  // const handleCommentSubmit = async () => {
-  //   await addMutation.mutateAsync(newComment);
-  //   setComment("");
-  // };
+  // 댓글 작성
+  const addMutation = useMutation({
+    mutationFn: addCommentAPI,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
+    },
+  });
+
+  const handleCommentSubmit = async () => {
+    await addMutation.mutationAsync(newComment);
+    setNewComment({ ...newComment, commentDesc: "" });
+  };
+
+  if (isLoading) return <>로딩중...</>;
+  if (error) return <>에러 발생...</>;
 
   return (
     <>
@@ -439,8 +451,12 @@ const Detail = () => {
                 <h2 className="font-bold mb-2">
                   댓글 {post.comments ? post.comments.length : 0}개
                 </h2>
-                {post.comments && post.comments.length > 0 ? (
-                  post.comments.map((comment, index) => (
+                {isLoading ? (
+                  <p>로딩 중...</p>
+                ) : error ? (
+                  <p>댓글을 불러오는 데 문제가 발생했습니다.</p>
+                ) : comments.data && comments.data.length > 0 ? (
+                  comments.data.map((comment, index) => (
                     <div key={index} className="mb-2">
                       <p className="text-sm">{comment.commentDesc}</p>
                     </div>
@@ -453,8 +469,10 @@ const Detail = () => {
                 <input
                   type="text"
                   placeholder="내용을 작성해주세요!"
-                  value={newComment.commentDesc}
-                  onChange={(e) => setComment(e.target.value)}
+                  value={comment.commentDesc}
+                  onChange={(e) =>
+                    setComment({ ...newComment, commentDesc: e.target.value })
+                  }
                   className="w-full p-2 border border-gray-300 rounded mb-2"
                 />
                 <button

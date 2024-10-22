@@ -6,6 +6,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 const Comment = ({ comment, postCode }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const [commentDesc, setCommentDesc] = useState("");
   const [newComment, setNewComment] = useState({
     commentCode: 0,
     commentDesc: "",
