@@ -23,6 +23,7 @@ import UpdateUser from "./pages/user/UpdateUser";
 import NewFeed from "./pages/post/NewFeed";
 import PopularFeed from "./pages/post/PopularFeed";
 import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
+import Searched from "./pages/post/Searched.js";
 
 import UploadVote from "./pages/post/UploadVote.js";
 
@@ -69,6 +70,7 @@ const router = createBrowserRouter([
       { path: "/newFeed", element: <NewFeed /> },
       { path: "/popularFeed", element: <PopularFeed /> },
       { path: "/myFollowerFeed", element: <MyFollowerFeed /> },
+      { path: "/searched", element: <Searched /> },
     ],
   },
 ]);

@@ -45,7 +45,6 @@ const Main = () => {
     const response = await axios.get(
       "http://localhost:8080/api/likes/post/ordered-by-likes"
     );
-    console.log(response.data);
     setPopularFeedImages(response.data);
   };
 
