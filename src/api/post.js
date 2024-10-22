@@ -11,6 +11,20 @@ const authorize = axios.create({
   },
 });
 
+// 투표 게시물 추가
+export const addPostVote = async (data) => {
+  return await instance.post("postVote", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  })
+}
+
+// 투표 게시물 조회
+export const detailPostVote = async (data) => {
+  return await instance.get(`postVote/${data}`);
+}
+
 // 게시물 추가
 export const addPost = async (data) => {
   return await instance.post("post", data, {
