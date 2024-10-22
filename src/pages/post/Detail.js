@@ -18,6 +18,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { addComment as addCommentAPI, getAllComment } from "../../api/comment";
 import { createComment, fetchComments } from "../../store/commentSlice";
 import Comment from "../../components/Comment";
+import { useDispatch, useSelector } from "react-redux";
+import { followStatus } from "../../store/followSlice";
 
 const DetailDiv = styled.div`
   .report {
@@ -50,6 +52,9 @@ const Detail = () => {
   const [post, setPost] = useState(null);
   const [comment, setComment] = useState("");
   const [state, reportDispatch] = useReducer(reportReducer, reportState);
+  const dispatch = useDispatch();
+  const followBool = useSelector((state) => state.follow.followBool);
+  const [followCheck, setFollowCheck] = useState(null);
   const { report } = state;
   const [reportPost, setReportPost] = useState({
     postReportDesc: "",
@@ -69,11 +74,14 @@ const Detail = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const [likeRendering, setLikeRendering] = useState([]);
   const [saveRendering, setSaveRendering] = useState([]);
-
+  const [userCode, setUserCode] = useState(0);
   let postUserCode = 0;
   let loginUserCode = 0;
   const [check, setCheck] = useState(false);
   const [user, setUser] = useState({
+    userCode: 0,
+  });
+  const [followUser, setFollowUser] = useState({
     userCode: 0,
   });
   const token = localStorage.getItem("token");
@@ -82,7 +90,7 @@ const Detail = () => {
       setIsToken(true);
     }
     fetchPost();
-  }, []);
+  }, [postCode]);
 
   useEffect(() => {
     if (token) {
@@ -91,6 +99,7 @@ const Detail = () => {
       const userData = JSON.parse(window.atob(base64));
       setUser(userData);
       loginUserCode = userData.userCode;
+      setUserCode(userData.userCode);
       fetchLikedPosts();
       fetchSavedPosts();
     }
@@ -104,20 +113,32 @@ const Detail = () => {
     );
     setPost(response.data);
   };
-
+ 
   useEffect(() => {
     const fetchPost = async () => {
       const response = await axios.get(
         `http://localhost:8080/api/post/${postCode}`
       );
       setPost(response.data);
-      setUser({
-        userCode: response.data.userCode,
-      });
+      setFollowUser({
+        userCode : response.data.userCode
+      })
     };
     fetchPost();
-  }, [isToken]);
+  }, [token]);
+   // 팔로우 여부 확인 코드
+   useEffect(() => {
+    if(userCode !== 0 && followUser.userCode !== 0) {
+      dispatch(followStatus({
+        followingUserCode: userCode,
+        followerUserCode: followUser.userCode  // userCode가 있는 경우에만 실행
+      }));
+      setFollowCheck(followBool);
+    }
+      
+  }, [userCode, followUser.userCode, followBool]);
 
+  // 자기 자신의 글을 볼때 팔로우 버튼 생성 방지
   if (loginUserCode === user.userCode) {
     isSelf = true;
   }
@@ -276,8 +297,7 @@ const Detail = () => {
 
   return (
     <>
-      {/* <FollowButton user={user} /> */}
-      {!isSelf ? <FollowButton user={user} /> : <></>}
+      {!isSelf ? <FollowButton user={followUser} bool={followBool}/> : <></>}
       {check ? (
         <></>
       ) : (

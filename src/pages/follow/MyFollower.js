@@ -15,6 +15,7 @@ const MyFollower = () => {
     const follower = useSelector((state) => state.follow.follower);
     const followee = useSelector((state) => state.follow.followee);
     const [bool, setBool] = useState(logic);
+    const [statusList, setStatusList] = useState([]);
     const warp1 = useCallback(() => {
       setBool(true);
     }, []);
@@ -30,32 +31,47 @@ const MyFollower = () => {
       해당 status 상태들을 리스트로 추가해서 false 또는 true로 
       리스트가 나오고! 
     */
-    users.forEach((e) => {
-      dispatch(followStatus(followingUserCode,e.userCode));
-    })
-  
-    const fetchFollowers = useCallback(() => {
-      dispatch(myFollower(followingUserCode));
-      dispatch(followMe(followingUserCode));
-    }, [dispatch, followingUserCode, bool]);
-  
-    // Redux 액션을 디스패치하는 useEffect
-    useEffect(() => {
-      fetchFollowers();
-    }, [fetchFollowers]);
-  
-    // users.map을 useMemo로 메모이제이션하여 불필요한 렌더링을 방지 bool={statusList[index]
-    const userList = useMemo(
+      const fetchFollowers = useCallback(() => {
+        dispatch(myFollower(followingUserCode));
+        dispatch(followMe(followingUserCode));
+      }, [dispatch, followingUserCode, bool]);
+    
+      // Redux 액션을 디스패치하는 useEffect
+      useEffect(() => {
+        fetchFollowers();
+      }, [fetchFollowers, bool]);
+    
+      useEffect(() => {
+        const fetchStatusList = async () => {
+          const result = await Promise.all(
+            users.map(async (e) => {
+              const response = await dispatch(followStatus({
+                followingUserCode,
+                followerUserCode: e.userCode,
+              }));
+              return response.payload; // true 또는 false 값을 반환
+            })
+          );
+          setStatusList(result); // 결과를 상태로 저장
+        };
+        fetchStatusList();
+      }, [users, bool, statusList]);
+    const userList = 
+    useMemo(
       () =>
         users.map((user, index) => (
           <div className="userSection" key={user.userCode}>
             <img src={user.userProfileUrl} alt={user.userNickname} />
             <p>{user.userNickname}</p>
             <p>{user.userEmail}</p>
-            <FollowButton user={user} key={user.userCode}/>
+            {statusList?.length > 0 && (
+              <>
+            <FollowButton user={user} key={user.userCode} bool={statusList[index]} />
+            </>
+          )}
           </div>
         )),
-      [users, bool]
+      [users, bool, statusList]
     );
   
     return (
