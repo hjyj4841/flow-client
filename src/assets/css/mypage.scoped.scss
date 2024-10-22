@@ -9,6 +9,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 160px;
 
     img {
       width: 150px;
@@ -47,6 +48,15 @@
         > span {
           font-weight: bold;
         }
+      }
+    }
+    .mypageNameGender {
+      display: flex;
+      align-items: center;
+      .mypageGender {
+        display: inline-block;
+        padding-left: 10px;
+        font-size: 1.3rem;
       }
     }
     div:nth-child(1) {

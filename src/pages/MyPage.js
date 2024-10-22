@@ -29,6 +29,7 @@ import { RiServiceFill, RiPlantFill } from "react-icons/ri";
 import { FaHelmetSafety, FaComputer } from "react-icons/fa6";
 import { HiBeaker } from "react-icons/hi2";
 import { haveVote } from "../api/vote";
+import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 
 const MyPage = () => {
   const [pageState, setPageState] = useState("created");
@@ -177,7 +178,16 @@ const MyPage = () => {
             />
           </div>
           <div className="mypageDesc">
-            <div>{mypageUser.userNickname}</div>
+            <div className="mypageNameGender">
+              {mypageUser.userNickname}
+              <span className="mypageGender">
+                {mypageUser.userGender === "남성" ? (
+                  <CgGenderMale style={{ color: "skyblue" }} />
+                ) : (
+                  <CgGenderFemale style={{ color: "pink" }} />
+                )}
+              </span>
+            </div>
             <div className="mypageFollow">
               <span>
                 게시물 <span>{createdPosts.totalPosts}</span>
@@ -228,6 +238,13 @@ const MyPage = () => {
                 )}
               </i>
               <span>{mypageUser.userJob}</span>
+              {mypageUser.userBodySpecYn === "Y" ? (
+                <span>
+                  {mypageUser.userHeight}cm / {mypageUser.userWeight}kg
+                </span>
+              ) : (
+                <></>
+              )}
             </div>
             <div>
               {user.userCode === mypageUser.userCode ? (
