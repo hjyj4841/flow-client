@@ -65,12 +65,6 @@ const MyPage = () => {
   const [isVote, setIsVote] = useState(false);
 
   /*팔로우 기능 테스트*/
-  const [isSelf, setIsSelf] = useState(false);
-  useEffect(() => {
-    if (user.userCode !== 0 && mypageUserCode !== 0) {
-      setIsSelf(user.userCode === mypageUserCode);
-    }
-  }, [user.userCode, mypageUserCode]); 
   // 팔로우 기능
   const [follow, setFollow] = useState({
     followingUser: {
@@ -90,7 +84,11 @@ const MyPage = () => {
       }
     })
   }, [user.userCode, mypageUser.userCode]);
+  let isSelf = 0;
   const addFollow = () => {
+    if((user.userCode !==0 && mypageUserCode !==0 && follow.followingUser.userCode !== 0)) {
+      isSelf = (user.userCode === parseInt(mypageUserCode) ? 1 : ((user.userCode !== parseInt(mypageUserCode)) && (parseInt(user.userCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
+    }
     dispatch(
       createFollowRelative({
         isSelf,
@@ -100,6 +98,9 @@ const MyPage = () => {
   };
   // 언팔로우 기능
   const removefollow = () => {
+    if((user.userCode !==0 && mypageUserCode !==0 && follow.followingUser.userCode !== 0)) {
+      isSelf = (user.userCode === parseInt(mypageUserCode) ? 1 : ((user.userCode !== parseInt(mypageUserCode)) && (parseInt(user.userCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
+    }
     dispatch(
       removeFollowRelative({
         isSelf,

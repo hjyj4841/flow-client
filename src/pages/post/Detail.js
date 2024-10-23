@@ -97,15 +97,7 @@ const Detail = () => {
     userCode: 0,
   });
   const token = localStorage.getItem("token");
-  /*
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    const userData = JSON.parse(window.atob(base64));
-    setUser(userData);
-    loginUserCode = userData.userCode;
-  }
-*/
+  
   useEffect(() => {
     if (token !== null) {
       setIsToken(true);
