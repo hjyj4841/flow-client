@@ -1,35 +1,62 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 
 const Searched = () => {
   const location = useLocation();
   const { params } = location.state || {};
-
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     if (params) {
+      console.log("Params:", params);
       fetchSearchedPosts(params);
+    } else {
+      console.log("No params found");
     }
   }, [params]);
 
   const fetchSearchedPosts = async (params) => {
-    const { jobs, seasons, moods } = params;
+    const {
+      jobs = [],
+      seasons = [],
+      moods = [],
+      heightMin,
+      heightMax,
+      weightMin,
+      weightMax,
+      gender,
+    } = params;
 
-    const apiParams = {
-      "jobs[]": jobs.length > 0 ? jobs : undefined,
-      "seasons[]": seasons.length > 0 ? seasons : undefined,
-      "moods[]": moods.length > 0 ? moods : undefined,
-    };
+    const query = new URLSearchParams();
+
+    if (jobs.length > 0) {
+      jobs.forEach((job) => query.append("jobs[]", job));
+    }
+
+    const tagCodes = [...seasons, ...moods];
+    if (tagCodes.length > 0) {
+      query.append("tagCodes", tagCodes.join(","));
+    }
+
+    if (heightMin !== undefined) query.append("heightMin", heightMin);
+    if (heightMax !== undefined) query.append("heightMax", heightMax);
+    if (weightMin !== undefined) query.append("weightMin", weightMin);
+    if (weightMax !== undefined) query.append("weightMax", weightMax);
+    if (gender) query.append("gender", gender);
+
+    console.log(`Fetching from: /api/tags/posts?${query}`);
 
     try {
-      const response = await axios.get("http://localhost:8080/api/tags/posts", {
-        params: apiParams,
-      });
-      setPosts(response.data);
+      const response = await fetch(`/api/tags/posts?${query}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log("Fetched data:", data);
+      setPosts(data);
     } catch (error) {
-      console.error("Error fetching searched posts", error);
+      console.error("Error fetching posts:", error);
     }
   };
 
