@@ -21,12 +21,12 @@ export const addComment = async (data) => {
   return await instance.post(`/addcomment`, data);
 };
 
-// // 댓글 수정
-// export const updateComment = async (data) => {
-//   return await authorize.put("comment", data);
-// };
+// 댓글 수정
+export const updateComment = async (commentCode) => {
+  return await authorize.put(`updatecomment/${commentCode}`);
+};
 
-// // 댓글 삭제
-// export const deleteComment = async (commentCode) => {
-//   return await authorize.delete(`comment/${commentCode}`);
-// };
+// 댓글 삭제
+export const deleteComment = async (commentCode) => {
+  return await authorize.delete(`deletecomment/${commentCode}`);
+};
