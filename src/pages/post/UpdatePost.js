@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
-import { delImg, detailPost, editPost } from "../../api/post";
+import { delImg, delProduct, detailPost, editPost } from "../../api/post";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { TiDelete } from "react-icons/ti";
 import { useState, useEffect } from "react";
 
 const UpdatePost = () => {
@@ -25,12 +27,17 @@ const UpdatePost = () => {
   const [imagesToDelete, setImagesToDelete] = useState(new Set());
   const [imgCode, setImgCode] = useState([]);
   const [bodyTag, setBodyTag] = useState(0);
-  const [careerTag, setCarrerTag] = useState(0);
+  const [careerTag, setCareerTag] = useState(0);
+  const [delProducts, setDelProducts] = useState([]);
 
   // 기존 post 내용 가져오기
   const detailView = async () => {
     const result = await detailPost(postCode);
-    // console.log(result.data);
+    // null 처리
+    if (result.data.postDesc === null) {
+      result.data.postDesc = "";
+    }
+    console.log(result.data.postDesc);
     setUpdate(result.data);
   };
 
@@ -61,18 +68,17 @@ const UpdatePost = () => {
   };
 
   const careerCheck = (e) => {
-    const value = e.target.value;
+    const value = Number(e.target.value);
+    // console.log("value : " + value);
+    // console.log("careerTag : " + careerTag);
 
     const checkCareer = document.getElementsByName("career");
     for (let i = 0; i < checkCareer.length; i++) {
       if (checkCareer[i].value !== value) {
-        // console.log(checkCareer[i].value);
         checkCareer[i].checked = false;
       }
     }
-
-    console.log(value);
-    setCarrerTag(Number(value));
+    setCareerTag(value);
   };
 
   const bodyCheck = (e) => {
@@ -119,7 +125,7 @@ const UpdatePost = () => {
           ...update,
           tagCodes: update.tagCodes.filter((value) => value !== item),
         });
-        setCarrerTag(item);
+        setCareerTag(item);
       }
       if (20 <= item && item <= 23) {
         setUpdate({
@@ -129,27 +135,9 @@ const UpdatePost = () => {
         setBodyTag(item);
       }
     });
-    console.log(update);
+    // console.log(update);
+    console.log(delProducts);
   }, [update]);
-
-  // 수정 완료 버튼
-  const updateForm = async () => {
-    if (imgCode.length > 0) {
-      console.log(imgCode); // 삭제하는 이미지 코드
-      await delImg([...imgCode]);
-    }
-    try {
-      console.log(update);
-      await editPost({
-        ...update,
-        tagCodes: [...update.tagCodes, careerTag, bodyTag],
-      });
-      alert("수정 완료");
-      window.location.href = "/";
-    } catch (error) {
-      alert("수정 실패:" + error);
-    }
-  };
 
   const setBrand = (e, i) => {
     const products = update.products;
@@ -186,6 +174,57 @@ const UpdatePost = () => {
     const products = update.products;
     products.push(product);
     setUpdate({ ...update, products: products });
+  };
+
+  const delProductAPI = async (productCode) => {
+    await delProduct(productCode);
+  };
+
+  // - 제품 삭제 버튼
+  const deleteProduct = (index, productCode) => {
+    // console.log(productCode);
+    setDelProducts((prevDelProducts) => [...prevDelProducts, productCode]);
+
+    setUpdate((prevPost) => {
+      // 현재 제품 목록에서 선택한 인덱스를 제외한 새로운 배열 생성
+      const updatedProducts = prevPost.products.filter((_, i) => i !== index);
+      return { ...prevPost, products: updatedProducts };
+    });
+  };
+
+  // 수정 완료 버튼
+  const updateForm = async () => {
+    if (imgCode.length > 0) {
+      // console.log(imgCode); // 삭제하는 이미지 코드
+      await delImg([...imgCode]);
+    }
+
+    delProductAPI(delProducts);
+    // console.log(delProducts);
+    try {
+      if (careerTag === 0 && bodyTag === 0) {
+        await editPost(update);
+      } else if (careerTag === 0 && bodyTag !== 0) {
+        await editPost({
+          ...update,
+          tagCodes: [...update.tagCodes, bodyTag],
+        });
+      } else if (careerTag !== 0 && bodyTag === 0) {
+        await editPost({
+          ...update,
+          tagCodes: [...update.tagCodes, careerTag],
+        });
+      } else {
+        await editPost({
+          ...update,
+          tagCodes: [...update.tagCodes, careerTag, bodyTag],
+        });
+      }
+      alert("수정 완료");
+      window.location.href = "/";
+    } catch (error) {
+      alert("수정 실패:" + error);
+    }
   };
 
   return (
@@ -255,40 +294,68 @@ const UpdatePost = () => {
       </div>
       <div className="mb-4">
         {update.products?.map((post, index) => (
-          <div
-            className="grid grid-cols-5 gap-2 text-center text-sm"
-            key={index}
-          >
+          <div className="text-center text-sm" key={index}>
             <input
               type="text"
               placeholder="브랜드"
               value={post.productBrand}
               onChange={(e) => setBrand(e, index)}
+              style={{
+                borderBottom: "1px solid #bbb",
+                width: "18%",
+                margin: "10px 2px",
+              }}
             />
             <input
               type="text"
               placeholder="제품명"
               value={post.productName}
               onChange={(e) => setName(e, index)}
+              style={{
+                borderBottom: "1px solid #bbb",
+                width: "18%",
+                margin: "10px 2px",
+              }}
             />
             <input
               type="text"
               placeholder="제품 사이즈"
               value={post.productSize}
               onChange={(e) => setSize(e, index)}
+              style={{
+                borderBottom: "1px solid #bbb",
+                width: "18%",
+                margin: "10px 2px",
+              }}
             />
             <input
               type="text"
               placeholder="구매처"
               value={post.productBuyFrom}
               onChange={(e) => setBuyFrom(e, index)}
+              style={{
+                borderBottom: "1px solid #bbb",
+                width: "18%",
+                margin: "10px 2px",
+              }}
             />
             <input
               type="text"
               placeholder="구매 링크"
               value={post.productLink}
               onChange={(e) => setLink(e, index)}
+              style={{
+                borderBottom: "1px solid #bbb",
+                width: "18%",
+                margin: "10px 2px",
+              }}
             />
+            <button
+              style={{ marginLeft: "10px", fontSize: "1.8rem" }}
+              onClick={() => deleteProduct(index, post.productCode)}
+            >
+              <TiDelete />
+            </button>
           </div>
         ))}
 
@@ -309,25 +376,29 @@ const UpdatePost = () => {
           공개 여부
         </label>
         <div>
-          <input
-            type="radio"
-            name="publicYn"
-            className="mr-1"
-            value="Y"
-            checked={update.postPublicYn === "Y"}
-            onChange={() => setUpdate({ ...update, postPublicYn: "Y" })}
-          />
-          공개
-          <input
-            type="radio"
-            name="publicYn"
-            className="mr-1"
-            value="N"
-            checked={update.postPublicYn === "N"}
-            onChange={() => setUpdate({ ...update, postPublicYn: "N" })}
-            style={{ marginLeft: "15px" }}
-          />
-          비공개
+          <label>
+            <input
+              type="radio"
+              name="publicYn"
+              className="mr-1"
+              value="Y"
+              checked={update.postPublicYn === "Y"}
+              onChange={() => setUpdate({ ...update, postPublicYn: "Y" })}
+            />
+            공개
+          </label>
+          <label>
+            <input
+              type="radio"
+              name="publicYn"
+              className="mr-1"
+              value="N"
+              checked={update.postPublicYn === "N"}
+              onChange={() => setUpdate({ ...update, postPublicYn: "N" })}
+              style={{ marginLeft: "15px" }}
+            />
+            비공개
+          </label>
         </div>
       </div>
 

@@ -22,7 +22,7 @@ const UploadPost = () => {
     tagCodes: [],
   });
 
-  const [careerTag, setCarrerTag] = useState(0);
+  const [careerTag, setCareerTag] = useState(0);
   const [bodyTag, setBodyTag] = useState(0);
 
   const upload = async () => {
@@ -69,10 +69,12 @@ const UploadPost = () => {
       formData.append(`tagCodes[${i}]`, post.tagCodes[i]);
     }
 
-    if (careerTag != 0)
+    if (careerTag !== 0 && bodyTag === 0)
       formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag);
-    if (bodyTag != 0)
-      formData.append(`tagCodes[${post.tagCodes.length + 1}]`, bodyTag);
+    else if (careerTag === 0 && bodyTag !== 0)
+      formData.append(`tagCodes[${post.tagCodes.length}]`, bodyTag);
+    else if (careerTag !== 0 && bodyTag !== 0)
+      formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag, bodyTag);
 
     formData.append("userCode", userCode);
     formData.append("postDesc", post.postDesc);
@@ -97,7 +99,7 @@ const UploadPost = () => {
         bodyTag={bodyTag}
         setBodyTag={setBodyTag}
         careerTag={careerTag}
-        setCarrerTag={setCarrerTag}
+        setCareerTag={setCareerTag}
       />
     </div>
   );
