@@ -14,10 +14,8 @@ import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
 import ReportList from "./pages/ReportList";
 import MyFollower from "./pages/follow/MyFollower";
 import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
-
 import UpdatePost from "./pages/post/UpdatePost";
 import VotePost from "./pages/post/VotePost";
-import Vote from "./pages/post/Vote";
 import Detail from "./pages/post/Detail";
 import UpdateUser from "./pages/user/UpdateUser";
 import NewFeed from "./pages/post/NewFeed";
@@ -46,7 +44,6 @@ const router = createBrowserRouter([
       { path: "/reportList", element: <ReportList /> },
       { path: "/votePost", element: <VotePost /> }, // 투표게시물 전체 보기
       { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드
-      { path: "/Vote/:postCode", element: <Vote /> }, // 투표 게시물
       { path: "/uploadPost", element: <UploadPost /> },
       {
         path: `mypage/follow/myFollower/:followingUserCode`,
