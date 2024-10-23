@@ -12,3 +12,8 @@ export const handleLikeToggle = async (postCode, user) => {
     console.error("Error toggling like", error);
   }
 };
+
+export const fetchLikedPosts = async (userCode) => {
+  const response = await instance.get(`likes/${userCode}/likes`);
+  return response.data.postInfoList;
+};

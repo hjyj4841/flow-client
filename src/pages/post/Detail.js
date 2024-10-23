@@ -26,30 +26,6 @@ import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
 
-const DetailDiv = styled.div`
-  .report {
-    display: flex;
-  }
-  .report-post-btn {
-    margin: 20px;
-  }
-  .report-user-btn {
-    margin: 20px;
-  }
-  .report button {
-    background-color: #f05650;
-    padding: 10px;
-    border-radius: 15px;
-    margin: 10px 5px;
-  }
-  .update-post-btn {
-    background-color: #ddd;
-    padding: 10px;
-    border-radius: 15px;
-    margin: 10px 5px;
-  }
-`;
-
 const Detail = () => {
   const navigate = useNavigate();
   const { postCode } = useParams();
@@ -147,7 +123,6 @@ const Detail = () => {
     }));
     setSavedPosts(savedPosts || []);
   };
-
   // 3. 작성자 유저 코드가 변경되는 시점
   useEffect(() => {
     if (post?.userCode !== undefined) {
@@ -161,7 +136,6 @@ const Detail = () => {
       setCheck(post.userCode === user.userCode);
     }
   }, [post?.userCode]);
-
   // 유저가 작성자를 팔로우 했는지 조회
   const dispatchFollowStatus = useCallback(() => {
     if (user.userCode !== 0 && followUser.userCode !== 0) {
@@ -182,12 +156,10 @@ const Detail = () => {
     if (followBool !== undefined && followBool !== followCheck)
       setFollowCheck(followBool);
   }, [followBool]);
-
   // 게시물 수정 페이지로 이동
   const updatePost = () => {
     navigate("/post/update/" + postCode);
   };
-
   // 게시물 신고
   const reportPostBtn = (data) => {
     addReportPost(reportDispatch, data);
@@ -197,7 +169,6 @@ const Detail = () => {
       postReportDesc: "",
     });
   };
-
   // 유저 신고
   const reportUserBtn = (data) => {
     addReportUser(reportDispatch, data);
@@ -207,7 +178,6 @@ const Detail = () => {
       userReportDesc: "",
     });
   };
-
   // 게시물 삭제
   const deletePost = () => {
     deleteAPI();
@@ -217,7 +187,6 @@ const Detail = () => {
   const deleteAPI = async () => {
     await delPost(postCode);
   };
-
   // 이미지(다음/이전) 변경 관련 메서드
   const handleNextImage = () => {
     if (post.imageUrls && post.imageUrls.length > 0) {
@@ -233,7 +202,6 @@ const Detail = () => {
       );
     }
   };
-
   // 라이크 버튼 클릭 시 발생
   const handleLike = async (postCode) => {
     await handleLikeToggle(postCode, user);
@@ -248,7 +216,6 @@ const Detail = () => {
     fetchPost();
     setLikeRendering(likeRendering + 1);
   };
-
   // 북마크 버튼 클릭 시 발생
   const handleSave = async (postCode) => {
     await handleSaveToggle(postCode, user);
@@ -256,13 +223,11 @@ const Detail = () => {
     fetchPost();
     setSaveRendering(saveRendering + 1);
   };
-
   // 댓글 조회
   const { data: comments, isLoading, error } = useQuery({
     queryKey: ["comments", postCode],
     queryFn: () => getAllComment(postCode),
   });
-
   // 댓글 작성
   const addMutation = useMutation({
     mutationFn: addCommentAPI,
@@ -274,12 +239,10 @@ const Detail = () => {
     addMutation.mutate(newComment);
     setNewComment({ ...newComment, commentDesc: "" });
   };
-
   // 작성자의 유저정보 페이지로 이동
   const goUserInfo = () => {
     navigate(`/mypage/${post.userCode}`);
   };
-
   // 접속한 유저 코드가 들어온 시점
   useEffect(() => {
     // newComment에 유저 코드 대입
@@ -290,7 +253,6 @@ const Detail = () => {
       });
     }
   }, [user.userCode]);
-
   if (isLoading) return <>로딩중...</>;
   if (error) return <>에러 발생...</>;
 
