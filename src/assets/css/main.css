@@ -29,3 +29,33 @@
 h2 {
   margin-left: 170px !important;
 }
+.menu-container {
+  margin-left: 450px;
+}
+.menu-button {
+  cursor: pointer;
+}
+.mf-text {
+  text-align: center;
+  width: 180px;
+  height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+.nf-text {
+  text-align: center;
+  width: 180px;
+  height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
+.pf-text {
+  text-align: center;
+  width: 180px;
+  height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}

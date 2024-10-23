@@ -7,6 +7,7 @@ import {
   reportReducer,
 } from "../reducers/reportReducer";
 import { delReportUser, banUserReport } from "../reducers/reportReducer";
+import "../assets/css/reportUsers.css";
 
 const ReportUser = () => {
   const [state, dispatch] = useReducer(reportReducer, rUserState);
@@ -53,41 +54,41 @@ const ReportUser = () => {
 
   return (
     <>
-      <div style={{ marginBottom: 150 }}>
+      <div>
         {currentPosts && reportUsers.length > 0 ? (
           currentPosts.map((user) => (
             <Card
+              className="card"
               key={user.userReportCode}
               sx={{ minWidth: 275 }}
               variant="outlined"
             >
-              <CardContent>
-                <Typography variant="h5" component="div">
+              <CardContent className="reportContainer">
+                <Typography variant="h5" component="div" className="reportName">
                   신고번호: {user.userReportCode}
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body" className="reportInfo">
                   신고내용 : {user.userReportDesc}
-                  <br />
                 </Typography>
-                <br />
-                <button
-                  className="delete-report-user-btn"
-                  type="button"
-                  onClick={() => deleteUser(user.userReportCode)}
-                >
-                  삭제
-                </button>
-                <button
-                  className="ban-report-user-btn"
-                  type="button"
-                  onClick={() =>
-                    banUser(user.user.userCode, user.userReportCode)
-                  }
-                >
-                  밴
-                </button>
+                <div>
+                  <button
+                    className="delete-report-user-btn"
+                    type="button"
+                    onClick={() => deleteUser(user.userReportCode)}
+                  >
+                    삭제
+                  </button>
+                  <button
+                    className="ban-report-user-btn"
+                    type="button"
+                    onClick={() =>
+                      banUser(user.user.userCode, user.userReportCode)
+                    }
+                  >
+                    밴
+                  </button>
+                </div>
               </CardContent>
-              <Divider />
             </Card>
           ))
         ) : (

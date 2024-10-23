@@ -133,19 +133,19 @@ const Main = () => {
   return (
     <div className="bg-gray-100 text-gray-800">
       <section className="bg-white py-4 shadow-md">
-        <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
+        <div className="menu-container mx-2 flex">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="flex-none w-16 h-16 bg-gray-300 rounded-full"
+              className="menu-button flex-none w-16 h-16 bg-gray-300 rounded-full ml-12"
             />
           ))}
         </div>
       </section>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className="container">
         {/* Popular Feed Section */}
-        <section className="mb-8 con">
+        <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">
             <Link to="/popularFeed" className="hover:underline">
               POPULAR FEED
@@ -164,12 +164,10 @@ const Main = () => {
                     className="w-full h-full object-cover rounded-lg"
                   />
                   <div
-                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                     onClick={(e) => detail(post.postCode, e)}
                   >
-                    <p className="text-white mb-2 w-full flex justify-center items-center text-sm truncate">
-                      {post.postDesc}
-                    </p>
+                    <p className="pf-text text-white mb-2">{post.postDesc}</p>
                     <div className="flex items-center">
                       {likedPosts.some(
                         (likedPost) => likedPost.post.postCode === post.postCode
@@ -241,12 +239,10 @@ const Main = () => {
                     className="w-full h-full object-cover rounded-lg"
                   />
                   <div
-                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                     onClick={(e) => detail(post.postCode, e)}
                   >
-                    <p className="text-white mb-2 w-full flex justify-center items-center text-sm truncate">
-                      {post.postDesc}
-                    </p>
+                    <p className="nf-text text-white mb-2">{post.postDesc}</p>
                     <div className="flex items-center">
                       {likedPosts.some(
                         (likedPost) => likedPost.post.postCode === post.postCode
@@ -319,10 +315,10 @@ const Main = () => {
                       className="w-full h-full object-cover rounded-lg"
                     />
                     <div
-                      className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                       onClick={(e) => detail(post.postCode, e)}
                     >
-                      <p className="text-white mb-2">{post.postDesc}</p>
+                      <p className="mf-text text-white mb-2">{post.postDesc}</p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>

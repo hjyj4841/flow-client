@@ -42,37 +42,38 @@ const ReportComment = () => {
         {currentPosts && reportComments.length > 0 ? (
           currentPosts.map((comment) => (
             <Card
+              className="card"
               key={comment.commentReportCode}
               sx={{ minWidth: 275 }}
               variant="outlined"
             >
-              <CardContent>
-                <Typography variant="h5" component="div">
+              <CardContent className="reportContainer">
+                <Typography variant="h5" component="div" className="reportName">
                   신고번호: {comment.commentReportCode}
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body" className="reportInfo">
                   신고내용 : {comment.commentReportDesc}
-                  <br />
                 </Typography>
-                <br />
-                <button
-                  className="delete-report-post-btn"
-                  type="button"
-                  //   onClick={() => deletePost(post.postReportCode)}
-                >
-                  삭제
-                </button>
-                <button
-                  className="ban-report-user-btn"
-                  type="button"
-                  //   onClick={() =>
-                  //     banUser(post.post.user.userCode, post.postReportCode)
-                  //   }
-                >
-                  밴
-                </button>
+
+                <div className="buttonContainer">
+                  <button
+                    className="delete-report-post-btn"
+                    type="button"
+                    //   onClick={() => deletePost(post.postReportCode)}
+                  >
+                    삭제
+                  </button>
+                  <button
+                    className="ban-report-user-btn"
+                    type="button"
+                    //   onClick={() =>
+                    //     banUser(post.post.user.userCode, post.postReportCode)
+                    //   }
+                  >
+                    밴
+                  </button>
+                </div>
               </CardContent>
-              <Divider />
             </Card>
           ))
         ) : (
