@@ -47,7 +47,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+      <div className="container flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold">
           FLOW
         </Link>
