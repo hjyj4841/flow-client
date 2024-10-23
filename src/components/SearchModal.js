@@ -42,6 +42,27 @@ const SearchModal = ({ isOpen, onClose }) => {
     기타: false,
   });
 
+  const seasonTagMapping = {
+    봄: 1,
+    여름: 2,
+    가을: 3,
+    겨울: 4,
+  };
+
+  const moodTagMapping = {
+    포멀: 9,
+    캐주얼: 10,
+    스트릿: 11,
+    아메카지: 12,
+    빈티지: 13,
+    시티보이: 14,
+    페미닌: 15,
+    미니멀: 16,
+    스포티: 17,
+    톰보이: 18,
+    기타: 19,
+  };
+
   const handleSlider1Change = (value) => {
     setHeightRange(value);
   };
@@ -101,18 +122,35 @@ const SearchModal = ({ isOpen, onClose }) => {
     const selectedSeasons = Object.keys(season).filter((key) => season[key]);
     const selectedMoods = Object.keys(mood).filter((key) => mood[key]);
 
+    const selectedSeasonCodes = selectedSeasons.map(
+      (season) => seasonTagMapping[season]
+    );
+    const selectedMoodCodes = selectedMoods.map((mood) => moodTagMapping[mood]);
+
     const params = {
       heightMin: heightRange[0],
       heightMax: heightRange[1],
       weightMin: weightRange[0],
       weightMax: weightRange[1],
-      gender,
-      jobs: selectedJobs,
-      seasons: selectedSeasons,
-      moods: selectedMoods,
+      gender: gender || undefined,
+      jobs: selectedJobs.length > 0 ? selectedJobs : undefined,
+      seasons: selectedSeasonCodes.length > 0 ? selectedSeasonCodes : undefined,
+      moods: selectedMoodCodes.length > 0 ? selectedMoodCodes : undefined,
     };
 
-    navigate("/searched", { state: { params } });
+    const finalParams = {};
+
+    if (selectedJobs.length > 0) finalParams.jobs = params.jobs;
+    if (selectedSeasonCodes.length > 0) finalParams.seasons = params.seasons;
+    if (selectedMoodCodes.length > 0) finalParams.moods = params.moods;
+
+    finalParams.heightMin = params.heightMin;
+    finalParams.heightMax = params.heightMax;
+    finalParams.weightMin = params.weightMin;
+    finalParams.weightMax = params.weightMax;
+    if (gender) finalParams.gender = params.gender;
+
+    navigate("/searched", { state: { params: finalParams } });
     onClose();
   };
 
