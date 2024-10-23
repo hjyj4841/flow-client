@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { TiDelete } from "react-icons/ti";
 import "../assets/css/post.css";
 
-const Post = ({ upload, post, setPost, setBodyTag, setCarrerTag }) => {
+const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
   const [imgPreviews, setImgPreviews] = useState([]);
   const [sortedFiles, setSortedFiles] = useState([]);
   const [click, setClick] = useState([]);
@@ -143,7 +142,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCarrerTag }) => {
     }
 
     console.log(value);
-    setCarrerTag(value);
+    setCareerTag(value);
   };
 
   const bodyCheck = (e) => {

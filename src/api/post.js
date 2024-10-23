@@ -17,13 +17,13 @@ export const addPostVote = async (data) => {
     headers: {
       "Content-Type": "multipart/form-data",
     },
-  })
-}
+  });
+};
 
 // 투표 게시물 조회
 export const detailPostVote = async (data) => {
   return await instance.get(`postVote/${data}`);
-}
+};
 
 // 게시물 추가
 export const addPost = async (data) => {
@@ -56,8 +56,15 @@ export const delPost = async (postCode) => {
 
 // postImgCode로 사진 삭제
 export const delImg = async (postImgCode) => {
-  return await instance.delete(`postImg`, {
+  return await instance.delete("postImg", {
     data: postImgCode, // 배열 전달
+  });
+};
+
+// productCode로 제품 삭제
+export const delProduct = async (productCode) => {
+  return await instance.delete("product", {
+    data: productCode, // 배열 전달
   });
 };
 
@@ -101,12 +108,12 @@ export const fetchSavedPosts = async (userCode) => {
 
 // 해당 유저가 업로드한 게시물 조회
 export const uploadPostVote = async (userCode) => {
-    return await instance.get(`${userCode}/postVote`);
-}
+  return await instance.get(`${userCode}/postVote`);
+};
 
 // 해당 유저가 투표한 게시물 조회
 export const fetchVotedPosts = async (userCode) => {
-    return await instance.get(`vote/${userCode}/vote`);
+  return await instance.get(`vote/${userCode}/vote`);
 };
 
 // 메인 화면 PopularFeed
