@@ -18,7 +18,6 @@ export const getAllComment = async (postCode) => {
 
 // 댓글 작성
 export const addComment = async (data) => {
-  console.log(data);
   return await instance.post(`/addcomment`, data);
 };
 

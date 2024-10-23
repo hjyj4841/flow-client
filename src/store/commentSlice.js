@@ -21,6 +21,7 @@ export const fetchComments = createAsyncThunk(
   "comment/fetchComments",
   async (postCode) => {
     const response = await getAllComment(postCode);
+
     return response.data;
   }
 );

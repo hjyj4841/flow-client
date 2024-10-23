@@ -70,7 +70,7 @@ const MyPage = () => {
     if (user.userCode !== 0 && mypageUserCode !== 0) {
       setIsSelf(user.userCode === mypageUserCode);
     }
-  }, [user.userCode, mypageUserCode]); 
+  }, [user.userCode, mypageUserCode]);
   // 팔로우 기능
   const [follow, setFollow] = useState({
     followingUser: {
@@ -78,7 +78,7 @@ const MyPage = () => {
     },
     followerUser: {
       userCode: 0,
-    }
+    },
   });
   useEffect(() => {
     setFollow({
@@ -87,15 +87,15 @@ const MyPage = () => {
       },
       followerUser: {
         userCode: mypageUser.userCode,
-      }
-    })
+      },
+    });
   }, [user.userCode, mypageUser.userCode]);
   const addFollow = () => {
     dispatch(
       createFollowRelative({
         isSelf,
-        follow
-        })
+        follow,
+      })
     );
   };
   // 언팔로우 기능
@@ -138,8 +138,10 @@ const MyPage = () => {
 
   // 회원 정보 가져오기
   const getUserInfo = async () => {
-    setMypageUser((await findUserByCode(mypageUserCode)).data);
     setUser((await findUser(token)).data);
+  };
+  const getMypageUserInfo = async () => {
+    setMypageUser((await findUserByCode(mypageUserCode)).data);
   };
 
   // 디테일 화면으로 이동
@@ -153,11 +155,12 @@ const MyPage = () => {
   };
 
   useEffect(() => {
-    getUserInfo();
+    if (token !== null) getUserInfo();
+    getMypageUserInfo();
   }, []);
 
   useEffect(() => {
-    if (mypageUser.userCode !== 0 && user.userCode !== 0) {
+    if (token === null || (mypageUser.userCode !== 0 && user.userCode !== 0)) {
       getVote();
       getCreatePosts();
       dispatch(myFollower(mypageUser.userCode));
@@ -215,18 +218,28 @@ const MyPage = () => {
               </span>
               <span
                 onClick={() =>
-                  navigate((mypageUserCode === user.userCode ? `/mypage/follow/myFollower/${user.userCode}` : `/mypage/follow/myFollower/${mypageUserCode}`), {
-                    state: false,
-                  })
+                  navigate(
+                    mypageUserCode === user.userCode
+                      ? `/mypage/follow/myFollower/${user.userCode}`
+                      : `/mypage/follow/myFollower/${mypageUserCode}`,
+                    {
+                      state: false,
+                    }
+                  )
                 }
               >
                 팔로워 <span>{followerCount}</span>
               </span>
               <span
                 onClick={() =>
-                  navigate((mypageUserCode === user.userCode ? `/mypage/follow/myFollower/${user.userCode}` : `/mypage/follow/myFollower/${mypageUserCode}`), {
-                    state: true,
-                  })
+                  navigate(
+                    mypageUserCode === user.userCode
+                      ? `/mypage/follow/myFollower/${user.userCode}`
+                      : `/mypage/follow/myFollower/${mypageUserCode}`,
+                    {
+                      state: true,
+                    }
+                  )
                 }
               >
                 팔로잉 <span>{followingCount}</span>
@@ -326,7 +339,7 @@ const MyPage = () => {
           </div>
           {/* 게시물 나오는 부분 */}
           <section className="postList">
-            <div className="grid grid-cols-3">
+            <div className="grid grid-cols-3 gap-2">
               {createdPosts.postInfoList.map((item) => (
                 <div
                   key={item.post.postCode}
@@ -339,13 +352,13 @@ const MyPage = () => {
                       className="object-cover rounded-lg"
                     />
                   ) : (
-                    <div className="bg-gray-200 flex justify-center items-center text-gray-500">
+                    <div className="bg-gray-200 rounded-lg flex justify-center items-center text-gray-500">
                       No Image
                     </div>
                   )}
                   <div
                     onClick={() => detail(item.post.postCode)}
-                    className="cursor-pointer absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                    className="cursor-pointer rounded-lg absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
                   />
                 </div>
               ))}
