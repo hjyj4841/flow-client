@@ -17,8 +17,9 @@ export const createFollowRelative = createAsyncThunk(
 
 export const removeFollowRelative = createAsyncThunk(
   "follow/removeFollowRelative",
-  async ({ followingUserCode, followerUserCode }) => {
+  async ({isSelf, followingUserCode, followerUserCode }) => {
     await unfollow(followingUserCode, followerUserCode);
+    return {isSelf};
   }
 );
 
@@ -73,15 +74,36 @@ const followSlice = createSlice({
       })
       .addCase(removeFollowRelative.fulfilled, (state,action) => {
         const { isSelf } = action.meta.arg;
-        if(isSelf) state.countFollower -= 1;
-        else state.counter -= 1;
+        switch(isSelf) {
+          case 1 : {
+            state.countFollower -= 1;
+            break;
+          }
+          case 2 : {
+            state.counter -= 1;
+            break;
+          }
+          default : {
+            break;
+          }
+        }
         state.followBool = false;
       })
       .addCase(createFollowRelative.fulfilled, (state,action) => {
         const { isSelf } = action.meta.arg;
-        console.log(isSelf);
-        if(isSelf) state.countFollower += 1;
-        else state.counter += 1;
+        switch(isSelf) {
+          case 1 : {
+            state.countFollower += 1;
+            break;
+          }
+          case 2 : {
+            state.counter += 1;
+            break;
+          }
+          default : {
+            break;
+          }
+        }
         state.followBool = true;
       })
       .addCase(createFollowRelative.rejected, (state, action) => {

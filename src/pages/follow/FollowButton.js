@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import {
   createFollowRelative,
   removeFollowRelative,
-  followStatus,
 } from "../../store/followSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch} from "react-redux";
 import styled from "styled-components";
 import { getKakaoCode } from "../../api/kakao";
 import { getGoogleCode } from "../../api/google";
@@ -76,7 +75,7 @@ const FollowButton = ({ user, bool }) => {
     if (token) {
       setIsLogin(true);
     }
-  }, []);
+  }, [token]);
   function parseJwt(token) {
     if (token !== null) {
       const base64Url = token.split(".")[1]; // 토큰의 두 번째 부분 (Payload)
@@ -114,16 +113,16 @@ const FollowButton = ({ user, bool }) => {
         },
       });
     }
-  }, [token, user]);
+  }, [tokenCode, user]);
 
   const [isFollow, setIsFollow] = useState(false);
   useEffect(() => {
     setIsFollow(bool);
   }, [bool]);
-  let isSelf = false;
+  let isSelf = 0;
   const addFollowRelative = () => {
-    if(tokenCode !==0 && followingUserCode !==0) {
-      isSelf = (tokenCode === parseInt(followingUserCode));
+    if((tokenCode !==0 && followingUserCode !==0 && follow.followingUser.userCode !== 0)) {
+      isSelf = (tokenCode === parseInt(followingUserCode) ? 1 : ((tokenCode !== parseInt(followingUserCode)) && (parseInt(followingUserCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
     } // isSelf 계산
     dispatch(createFollowRelative({isSelf, 
       follow}));
@@ -131,8 +130,8 @@ const FollowButton = ({ user, bool }) => {
   };
 
   const unfollow = () => {
-    if(tokenCode !==0 && followingUserCode !==0) {
-      isSelf = (tokenCode === parseInt(followingUserCode));
+    if((tokenCode !==0 && followingUserCode !==0 && follow.followingUser.userCode !== 0)) {
+      isSelf = (tokenCode === parseInt(followingUserCode) ? 1 : ((tokenCode !== parseInt(followingUserCode)) && (parseInt(followingUserCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
     } // isSelf 계산
     dispatch(
       removeFollowRelative({

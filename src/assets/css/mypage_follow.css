@@ -41,6 +41,7 @@
     width: 100%; 
     position: relative;
     flex-wrap: wrap;
+    justify-content: center;
 }
 .userSection {
     min-width: 300px;
