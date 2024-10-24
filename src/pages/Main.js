@@ -5,7 +5,6 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import "../assets/css/main.css";
-
 const Main = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [newFeedImages, setNewFeedImages] = useState([]);
@@ -14,7 +13,6 @@ const Main = () => {
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [popularFeedImages, setPopularFeedImages] = useState([]);
   const navigate = useNavigate();
-
   let userCode = "";
   let user = "";
   if (token) {
@@ -24,38 +22,32 @@ const Main = () => {
     userCode = userData.userCode;
     user = userData;
   }
-
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
     fetchPopularFeedImages();
-
     if (token) {
       fetchLikedPosts();
       fetchSavedPosts();
       if (userCode) fetchFollowingUserPosts();
     }
   }, [token, userCode]);
-
   const fetchNewFeedImages = async () => {
     const response = await axios.get("http://localhost:8080/api/post");
     setNewFeedImages(response.data);
   };
-
   const fetchPopularFeedImages = async () => {
     const response = await axios.get(
       "http://localhost:8080/api/likes/post/ordered-by-likes"
     );
     setPopularFeedImages(response.data);
   };
-
-  const fetchFollowingUserPosts = async () => {
+  const fetchFollowedUserPosts = async () => {
     const response = await axios.get(
       `http://localhost:8080/api/posts/following/${userCode}`
     );
     setFollowingUserPosts(response.data);
   };
-
   // Fetch liked posts
   const fetchLikedPosts = async () => {
     try {
@@ -71,7 +63,6 @@ const Main = () => {
       console.error("Error fetching liked posts", error);
     }
   };
-
   // Fetch saved posts
   const fetchSavedPosts = async () => {
     try {
@@ -87,7 +78,6 @@ const Main = () => {
       console.error("Error fetching saved posts", error);
     }
   };
-
   // Toggle like
   const handleLikeToggle = async (postCode) => {
     try {
@@ -100,7 +90,6 @@ const Main = () => {
       console.error("Error toggling like", error);
     }
   };
-
   // Toggle save
   const handleSaveToggle = async (postCode) => {
     try {
@@ -113,11 +102,9 @@ const Main = () => {
       console.error("Error toggling save", error);
     }
   };
-
   const detail = (postCode, e) => {
     // 막고 싶은 태그 리스트
     const blockedClasses = ["mx-2"];
-
     // 이벤트가 발생한 요소의 className 체크
     if (
       blockedClasses.some((className) => e.target.classList.contains(className))
@@ -125,7 +112,6 @@ const Main = () => {
       e.stopPropagation(); // 해당 태그일 경우 이벤트를 막음
       return;
     }
-
     // 나머지 태그에서는 네비게이션 동작
     navigate(`/post/${postCode}`);
   };
@@ -142,7 +128,6 @@ const Main = () => {
           ))}
         </div>
       </section>
-
       <main className="container mx-auto">
         {/* Popular Feed Section */}
         <section className="mb-8 flex justify-center">
@@ -157,7 +142,7 @@ const Main = () => {
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative bg-gray-300 rounded-lg group mb-5 p-feed"
+                    className="relative bg-gray-300 rounded-lg group mb-5 main-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -168,7 +153,9 @@ const Main = () => {
                       className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                       onClick={(e) => detail(post.postCode, e)}
                     >
-                      <p className="pf-text text-white mb-2">{post.postDesc}</p>
+                      <p className="main-text text-white mb-2">
+                        {post.postDesc}
+                      </p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -222,7 +209,6 @@ const Main = () => {
             </div>
           </div>
         </section>
-
         {/* New Feed Section */}
         <section className="mb-8 flex justify-center">
           <div className="flex flex-col main-section">
@@ -236,7 +222,7 @@ const Main = () => {
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed"
+                    className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 main-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -247,7 +233,9 @@ const Main = () => {
                       className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                       onClick={(e) => detail(post.postCode, e)}
                     >
-                      <p className="nf-text text-white mb-2">{post.postDesc}</p>
+                      <p className="main-text text-white mb-2">
+                        {post.postDesc}
+                      </p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -301,14 +289,13 @@ const Main = () => {
             </div>
           </div>
         </section>
-
         {/* Follower's Feed Section */}
         {token && (
           <section className="mb-8 flex justify-center">
             <div className="flex flex-col main-section">
               <h2 className="text-xl font-bold mb-4">
                 <Link to="/popularFeed" className="hover:underline">
-                  POPULAR FEED
+                  MY FOLLOWER'S FEED
                 </Link>
               </h2>
               <div className="main-con grid grid-cols-5 gap-4">
@@ -388,5 +375,4 @@ const Main = () => {
     </div>
   );
 };
-
 export default Main;
