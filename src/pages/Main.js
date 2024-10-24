@@ -11,7 +11,7 @@ const Main = () => {
   const [newFeedImages, setNewFeedImages] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [followedUserPosts, setFollowedUserPosts] = useState([]);
+  const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [popularFeedImages, setPopularFeedImages] = useState([]);
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Main = () => {
     if (token) {
       fetchLikedPosts();
       fetchSavedPosts();
-      if (userCode) fetchFollowedUserPosts();
+      if (userCode) fetchFollowingUserPosts();
     }
   }, [token, userCode]);
 
@@ -49,11 +49,11 @@ const Main = () => {
     setPopularFeedImages(response.data);
   };
 
-  const fetchFollowedUserPosts = async () => {
+  const fetchFollowingUserPosts = async () => {
     const response = await axios.get(
-      `http://localhost:8080/api/posts/followed/${userCode}`
+      `http://localhost:8080/api/posts/following/${userCode}`
     );
-    setFollowedUserPosts(response.data);
+    setFollowingUserPosts(response.data);
   };
 
   // Fetch liked posts
@@ -152,12 +152,12 @@ const Main = () => {
                 POPULAR FEED
               </Link>
             </h2>
-            <div className="main-con grid grid-cols-5 gap-4">
-              {popularFeedImages.slice(0, 5).map((post) =>
+            <div className="pf-con grid grid-cols-5 gap-4 flex justify-center content-center">
+              {popularFeedImages.slice(0, 10).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative bg-gray-300 rounded-lg group mb-5 main-feed"
+                    className="relative bg-gray-300 rounded-lg group mb-5 p-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -168,9 +168,7 @@ const Main = () => {
                       className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                       onClick={(e) => detail(post.postCode, e)}
                     >
-                      <p className="main-text text-white mb-2">
-                        {post.postDesc}
-                      </p>
+                      <p className="pf-text text-white mb-2">{post.postDesc}</p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -233,12 +231,12 @@ const Main = () => {
                 NEW FEED
               </Link>
             </h2>
-            <div className="main-con grid grid-cols-5 gap-4">
+            <div className="nf-con grid grid-cols-5 gap-4">
               {newFeedImages.slice(0, 10).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 main-feed"
+                    className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -249,9 +247,7 @@ const Main = () => {
                       className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                       onClick={(e) => detail(post.postCode, e)}
                     >
-                      <p className="main-text text-white mb-2">
-                        {post.postDesc}
-                      </p>
+                      <p className="nf-text text-white mb-2">{post.postDesc}</p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -308,19 +304,19 @@ const Main = () => {
 
         {/* Follower's Feed Section */}
         {token && (
-          <section className="flex justify-center">
-            <div className="flex flex-col main-section mb-8">
+          <section className="mb-8 flex justify-center">
+            <div className="flex flex-col main-section">
               <h2 className="text-xl font-bold mb-4">
-                <Link to="/myFollowerFeed" className="hover:underline">
-                  MY FOLLOWER'S FEED
+                <Link to="/popularFeed" className="hover:underline">
+                  POPULAR FEED
                 </Link>
               </h2>
               <div className="main-con grid grid-cols-5 gap-4">
-                {followedUserPosts.slice(0, 5).map((post) =>
+                {followingUserPosts.slice(0, 10).map((post) =>
                   post.imageUrls.length > 0 ? (
                     <div
                       key={post.postCode}
-                      className="relative w-full h-64 bg-gray-300 rounded-lg group main-feed"
+                      className="relative bg-gray-300 rounded-lg group mb-5 main-feed"
                     >
                       <img
                         src={post.imageUrls[0]}

@@ -13,11 +13,19 @@ const NewFeed = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const navigate = useNavigate();
 
+  let userCode = "";
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    userCode = userData.userCode;
+  }
+
   const fetchLikedPosts = async () => {
-    if (token) {
+    if (userCode) {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/likes/${token}/likes`
+          `http://localhost:8080/api/likes/${userCode}/likes`
         );
         const likedPosts = response.data.postInfoList.map((post) => ({
           ...post,
@@ -31,10 +39,10 @@ const NewFeed = () => {
   };
 
   const fetchSavedPosts = async () => {
-    if (token) {
+    if (userCode) {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/collection/${token}/collections`
+          `http://localhost:8080/api/collection/${userCode}/collections`
         );
         const savedPosts = response.data.postInfoList.map((post) => ({
           ...post,
@@ -56,13 +64,13 @@ const NewFeed = () => {
     fetchPosts();
     fetchLikedPosts();
     fetchSavedPosts();
-  }, [token]);
+  }, [token, userCode]);
 
   // Toggle like
   const handleLikeToggle = async (postCode) => {
     try {
       await axios.post(`http://localhost:8080/api/likes/toggle/${postCode}`, {
-        token,
+        userCode,
       });
       fetchLikedPosts();
     } catch (error) {
@@ -75,7 +83,7 @@ const NewFeed = () => {
     try {
       await axios.post(
         `http://localhost:8080/api/collection/toggle/${postCode}`,
-        { token }
+        { userCode }
       );
       fetchSavedPosts();
     } catch (error) {
