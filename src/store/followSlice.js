@@ -25,16 +25,15 @@ export const removeFollowRelative = createAsyncThunk(
 
 export const myFollower = createAsyncThunk(
   "follow/myFollower",
-  async (followingUserCode) => {
-    const response = await viewMyFollower(followingUserCode);
+  async ({ followingUserCode, key }) => {
+    const response = await viewMyFollower(followingUserCode, key);
     return response.data;
   }
 );
-
 export const followMe = createAsyncThunk(
   "follow/followMe",
-  async (followerUserCode) => {
-    const response = await followMeUsers(followerUserCode);
+  async ({followerUserCode, key}) => {
+    const response = await followMeUsers(followerUserCode, key);
     return response.data;
   }
 );

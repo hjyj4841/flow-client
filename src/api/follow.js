@@ -20,12 +20,20 @@ export const unfollow = async (followingUserCode, followerUserCode) => {
     });
 }
 ;
-export const viewMyFollower = async (followingUserCode) => {
-    return await auth.get(`follow/myFollower/${followingUserCode}`);
-}
+export const viewMyFollower = async (followingUserCode, key) => {
+    return await auth.get(`follow/myFollower/${followingUserCode}`, {
+        params: {
+            key: key  // key를 객체로 전달
+        }
+    });
+};
 
-export const followMeUsers = async (followerUserCode) => {
-    return await auth.get(`follow/toMe/${followerUserCode}`);
+export const followMeUsers = async (followerUserCode, key) => {
+    return await auth.get(`follow/toMe/${followerUserCode}`, {
+        params : {
+            key : key
+        }
+    });
 }
 
 
