@@ -12,11 +12,39 @@ const PopularFeed = () => {
   const [savedPosts, setSavedPosts] = useState([]);
   const navigate = useNavigate();
 
+  let userCode = "";
+  if (token) {
+    const base64Url = token.split(".")[1];
+    const base64 = base64Url.replace("-", "+").replace("_", "/");
+    const userData = JSON.parse(window.atob(base64));
+    userCode = userData.userCode;
+  }
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    if (token && userCode) {
+      fetchPosts();
+      fetchLikedPosts();
+      fetchSavedPosts();
+    }
+  }, [token, userCode]);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:8080/api/likes/post/ordered-by-likes"
+      );
+      setPopularFeedImages(response.data);
+    } catch (error) {
+      console.error("Error fetching popular feed", error);
+    }
+  };
+
   const fetchLikedPosts = async () => {
     if (token) {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/likes/${token}/likes`
+          `http://localhost:8080/api/likes/${userCode}/likes`
         );
         const likedPosts = response.data.postInfoList.map((post) => ({
           ...post,
@@ -33,7 +61,7 @@ const PopularFeed = () => {
     if (token) {
       try {
         const response = await axios.get(
-          `http://localhost:8080/api/collection/${token}/collections`
+          `http://localhost:8080/api/collection/${userCode}/collections`
         );
         const savedPosts = response.data.postInfoList.map((post) => ({
           ...post,
@@ -46,28 +74,10 @@ const PopularFeed = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:8080/api/likes/post/ordered-by-likes"
-        );
-        setPopularFeedImages(response.data);
-      } catch (error) {
-        console.error("Error fetching popular feed", error);
-      }
-    };
-
-    fetchPosts();
-    fetchLikedPosts();
-    fetchSavedPosts();
-  }, [token]);
-
-  // Toggle like
   const handleLikeToggle = async (postCode) => {
     try {
       await axios.post(`http://localhost:8080/api/likes/toggle/${postCode}`, {
-        token,
+        userCode,
       });
       fetchLikedPosts();
     } catch (error) {
@@ -75,12 +85,11 @@ const PopularFeed = () => {
     }
   };
 
-  // Toggle save
   const handleSaveToggle = async (postCode) => {
     try {
       await axios.post(
         `http://localhost:8080/api/collection/toggle/${postCode}`,
-        { token }
+        { userCode }
       );
       fetchSavedPosts();
     } catch (error) {

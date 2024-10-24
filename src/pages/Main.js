@@ -11,7 +11,7 @@ const Main = () => {
   const [newFeedImages, setNewFeedImages] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [followedUserPosts, setFollowedUserPosts] = useState([]);
+  const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [popularFeedImages, setPopularFeedImages] = useState([]);
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const Main = () => {
     if (token) {
       fetchLikedPosts();
       fetchSavedPosts();
-      if (userCode) fetchFollowedUserPosts();
+      if (userCode) fetchFollowingUserPosts();
     }
   }, [token, userCode]);
 
@@ -49,11 +49,11 @@ const Main = () => {
     setPopularFeedImages(response.data);
   };
 
-  const fetchFollowedUserPosts = async () => {
+  const fetchFollowingUserPosts = async () => {
     const response = await axios.get(
-      `http://localhost:8080/api/posts/followed/${userCode}`
+      `http://localhost:8080/api/posts/following/${userCode}`
     );
-    setFollowedUserPosts(response.data);
+    setFollowingUserPosts(response.data);
   };
 
   // Fetch liked posts
@@ -152,7 +152,7 @@ const Main = () => {
             </Link>
           </h2>
           <div className="pf-con grid grid-cols-5 gap-4 flex justify-center content-center">
-            {popularFeedImages.slice(0, 8).map((post) =>
+            {popularFeedImages.slice(0, 10).map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
@@ -227,7 +227,7 @@ const Main = () => {
             </Link>
           </h2>
           <div className="nf-con grid grid-cols-5 gap-4">
-            {newFeedImages.slice(0, 8).map((post) =>
+            {newFeedImages.slice(0, 10).map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
@@ -303,7 +303,7 @@ const Main = () => {
               </Link>
             </h2>
             <div className="mff-con grid grid-cols-5 gap-4">
-              {followedUserPosts.slice(0, 8).map((post) =>
+              {followingUserPosts.slice(0, 10).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}

@@ -228,7 +228,7 @@ const SearchModal = ({ isOpen, onClose }) => {
           </div>
           <div className="mb-4">
             <h2 className="section-title">JOB</h2>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {Object.keys(job).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <span>{item}</span>
@@ -244,7 +244,7 @@ const SearchModal = ({ isOpen, onClose }) => {
           </div>
           <div className="mb-4">
             <h2 className="section-title">SEASON</h2>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {Object.keys(season).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <span>{item}</span>
@@ -260,7 +260,7 @@ const SearchModal = ({ isOpen, onClose }) => {
           </div>
           <div className="mb-4">
             <h2 className="section-title">MOOD</h2>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-4 gap-2">
               {Object.keys(mood).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <span>{item}</span>
