@@ -25,6 +25,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
+import Comment from "../../components/Comment";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -551,6 +552,7 @@ const Detail = () => {
                           >
                             <p>{comment.userCode.userNickname}</p>
                           </td>
+                          <div />
                           <td style={{ padding: "5px 5px 5px 10px" }}>
                             <p>{comment.commentDesc}</p>
                           </td>

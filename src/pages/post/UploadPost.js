@@ -73,8 +73,10 @@ const UploadPost = () => {
       formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag);
     else if (careerTag === 0 && bodyTag !== 0)
       formData.append(`tagCodes[${post.tagCodes.length}]`, bodyTag);
-    else if (careerTag !== 0 && bodyTag !== 0)
-      formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag, bodyTag);
+    else if (careerTag !== 0 && bodyTag !== 0) {
+      formData.append(`tagCodes[${post.tagCodes.length}]`, careerTag);
+      formData.append(`tagCodes[${post.tagCodes.length + 1}]`, bodyTag);
+    }
 
     formData.append("userCode", userCode);
     formData.append("postDesc", post.postDesc);

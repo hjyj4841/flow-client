@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
-import { addComment } from "../api/comment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addComment, updateComment, deleteComment } from "../api/comment";
 
 const Comment = ({ comment, postCode }) => {
   const queryClient = useQueryClient();
@@ -25,7 +25,7 @@ const Comment = ({ comment, postCode }) => {
 
   // 댓글 수정
   const updateMutation = useMutation({
-    mutationFn: (data) => updateComment(data),
+    mutationFn: updateComment,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
       setIsUpdating(false);
@@ -40,41 +40,28 @@ const Comment = ({ comment, postCode }) => {
     },
   });
 
-  const updateComment = () => {
-    updateMutation.mutate({ ...comment, commentDesc });
-  };
+  // const handleUpdate = () => {
+  //   updateMutation.mutate({ ...comment, commentDesc });
+  // };
 
-  const updateCancle = () => {
-    setNewComment({ ...newComment, commentDesc: "", commentCode: 0 });
-  };
-
-  const deleteComment = () => {
+  const handleDelete = () => {
     deleteMutation.mutate(comment.commentCode);
   };
+
   return (
     <div>
-      {isUpdating ? (
-        <>
-          <input
-            value={commentDesc}
-            onChange={(e) => setCommentDesc(e.target.value)}
-          />
-        </>
-      ) : (
-        <>
-          <p>{comment.commentDesc}</p>
-          {user.userCode === comment.userCode && ( // 작성자만 수정 및 삭제 가능
-            <div>
-              <button onClick={() => updateComment(comment.commentCode)}>
-                수정
-              </button>
-              <button onClick={() => deleteComment(comment.commentCode)}>
-                삭제
-              </button>
-            </div>
-          )}
-        </>
-      )}
+      <tr>
+        <tr className="flex justify-between items-center" />
+        <p>{comment.commentDesc}</p>
+        {user.userCode === comment.userCode && (
+          <button
+            onClick={handleDelete}
+            className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
+          >
+            삭제
+          </button>
+        )}
+      </tr>
     </div>
   );
 };
