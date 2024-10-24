@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 const VotePost = () => {
   const [token, setToken] = useState(null);
@@ -16,6 +16,12 @@ const VotePost = () => {
     console.log(response.data);
     setNewFeedImages(response.data);
   };
+
+  const detail = (postCode, postType, e) => {
+    // 나머지 태그에서는 네비게이션 동작
+    Navigate(`/votePost/${postCode}`);
+  };
+
   return (
     // 나중에 투표 게시물만 표시 되게 구현 .... 투표게시물 구현 중
     <>
@@ -33,21 +39,31 @@ const VotePost = () => {
         투표업로드
       </Link>
       <section className="mb-8">
-        <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
-        <div className="grid grid-cols-4 gap-4">
-          {newFeedImages.map((post) =>
-            post.imageUrls.map((url, index) => (
+        <h2 className="text-xl font-bold mb-4">
+          <Link to="/votePost" className="hover:underline">
+            NEW VOTE
+          </Link>
+        </h2>
+        <div className="nf-con grid grid-cols-5 gap-4">
+          {newFeedImages.slice(0, 10).map((post) =>
+            post.imageUrls.length > 0 ? (
               <div
-                key={`${post.postCode}-${index}`}
-                className="w-full h-64 bg-gray-300 rounded-lg"
+                key={post.postCode}
+                className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed"
               >
                 <img
-                  src={url}
+                  src={post.imageUrls[0]}
                   alt={post.postDesc}
                   className="w-full h-full object-cover rounded-lg"
                 />
+                <div
+                  className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                  onClick={(e) => detail(post.postCode, e)}
+                >
+                  <p className="nf-text text-white mb-2">{post.postDesc}</p>
+                </div>
               </div>
-            ))
+            ) : null
           )}
         </div>
       </section>
