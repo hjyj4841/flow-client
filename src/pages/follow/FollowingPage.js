@@ -7,7 +7,7 @@ import "../../assets/css/mypage_follow.css"
 import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
 
-const FollowingPage = React.memo(({followingUserCode}) => {
+const FollowingPage = React.memo(({followingUserCode, search}) => {
     const dispatch = useDispatch();
     const follower = useSelector((state) => state.follow.follower);
     const {token} = useAuth();
@@ -26,8 +26,13 @@ const FollowingPage = React.memo(({followingUserCode}) => {
     const users = useMemo(() => follower, [follower]);
 
       const fetchFollowers = useCallback(() => {
-        dispatch(myFollower(followingUserCode));
-      }, [dispatch]);
+        if(followingUserCode !== undefined) {
+          dispatch(myFollower({
+            followingUserCode,
+            key : search
+          }));
+        }
+      }, [dispatch, search]);
     
       // Redux 액션을 디스패치하는 useEffect
       useEffect(() => {

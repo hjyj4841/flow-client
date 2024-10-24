@@ -1,16 +1,88 @@
 .following-userInfo {
     width: 100%;
-    height: 100%;
+    height: calc(100vh -32px);
+    position: relative;
 }
-
 
 .following-userInfo header {
     display: flex;
-    width: 100%;
+    width: 100vw;
     height: 80px;
     border : 2px solid black;
     justify-content: space-around;
     align-items: center;
+    position: fixed;
+    z-index: 990;
+    background-color: white;
+    margin-top: 30px; 
+}
+
+.searchBar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed; /* 화면 하단에 고정 */
+    bottom: 0;       /* 화면 하단에 위치 */
+    left: 0;
+    width: 100%;     /* 전체 너비 */
+    height: 130px;
+    background-color: white; /* 배경 색 설정 */
+    padding: 10px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 하단 그림자 */
+    z-index: 1000;
+}
+
+.searchBar input {
+    width: 80%; /* 넉넉한 너비 */
+    height: 50px; 
+    padding: 0 15px; /* 좌우 여백 추가 */
+    font-size: 16px; /* 텍스트 크기 */
+    border: 2px solid #ddd; /* 첫 번째 테두리 */
+    border-radius: 25px; /* 둥근 테두리 */
+    outline: none; /* 클릭 시 파란 테두리 제거 */
+    transition: border 0.3s ease; /* 테두리 변화 애니메이션 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+    position: relative; /* 가상 요소를 위한 상대적 위치 지정 */
+    z-index: 1; /* 가상 요소보다 위에 보이도록 */
+    background-color: white; /* 가상 요소와 구분되도록 배경 색 지정 */
+}
+
+.searchBar input::before,
+.searchBar input::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 25px; /* 입력 필드의 둥근 모서리와 일치 */
+    z-index: -1; /* 입력 필드 뒤에 위치 */
+    pointer-events: none; /* 가상 요소가 클릭 이벤트를 막지 않도록 설정 */
+}
+
+.searchBar input::before {
+    border: 2px solid rgba(200, 200, 200, 1); /* 두 번째 테두리 */
+    top: -6px;
+    left: -6px;
+    right: -6px;
+    bottom: -6px;
+}
+
+.searchBar input::after {
+    border: 2px solid rgba(150, 150, 150, 1); /* 세 번째 테두리 */
+    top: -12px;
+    left: -12px;
+    right: -12px;
+    bottom: -12px;
+}
+
+
+
+.searchBar input:focus {
+    border: 2px solid transparent; /* 테두리 자체는 투명 */
+    box-shadow: 0 0 10px rgba(255, 255, 224, 0.8), /* 흰색에 가까운 노란색 빛 */
+                0 0 15px rgba(255, 223, 0, 0.5); /* 약간 짙은 빛 */
+    transition: background-image 0.5s ease-in-out, box-shadow 0.5s ease-in-out; /* 부드러운 전환 */
 }
 
 .section {
@@ -42,6 +114,11 @@
     position: relative;
     flex-wrap: wrap;
     justify-content: center;
+    padding-top: 60px;
+    padding-bottom: 80px;
+
+    height: calc(100vh - 210px); /* 헤더와 검색창을 제외한 높이 */
+    overflow-y: auto; /* 스크롤 발생 */
 }
 .userSection {
     min-width: 300px;

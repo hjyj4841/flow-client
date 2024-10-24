@@ -183,8 +183,14 @@ const MyPage = () => {
     if (token === null || (mypageUser.userCode !== 0 && user.userCode !== 0)) {
       getVote();
       getCreatePosts();
-      dispatch(myFollower(mypageUser.userCode));
-      dispatch(followMe(mypageUser.userCode));
+      dispatch(myFollower({
+        followingUserCode : mypageUser.userCode,
+        key : null
+      }));
+      dispatch(followMe({
+        followerUserCode : mypageUser.userCode,
+        key : null
+      }));
       dispatch(
         followStatus({
           followingUserCode: user.userCode,
