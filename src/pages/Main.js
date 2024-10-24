@@ -29,7 +29,7 @@ const Main = () => {
     if (token) {
       fetchLikedPosts();
       fetchSavedPosts();
-      if (userCode) fetchFollowingUserPosts();
+      if (userCode) fetchFollowedUserPosts();
     }
   }, [token, userCode]);
   const fetchNewFeedImages = async () => {
