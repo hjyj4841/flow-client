@@ -47,7 +47,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="container flex justify-between items-center">
+      <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold">
           FLOW
         </Link>

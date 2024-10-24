@@ -132,182 +132,32 @@ const Main = () => {
 
   return (
     <div className="bg-gray-100 text-gray-800">
-      <section className="bg-white py-4 shadow-md">
-        <div className="menu-container mx-2 flex">
+      <section className="bg-white py-4 shadow-md flex justify-center">
+        <div className="menu-container flex justify-center">
           {[...Array(8)].map((_, i) => (
             <div
               key={i}
-              className="menu-button flex-none w-16 h-16 bg-gray-300 rounded-full ml-12"
+              className="menu-button flex-none w-16 h-16 bg-gray-300 rounded-full ml-5 mr-5"
             />
           ))}
         </div>
       </section>
 
-      <main className="container">
+      <main className="container mx-auto">
         {/* Popular Feed Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">
-            <Link to="/popularFeed" className="hover:underline">
-              POPULAR FEED
-            </Link>
-          </h2>
-          <div className="pf-con grid grid-cols-5 gap-4 flex justify-center content-center">
-            {popularFeedImages.slice(0, 8).map((post) =>
-              post.imageUrls.length > 0 ? (
-                <div
-                  key={post.postCode}
-                  className="relative bg-gray-300 rounded-lg group mb-5 p-feed"
-                >
-                  <img
-                    src={post.imageUrls[0]}
-                    alt={post.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div
-                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
-                    onClick={(e) => detail(post.postCode, e)}
-                  >
-                    <p className="pf-text text-white mb-2">{post.postDesc}</p>
-                    <div className="flex items-center">
-                      {likedPosts.some(
-                        (likedPost) => likedPost.post.postCode === post.postCode
-                      ) ? (
-                        <FaHeart
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleLikeToggle(post.postCode);
-                          }}
-                          style={{ color: "red", fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <FaRegHeart
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleLikeToggle(post.postCode);
-                          }}
-                          style={{ fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      )}
-                      {savedPosts.some(
-                        (savedPost) => savedPost.post.postCode === post.postCode
-                      ) ? (
-                        <BsCollectionFill
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleSaveToggle(post.postCode);
-                          }}
-                          style={{ color: "white", fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <BsCollection
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleSaveToggle(post.postCode);
-                          }}
-                          style={{ fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : null
-            )}
-          </div>
-        </section>
-
-        {/* New Feed Section */}
-        <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">
-            <Link to="/newFeed" className="hover:underline">
-              NEW FEED
-            </Link>
-          </h2>
-          <div className="nf-con grid grid-cols-5 gap-4">
-            {newFeedImages.slice(0, 8).map((post) =>
-              post.imageUrls.length > 0 ? (
-                <div
-                  key={post.postCode}
-                  className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed"
-                >
-                  <img
-                    src={post.imageUrls[0]}
-                    alt={post.postDesc}
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                  <div
-                    className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
-                    onClick={(e) => detail(post.postCode, e)}
-                  >
-                    <p className="nf-text text-white mb-2">{post.postDesc}</p>
-                    <div className="flex items-center">
-                      {likedPosts.some(
-                        (likedPost) => likedPost.post.postCode === post.postCode
-                      ) ? (
-                        <FaHeart
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleLikeToggle(post.postCode);
-                          }}
-                          style={{ color: "red", fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <FaRegHeart
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleLikeToggle(post.postCode);
-                          }}
-                          style={{ fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      )}
-                      {savedPosts.some(
-                        (savedPost) => savedPost.post.postCode === post.postCode
-                      ) ? (
-                        <BsCollectionFill
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleSaveToggle(post.postCode);
-                          }}
-                          style={{ color: "white", fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      ) : (
-                        <BsCollection
-                          onClick={(e) => {
-                            e.stopPropagation(); // 이벤트 전파 막기
-                            handleSaveToggle(post.postCode);
-                          }}
-                          style={{ fontSize: "30px" }}
-                          className="mx-2"
-                        />
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ) : null
-            )}
-          </div>
-        </section>
-
-        {/* Follower's Feed Section */}
-        {token && (
-          <section className="mb-8">
+        <section className="mb-8 flex justify-center">
+          <div className="flex flex-col main-section">
             <h2 className="text-xl font-bold mb-4">
-              <Link to="/myFollowerFeed" className="hover:underline">
-                MY FOLLOWER'S FEED
+              <Link to="/popularFeed" className="hover:underline">
+                POPULAR FEED
               </Link>
             </h2>
-            <div className="mff-con grid grid-cols-5 gap-4">
-              {followedUserPosts.slice(0, 8).map((post) =>
+            <div className="main-con grid grid-cols-5 gap-4">
+              {popularFeedImages.slice(0, 5).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative w-full h-64 bg-gray-300 rounded-lg group mf-feed"
+                    className="relative bg-gray-300 rounded-lg group mb-5 main-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -318,7 +168,9 @@ const Main = () => {
                       className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
                       onClick={(e) => detail(post.postCode, e)}
                     >
-                      <p className="mf-text text-white mb-2">{post.postDesc}</p>
+                      <p className="main-text text-white mb-2">
+                        {post.postDesc}
+                      </p>
                       <div className="flex items-center">
                         {likedPosts.some(
                           (likedPost) =>
@@ -369,6 +221,170 @@ const Main = () => {
                   </div>
                 ) : null
               )}
+            </div>
+          </div>
+        </section>
+
+        {/* New Feed Section */}
+        <section className="mb-8 flex justify-center">
+          <div className="flex flex-col main-section">
+            <h2 className="text-xl font-bold mb-4">
+              <Link to="/newFeed" className="hover:underline">
+                NEW FEED
+              </Link>
+            </h2>
+            <div className="main-con grid grid-cols-5 gap-4">
+              {newFeedImages.slice(0, 10).map((post) =>
+                post.imageUrls.length > 0 ? (
+                  <div
+                    key={post.postCode}
+                    className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 main-feed"
+                  >
+                    <img
+                      src={post.imageUrls[0]}
+                      alt={post.postDesc}
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                    <div
+                      className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                      onClick={(e) => detail(post.postCode, e)}
+                    >
+                      <p className="main-text text-white mb-2">
+                        {post.postDesc}
+                      </p>
+                      <div className="flex items-center">
+                        {likedPosts.some(
+                          (likedPost) =>
+                            likedPost.post.postCode === post.postCode
+                        ) ? (
+                          <FaHeart
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleLikeToggle(post.postCode);
+                            }}
+                            style={{ color: "red", fontSize: "30px" }}
+                            className="mx-2"
+                          />
+                        ) : (
+                          <FaRegHeart
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleLikeToggle(post.postCode);
+                            }}
+                            style={{ fontSize: "30px" }}
+                            className="mx-2"
+                          />
+                        )}
+                        {savedPosts.some(
+                          (savedPost) =>
+                            savedPost.post.postCode === post.postCode
+                        ) ? (
+                          <BsCollectionFill
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleSaveToggle(post.postCode);
+                            }}
+                            style={{ color: "white", fontSize: "30px" }}
+                            className="mx-2"
+                          />
+                        ) : (
+                          <BsCollection
+                            onClick={(e) => {
+                              e.stopPropagation(); // 이벤트 전파 막기
+                              handleSaveToggle(post.postCode);
+                            }}
+                            style={{ fontSize: "30px" }}
+                            className="mx-2"
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ) : null
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* Follower's Feed Section */}
+        {token && (
+          <section className="flex justify-center">
+            <div className="flex flex-col main-section mb-8">
+              <h2 className="text-xl font-bold mb-4">
+                <Link to="/myFollowerFeed" className="hover:underline">
+                  MY FOLLOWER'S FEED
+                </Link>
+              </h2>
+              <div className="main-con grid grid-cols-5 gap-4">
+                {followedUserPosts.slice(0, 5).map((post) =>
+                  post.imageUrls.length > 0 ? (
+                    <div
+                      key={post.postCode}
+                      className="relative w-full h-64 bg-gray-300 rounded-lg group main-feed"
+                    >
+                      <img
+                        src={post.imageUrls[0]}
+                        alt={post.postDesc}
+                        className="w-full h-full object-cover rounded-lg"
+                      />
+                      <div
+                        className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                        onClick={(e) => detail(post.postCode, e)}
+                      >
+                        <p className="main-text text-white mb-2">
+                          {post.postDesc}
+                        </p>
+                        <div className="flex items-center">
+                          {likedPosts.some(
+                            (likedPost) =>
+                              likedPost.post.postCode === post.postCode
+                          ) ? (
+                            <FaHeart
+                              onClick={(e) => {
+                                e.stopPropagation(); // 이벤트 전파 막기
+                                handleLikeToggle(post.postCode);
+                              }}
+                              style={{ color: "red", fontSize: "30px" }}
+                              className="mx-2"
+                            />
+                          ) : (
+                            <FaRegHeart
+                              onClick={(e) => {
+                                e.stopPropagation(); // 이벤트 전파 막기
+                                handleLikeToggle(post.postCode);
+                              }}
+                              style={{ fontSize: "30px" }}
+                              className="mx-2"
+                            />
+                          )}
+                          {savedPosts.some(
+                            (savedPost) =>
+                              savedPost.post.postCode === post.postCode
+                          ) ? (
+                            <BsCollectionFill
+                              onClick={(e) => {
+                                e.stopPropagation(); // 이벤트 전파 막기
+                                handleSaveToggle(post.postCode);
+                              }}
+                              style={{ color: "white", fontSize: "30px" }}
+                              className="mx-2"
+                            />
+                          ) : (
+                            <BsCollection
+                              onClick={(e) => {
+                                e.stopPropagation(); // 이벤트 전파 막기
+                                handleSaveToggle(post.postCode);
+                              }}
+                              style={{ fontSize: "30px" }}
+                              className="mx-2"
+                            />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : null
+                )}
+              </div>
             </div>
           </section>
         )}

@@ -49,80 +49,85 @@ const RegisterUser = () => {
   };
 
   return (
-    <div className="con">
-      <h1>회원 가입</h1>
-      <div>
-        <input
-          type="text"
-          value={user.userNickname}
-          onChange={(e) => setUser({ ...user, userNickname: e.target.value })}
-          placeholder="닉네임"
-        />
+    <div className="text-gray-800">
+      <section className="bg-white py-4 shadow-md" />
+      <div className="con">
+        <h1>회원 가입</h1>
+        <div>
+          <input
+            type="text"
+            value={user.userNickname}
+            onChange={(e) => setUser({ ...user, userNickname: e.target.value })}
+            placeholder="닉네임"
+          />
+        </div>
+        <div>
+          직종
+          <select
+            onChange={(e) => setUser({ ...user, userJob: e.target.value })}
+          >
+            <option value="사무직">사무직</option>
+            <option value="연구직">연구직</option>
+            <option value="공공직">공공직</option>
+            <option value="의료직">의료직</option>
+            <option value="엔터테인먼트">엔터테인먼트</option>
+            <option value="서비스직">서비스직</option>
+            <option value="영업직">영업직</option>
+            <option value="건설직">건설직</option>
+            <option value="생산직">생산직</option>
+            <option value="농림어업직">농림어업직</option>
+            <option value="기타">기타</option>
+          </select>
+        </div>
+        <div>
+          성별
+          <label onClick={() => setUser({ ...user, userGender: "남성" })}>
+            <input type="radio" value="남성" name="gender" defaultChecked />
+            남성
+          </label>
+          <label onClick={() => setUser({ ...user, userGender: "여성" })}>
+            <input type="radio" value="여성" name="gender" />
+            여성
+          </label>
+        </div>
+        <div>
+          신장
+          <input
+            type="range"
+            min="140"
+            max="200"
+            step="1"
+            value={user.userHeight}
+            onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
+          />
+          <input
+            type="number"
+            value={user.userHeight}
+            onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
+          />
+          <span>cm</span>
+        </div>
+        <div>
+          체중
+          <input
+            type="range"
+            min="30"
+            max="120"
+            step="1"
+            value={user.userWeight}
+            onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
+          />
+          <input
+            type="number"
+            value={user.userWeight}
+            onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
+          />
+          <span>kg</span>
+        </div>
+        <button type="button" onClick={register}>
+          회원가입
+        </button>
       </div>
-      <div>
-        직종
-        <select onChange={(e) => setUser({ ...user, userJob: e.target.value })}>
-          <option value="사무직">사무직</option>
-          <option value="연구직">연구직</option>
-          <option value="공공직">공공직</option>
-          <option value="의료직">의료직</option>
-          <option value="엔터테인먼트">엔터테인먼트</option>
-          <option value="서비스직">서비스직</option>
-          <option value="영업직">영업직</option>
-          <option value="건설직">건설직</option>
-          <option value="생산직">생산직</option>
-          <option value="농림어업직">농림어업직</option>
-          <option value="기타">기타</option>
-        </select>
-      </div>
-      <div>
-        성별
-        <label onClick={() => setUser({ ...user, userGender: "남성" })}>
-          <input type="radio" value="남성" name="gender" defaultChecked />
-          남성
-        </label>
-        <label onClick={() => setUser({ ...user, userGender: "여성" })}>
-          <input type="radio" value="여성" name="gender" />
-          여성
-        </label>
-      </div>
-      <div>
-        신장
-        <input
-          type="range"
-          min="140"
-          max="200"
-          step="1"
-          value={user.userHeight}
-          onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
-        />
-        <input
-          type="number"
-          value={user.userHeight}
-          onChange={(e) => setUser({ ...user, userHeight: e.target.value })}
-        />
-        <span>cm</span>
-      </div>
-      <div>
-        체중
-        <input
-          type="range"
-          min="30"
-          max="120"
-          step="1"
-          value={user.userWeight}
-          onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
-        />
-        <input
-          type="number"
-          value={user.userWeight}
-          onChange={(e) => setUser({ ...user, userWeight: e.target.value })}
-        />
-        <span>kg</span>
-      </div>
-      <button type="button" onClick={register}>
-        회원가입
-      </button>
     </div>
   );
 };

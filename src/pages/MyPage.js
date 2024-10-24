@@ -196,11 +196,7 @@ const MyPage = () => {
 
   return (
     <div className="text-gray-800">
-      <section className="bg-white py-4 shadow-md">
-        <div className="container mx-auto px-4 flex overflow-x-auto space-x-4">
-          {/* Profile & Follow buttons */}
-        </div>
-      </section>
+      <section className="bg-white py-4 shadow-md" />
 
       <main className="container mx-auto py-8">
         <div className="mypageTop">

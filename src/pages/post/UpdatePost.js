@@ -228,467 +228,470 @@ const UpdatePost = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white shadow-md mt-10 rounded-lg">
-      <div className="mb-4">
-        <label
-          htmlFor="board"
-          className="block text-sm font-medium mb-2"
-          style={{
-            fontWeight: "bold",
-            fontSize: "1.8rem",
-            paddingBottom: "20px",
-          }}
-        >
-          게시물 수정하기
-        </label>
-      </div>
-      <div className="mb-4">
-        <label htmlFor="content" className="block text-sm font-medium mb-2">
-          내용
-        </label>
-        <textarea
-          id="content"
-          className="w-full border border-gray-300 rounded px-3 py-2 h-32"
-          placeholder="내용을 입력해 다른이들과 소통해보세요!"
-          value={update?.postDesc}
-          onChange={(e) => setUpdate({ ...update, postDesc: e.target.value })}
-        />
-      </div>
-      <div className="mb-4 flex items-center">
-        {update.postImgInfo
-          .filter((post) => !imagesToDelete.has(post.postImgCode)) // 삭제할 이미지 제외
-          .map((post) => (
-            <div
-              key={post.postImgCode}
-              style={{ position: "relative", display: "inline-block" }}
-            >
-              <img
-                src={post.postImgUrl}
+    <div className="text-gray-800">
+      <section className="bg-white py-4 shadow-md" />
+      <div className="max-w-2xl mx-auto p-6 bg-white shadow-md mt-10 rounded-lg">
+        <div className="mb-4">
+          <label
+            htmlFor="board"
+            className="block text-sm font-medium mb-2"
+            style={{
+              fontWeight: "bold",
+              fontSize: "1.8rem",
+              paddingBottom: "20px",
+            }}
+          >
+            게시물 수정하기
+          </label>
+        </div>
+        <div className="mb-4">
+          <label htmlFor="content" className="block text-sm font-medium mb-2">
+            내용
+          </label>
+          <textarea
+            id="content"
+            className="w-full border border-gray-300 rounded px-3 py-2 h-32"
+            placeholder="내용을 입력해 다른이들과 소통해보세요!"
+            value={update?.postDesc}
+            onChange={(e) => setUpdate({ ...update, postDesc: e.target.value })}
+          />
+        </div>
+        <div className="mb-4 flex items-center">
+          {update.postImgInfo
+            .filter((post) => !imagesToDelete.has(post.postImgCode)) // 삭제할 이미지 제외
+            .map((post) => (
+              <div
+                key={post.postImgCode}
+                style={{ position: "relative", display: "inline-block" }}
+              >
+                <img
+                  src={post.postImgUrl}
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    objectFit: "cover",
+                    margin: "5px",
+                  }}
+                />
+                {update.postImgInfo.length > 1 && (
+                  <button
+                    onClick={() => handleDelete(post.postImgCode)}
+                    style={{
+                      position: "absolute",
+                      fontWeight: "bold",
+                      top: "0",
+                      right: "0",
+                      color: "white",
+                      backgroundColor: "rgba(0, 0, 0, 0.6)",
+                      padding: "2px 5px",
+                      borderRadius: "3px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    X
+                  </button>
+                )}
+              </div>
+            ))}
+        </div>
+        <div className="mb-4">
+          {update.products?.map((post, index) => (
+            <div className="text-center text-sm" key={index}>
+              <input
+                type="text"
+                placeholder="브랜드"
+                value={post.productBrand}
+                onChange={(e) => setBrand(e, index)}
                 style={{
-                  width: "100px",
-                  height: "100px",
-                  objectFit: "cover",
-                  margin: "5px",
+                  borderBottom: "1px solid #bbb",
+                  width: "18%",
+                  margin: "10px 2px",
                 }}
               />
-              {update.postImgInfo.length > 1 && (
-                <button
-                  onClick={() => handleDelete(post.postImgCode)}
-                  style={{
-                    position: "absolute",
-                    fontWeight: "bold",
-                    top: "0",
-                    right: "0",
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.6)",
-                    padding: "2px 5px",
-                    borderRadius: "3px",
-                    cursor: "pointer",
-                  }}
-                >
-                  X
-                </button>
-              )}
+              <input
+                type="text"
+                placeholder="제품명"
+                value={post.productName}
+                onChange={(e) => setName(e, index)}
+                style={{
+                  borderBottom: "1px solid #bbb",
+                  width: "18%",
+                  margin: "10px 2px",
+                }}
+              />
+              <input
+                type="text"
+                placeholder="제품 사이즈"
+                value={post.productSize}
+                onChange={(e) => setSize(e, index)}
+                style={{
+                  borderBottom: "1px solid #bbb",
+                  width: "18%",
+                  margin: "10px 2px",
+                }}
+              />
+              <input
+                type="text"
+                placeholder="구매처"
+                value={post.productBuyFrom}
+                onChange={(e) => setBuyFrom(e, index)}
+                style={{
+                  borderBottom: "1px solid #bbb",
+                  width: "18%",
+                  margin: "10px 2px",
+                }}
+              />
+              <input
+                type="text"
+                placeholder="구매 링크"
+                value={post.productLink}
+                onChange={(e) => setLink(e, index)}
+                style={{
+                  borderBottom: "1px solid #bbb",
+                  width: "18%",
+                  margin: "10px 2px",
+                }}
+              />
+              <button
+                style={{ marginLeft: "10px", fontSize: "1.8rem" }}
+                onClick={() => deleteProduct(index, post.productCode)}
+              >
+                <TiDelete />
+              </button>
             </div>
           ))}
-      </div>
-      <div className="mb-4">
-        {update.products?.map((post, index) => (
-          <div className="text-center text-sm" key={index}>
-            <input
-              type="text"
-              placeholder="브랜드"
-              value={post.productBrand}
-              onChange={(e) => setBrand(e, index)}
-              style={{
-                borderBottom: "1px solid #bbb",
-                width: "18%",
-                margin: "10px 2px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="제품명"
-              value={post.productName}
-              onChange={(e) => setName(e, index)}
-              style={{
-                borderBottom: "1px solid #bbb",
-                width: "18%",
-                margin: "10px 2px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="제품 사이즈"
-              value={post.productSize}
-              onChange={(e) => setSize(e, index)}
-              style={{
-                borderBottom: "1px solid #bbb",
-                width: "18%",
-                margin: "10px 2px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="구매처"
-              value={post.productBuyFrom}
-              onChange={(e) => setBuyFrom(e, index)}
-              style={{
-                borderBottom: "1px solid #bbb",
-                width: "18%",
-                margin: "10px 2px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="구매 링크"
-              value={post.productLink}
-              onChange={(e) => setLink(e, index)}
-              style={{
-                borderBottom: "1px solid #bbb",
-                width: "18%",
-                margin: "10px 2px",
-              }}
-            />
-            <button
-              style={{ marginLeft: "10px", fontSize: "1.8rem" }}
-              onClick={() => deleteProduct(index, post.productCode)}
-            >
-              <TiDelete />
-            </button>
+
+          <button
+            type="button"
+            className="w-full p-2 border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
+            onClick={addProduct}
+          >
+            제품 정보 추가 +
+          </button>
+        </div>
+
+        <div className="mb-4 text-sm">
+          <label
+            htmlFor="content"
+            className="block text-sm font-bold font-medium mb-2"
+          >
+            공개 여부
+          </label>
+          <div>
+            <label>
+              <input
+                type="radio"
+                name="publicYn"
+                className="mr-1"
+                value="Y"
+                checked={update.postPublicYn === "Y"}
+                onChange={() => setUpdate({ ...update, postPublicYn: "Y" })}
+              />
+              공개
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="publicYn"
+                className="mr-1"
+                value="N"
+                checked={update.postPublicYn === "N"}
+                onChange={() => setUpdate({ ...update, postPublicYn: "N" })}
+                style={{ marginLeft: "15px" }}
+              />
+              비공개
+            </label>
           </div>
-        ))}
+        </div>
 
-        <button
-          type="button"
-          className="w-full p-2 border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
-          onClick={addProduct}
-        >
-          제품 정보 추가 +
-        </button>
-      </div>
-
-      <div className="mb-4 text-sm">
-        <label
-          htmlFor="content"
-          className="block text-sm font-bold font-medium mb-2"
-        >
-          공개 여부
-        </label>
+        {/* 태그 */}
+        <div className="mb-4">
+          <div className="text-sm">
+            <div className="mb-2 font-bold">SEASON</div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="1"
+                  checked={update.tagCodes.includes(1)} // 1이 선택되었는지 확인
+                  onChange={tagCheck}
+                />
+                봄
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="2"
+                  checked={update.tagCodes.includes(2)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                여름
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="3"
+                  checked={update.tagCodes.includes(3)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                가을
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="4"
+                  checked={update.tagCodes.includes(4)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                겨울
+              </label>
+            </div>
+          </div>
+          <div className="text-sm mt-4">
+            <div className="mb-2 font-bold">CAREER</div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  name="career"
+                  className="mr-1"
+                  value="5"
+                  checked={careerTag === 5}
+                  onChange={careerCheck}
+                />
+                ~1년 미만
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="career"
+                  className="mr-1"
+                  value="6"
+                  checked={careerTag === 6}
+                  onChange={careerCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                1~3년차
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="career"
+                  className="mr-1"
+                  value="7"
+                  checked={careerTag === 7}
+                  onChange={careerCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                3년 이상
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  name="career"
+                  className="mr-1"
+                  value="8"
+                  checked={careerTag === 8}
+                  onChange={careerCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                임원
+              </label>
+            </div>
+          </div>
+          <div className="text-sm mt-4">
+            <div className="mb-2 font-bold">MOOD</div>
+            <div style={{ width: "85%" }}>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="9"
+                  checked={update.tagCodes.includes(9)}
+                  onChange={tagCheck}
+                />
+                포멀
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="10"
+                  checked={update.tagCodes.includes(10)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                캐주얼
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="11"
+                  checked={update.tagCodes.includes(11)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                스트릿
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="12"
+                  checked={update.tagCodes.includes(12)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                아메카지
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="13"
+                  checked={update.tagCodes.includes(13)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                빈티지
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="14"
+                  checked={update.tagCodes.includes(14)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                시티보이
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="15"
+                  checked={update.tagCodes.includes(15)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                페미닌
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="16"
+                  checked={update.tagCodes.includes(16)}
+                  onChange={tagCheck}
+                />
+                미니멀
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="17"
+                  checked={update.tagCodes.includes(17)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                스포티
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="18"
+                  checked={update.tagCodes.includes(18)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                톰보이
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  value="19"
+                  checked={update.tagCodes.includes(19)}
+                  onChange={tagCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                기타
+              </label>
+            </div>
+          </div>
+          <div className="text-sm mt-4">
+            <div className="mb-2 font-bold">BODY TYPE</div>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  name="bodyType"
+                  value="20"
+                  checked={bodyTag === 20}
+                  onChange={bodyCheck}
+                />
+                마름
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  name="bodyType"
+                  value="21"
+                  checked={bodyTag === 21}
+                  onChange={bodyCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                보통
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  name="bodyType"
+                  value="22"
+                  checked={bodyTag === 22}
+                  onChange={bodyCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                건장
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  className="mr-1"
+                  name="bodyType"
+                  value="23"
+                  checked={bodyTag === 23}
+                  onChange={bodyCheck}
+                  style={{ marginLeft: "15px" }}
+                />
+                빅사이즈
+              </label>
+            </div>
+          </div>
+        </div>
         <div>
-          <label>
-            <input
-              type="radio"
-              name="publicYn"
-              className="mr-1"
-              value="Y"
-              checked={update.postPublicYn === "Y"}
-              onChange={() => setUpdate({ ...update, postPublicYn: "Y" })}
-            />
-            공개
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="publicYn"
-              className="mr-1"
-              value="N"
-              checked={update.postPublicYn === "N"}
-              onChange={() => setUpdate({ ...update, postPublicYn: "N" })}
-              style={{ marginLeft: "15px" }}
-            />
-            비공개
-          </label>
+          <button
+            type="button"
+            className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
+            onClick={updateForm}
+          >
+            수정 완료
+          </button>
         </div>
-      </div>
-
-      {/* 태그 */}
-      <div className="mb-4">
-        <div className="text-sm">
-          <div className="mb-2 font-bold">SEASON</div>
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="1"
-                checked={update.tagCodes.includes(1)} // 1이 선택되었는지 확인
-                onChange={tagCheck}
-              />
-              봄
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="2"
-                checked={update.tagCodes.includes(2)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              여름
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="3"
-                checked={update.tagCodes.includes(3)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              가을
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="4"
-                checked={update.tagCodes.includes(4)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              겨울
-            </label>
-          </div>
-        </div>
-        <div className="text-sm mt-4">
-          <div className="mb-2 font-bold">CAREER</div>
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                name="career"
-                className="mr-1"
-                value="5"
-                checked={careerTag === 5}
-                onChange={careerCheck}
-              />
-              ~1년 미만
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="career"
-                className="mr-1"
-                value="6"
-                checked={careerTag === 6}
-                onChange={careerCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              1~3년차
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="career"
-                className="mr-1"
-                value="7"
-                checked={careerTag === 7}
-                onChange={careerCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              3년 이상
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                name="career"
-                className="mr-1"
-                value="8"
-                checked={careerTag === 8}
-                onChange={careerCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              임원
-            </label>
-          </div>
-        </div>
-        <div className="text-sm mt-4">
-          <div className="mb-2 font-bold">MOOD</div>
-          <div style={{ width: "85%" }}>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="9"
-                checked={update.tagCodes.includes(9)}
-                onChange={tagCheck}
-              />
-              포멀
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="10"
-                checked={update.tagCodes.includes(10)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              캐주얼
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="11"
-                checked={update.tagCodes.includes(11)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              스트릿
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="12"
-                checked={update.tagCodes.includes(12)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              아메카지
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="13"
-                checked={update.tagCodes.includes(13)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              빈티지
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="14"
-                checked={update.tagCodes.includes(14)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              시티보이
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="15"
-                checked={update.tagCodes.includes(15)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              페미닌
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="16"
-                checked={update.tagCodes.includes(16)}
-                onChange={tagCheck}
-              />
-              미니멀
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="17"
-                checked={update.tagCodes.includes(17)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              스포티
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="18"
-                checked={update.tagCodes.includes(18)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              톰보이
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                value="19"
-                checked={update.tagCodes.includes(19)}
-                onChange={tagCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              기타
-            </label>
-          </div>
-        </div>
-        <div className="text-sm mt-4">
-          <div className="mb-2 font-bold">BODY TYPE</div>
-          <div>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                name="bodyType"
-                value="20"
-                checked={bodyTag === 20}
-                onChange={bodyCheck}
-              />
-              마름
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                name="bodyType"
-                value="21"
-                checked={bodyTag === 21}
-                onChange={bodyCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              보통
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                name="bodyType"
-                value="22"
-                checked={bodyTag === 22}
-                onChange={bodyCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              건장
-            </label>
-            <label>
-              <input
-                type="checkbox"
-                className="mr-1"
-                name="bodyType"
-                value="23"
-                checked={bodyTag === 23}
-                onChange={bodyCheck}
-                style={{ marginLeft: "15px" }}
-              />
-              빅사이즈
-            </label>
-          </div>
-        </div>
-      </div>
-      <div>
-        <button
-          type="button"
-          className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
-          onClick={updateForm}
-        >
-          수정 완료
-        </button>
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useReducer, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import styled from "styled-components";
 import {
   addReportPost,
   addReportUser,
@@ -23,6 +22,7 @@ import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
 
@@ -258,6 +258,7 @@ const Detail = () => {
 
   return (
     <>
+      <section className="bg-white py-4 shadow-md" />
       <div className="max-w-4xl mx-auto p-4">
         <main className="bg-white p-6 rounded-lg shadow-md">
           <div
@@ -270,8 +271,8 @@ const Detail = () => {
             <div style={{ display: "flex", alignItems: "center" }}>
               <img
                 style={{
-                  width: "50px",
-                  height: "50px",
+                  width: "40px",
+                  height: "40px",
                   objectFit: "cover",
                   borderRadius: "50%",
                   cursor: "pointer",
@@ -281,7 +282,7 @@ const Detail = () => {
               />
               <span
                 style={{
-                  padding: "0 15px",
+                  padding: "0 10px",
                   fontWeight: "bold",
                   cursor: "pointer",
                 }}
@@ -289,10 +290,30 @@ const Detail = () => {
               >
                 {followUser.userNickname}
               </span>
+              <span
+                style={{ paddingRight: "10px", cursor: "pointer" }}
+                onClick={goUserInfo}
+              >
+                {followUser.userGender === "남성" ? (
+                  <CgGenderMale style={{ color: "skyblue" }} />
+                ) : (
+                  <CgGenderFemale style={{ color: "pink" }} />
+                )}
+              </span>
+              <span
+                style={{
+                  paddingRight: "10px",
+                  cursor: "pointer",
+                  fontSize: "0.8rem",
+                }}
+                onClick={goUserInfo}
+              >
+                {followUser.userJob}
+              </span>
               {followUser.userBodySpecYn === "Y" ? (
                 <span
                   style={{
-                    paddingRight: "15px",
+                    paddingRight: "10px",
                     fontSize: "0.8rem",
                     cursor: "pointer",
                   }}
@@ -388,7 +409,7 @@ const Detail = () => {
                 )}
               </div>
               <div
-                className="flex text-sm text-gray-600 mb-4"
+                className="flex text-sm text-gray-600 mb-5"
                 style={{ justifyContent: "space-between" }}
               >
                 <div>
@@ -462,16 +483,69 @@ const Detail = () => {
                   )}
                 </div>
               </div>
-              <p className="mb-3 text-blue-500">
-                태그 들어갈 부분
+              <p className="mb-8 text-blue-500">
                 {post.tags && post.tags.length > 0
                   ? post.tags.map((tag, index) => (
-                      <span key={index}>#{tag} </span>
+                      <span key={index}>
+                        #{tag.tagName} {tag.tagType === "체형" ? "체형 " : ""}
+                      </span>
                     ))
                   : null}
               </p>
-              <p className="mb-3">{post.postDesc}</p>
-              <p className="mb-2">제품 정보들어갈 부분</p>
+              <p className="mb-10" style={{ lineHeight: "1.5rem" }}>
+                {post.postDesc}
+              </p>
+              <table className="mb-2" style={{ width: "100%" }}>
+                {post.products && post.products.length > 0 ? (
+                  <>
+                    <thead style={{ borderBottom: "1px solid gainsboro" }}>
+                      <tr style={{ fontWeight: "bold" }}>
+                        <th style={{ paddingBottom: "5px" }}>제품명</th>
+                        <th style={{ paddingBottom: "5px" }}>브랜드</th>
+                        <th style={{ paddingBottom: "5px" }}>사이즈</th>
+                        <th style={{ paddingBottom: "5px" }}>구매처</th>
+                        <th style={{ paddingBottom: "5px" }}>구매링크</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {post.products.map((product, index) => (
+                        <tr key={index}>
+                          <td style={{ padding: "10px", textAlign: "center" }}>
+                            {product.productName}
+                          </td>
+                          <td style={{ padding: "10px", textAlign: "center" }}>
+                            {product.productBrand}
+                          </td>
+                          <td style={{ padding: "10px", textAlign: "center" }}>
+                            {product.productSize}
+                          </td>
+                          <td style={{ padding: "10px", textAlign: "center" }}>
+                            {product.productBuyFrom}
+                          </td>
+                          <td style={{ padding: "10px", textAlign: "center" }}>
+                            <a
+                              href={
+                                product.productLink === "" ||
+                                (product.productLink.includes("http://") ||
+                                  product.productLink.includes("https://"))
+                                  ? product.productLink
+                                  : `https://${product.productLink}`
+                              }
+                              className="text-blue-500 hover:text-blue-800"
+                            >
+                              {product.productLink === "" ||
+                              (product.productLink.includes("http://") ||
+                                product.productLink.includes("https://"))
+                                ? product.productLink
+                                : `https://${product.productLink}`}
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </>
+                ) : null}
+              </table>
               <div className="border-t border-gray-300 pt-4">
                 <h2 className="font-bold mb-2">
                   댓글 {comments ? comments.data.length : 0}개
@@ -492,7 +566,8 @@ const Detail = () => {
                         className="w-5/6 p-2 border border-gray-300 rounded mb-2"
                       />
                       <button
-                        className="w-1/6 bg-black text-white py-2 rounded"
+                        className="w-1/6 border border-black-300 bg-black text-white py-2 rounded p-2 mb-2 hover:bg-gray-700"
+                        style={{ height: "39px" }}
                         onClick={addComment}
                       >
                         댓글 등록
