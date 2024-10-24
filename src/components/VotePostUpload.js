@@ -49,10 +49,6 @@ const VoteUpload = ({ upload, post, setPost }) => {
   };
 
   useEffect(() => {
-    setSortedFiles(click.map((i) => post.imageFiles[i]));
-  }, [click, post.imageFiles]); // 의존성 배열에 post.imageFiles 추가
-
-  useEffect(() => {
     if (post.imageFiles.length === sortedFiles.length) {
       setPost((prevPost) => ({ ...prevPost, imageFiles: sortedFiles })); // 기존 post 상태 유지
     }
@@ -148,14 +144,14 @@ const VoteUpload = ({ upload, post, setPost }) => {
         )}
       </div>
       <div>
-          <button
-            type="submit"
-            className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
-            onClick={upload}
-          >
-            업로드
-          </button>
-        </div>
+        <button
+          type="submit"
+          className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
+          onClick={upload}
+        >
+          업로드
+        </button>
+      </div>
     </>
   );
 };

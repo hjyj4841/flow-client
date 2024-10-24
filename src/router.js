@@ -22,7 +22,7 @@ import NewFeed from "./pages/post/NewFeed";
 import PopularFeed from "./pages/post/PopularFeed";
 import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
 import Searched from "./pages/post/Searched.js";
-
+import VoteDetail from "./pages/post/VoteDetail.js";
 import UploadVote from "./pages/post/UploadVote.js";
 
 const router = createBrowserRouter([
@@ -42,7 +42,16 @@ const router = createBrowserRouter([
       { path: "/authRegisterGoogle", element: <AuthRegisterGoogle /> },
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
-      { path: "/votePost", element: <VotePost /> }, // 투표게시물 전체 보기
+      {
+        path: "/votePost",
+        element: <VotePost />,
+        children: [
+          {
+            path: ":postCode",
+            element: <VoteDetail />,
+          },
+        ],
+      },
       { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드
       { path: "/uploadPost", element: <UploadPost /> },
       {

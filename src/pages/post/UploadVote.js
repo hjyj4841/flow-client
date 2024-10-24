@@ -1,6 +1,6 @@
 import { addPostVote } from "../../api/post";
 import { useState } from "react";
-import VoteUpload from "../../components/VotePost";
+import VoteUpload from "../../components/VotePostUpload";
 
 const UploadVote = () => {
   // 유저 코드 저장 및 불러오기 -> 확인 필요**
@@ -17,6 +17,7 @@ const UploadVote = () => {
     imageFiles: [],
     postDesc: "",
     postPublicYn: "Y",
+    postType: "vote",
     userCode: "",
   });
 
@@ -29,6 +30,7 @@ const UploadVote = () => {
 
     // 이미지 리스트
     for (let i = 0; i < post.imageFiles.length; i++) {
+      console.log(post.imageFiles[i]);
       formData.append(`imageFiles[${i}]`, post.imageFiles[i]);
     }
 

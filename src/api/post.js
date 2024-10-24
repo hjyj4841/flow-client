@@ -13,7 +13,7 @@ const authorize = axios.create({
 
 // 투표 게시물 추가
 export const addPostVote = async (data) => {
-  return await instance.post("postVote", data, {
+  return await instance.post("uploadVote", data, {
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -21,8 +21,8 @@ export const addPostVote = async (data) => {
 };
 
 // 투표 게시물 조회
-export const detailPostVote = async (data) => {
-  return await instance.get(`postVote/${data}`);
+export const detailVote = async (postCode) => {
+  return await instance.get(`vote/${postCode}`);
 };
 
 // 게시물 추가
@@ -71,6 +71,17 @@ export const delProduct = async (productCode) => {
 // 메인 화면 NewFeed
 export const newFeed = async (page = 1, keyword = "") => {
   const response = await instance.get(`post`, {
+    params: {
+      page: page,
+      keyword: keyword,
+    },
+  });
+  return response.data;
+};
+
+// 투표 게시판 메인 화면 NEW VOTE
+export const newVote = async (page = 1, keyword = "") => {
+  const response = await instance.get(`votePost`, {
     params: {
       page: page,
       keyword: keyword,
