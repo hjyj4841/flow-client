@@ -23,10 +23,10 @@ export const addComment = async (data) => {
 
 // 댓글 수정
 export const updateComment = async (commentCode) => {
-  return await authorize.put(`updatecomment/${commentCode}`);
+  return await instance.put(`updatecomment/${commentCode}`);
 };
 
 // 댓글 삭제
 export const deleteComment = async (commentCode) => {
-  return await authorize.delete(`deletecomment/${commentCode}`);
+  return await instance.delete(`deletecomment/${commentCode}`);
 };

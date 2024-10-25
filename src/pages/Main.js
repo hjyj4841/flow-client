@@ -1,107 +1,94 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/main.css";
+import { findUser } from "../api/user";
+import {
+  fetchLikedPosts,
+  fetchSavedPosts,
+  FollowedUserPosts,
+  newFeed,
+  popularFeed,
+} from "../api/post";
+import { handleLikeToggle } from "../api/likes";
+import { handleSaveToggle } from "../api/collection";
 const Main = () => {
-  const [token, setToken] = useState(localStorage.getItem("token"));
+  // 토큰 받아오기
+  const { token } = useAuth();
+  const navigate = useNavigate();
+  const [user, setUser] = useState({});
   const [newFeedImages, setNewFeedImages] = useState([]);
-  const [likedPosts, setLikedPosts] = useState([]);
-  const [savedPosts, setSavedPosts] = useState([]);
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [popularFeedImages, setPopularFeedImages] = useState([]);
-  const navigate = useNavigate();
-  let userCode = "";
-  let user = "";
-  if (token) {
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace("-", "+").replace("_", "/");
-    const userData = JSON.parse(window.atob(base64));
-    userCode = userData.userCode;
-    user = userData;
-  }
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+
+  // 페이지 첫 로드 시 실행
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
+    if (token !== null) {
+      getUserInfo();
+    }
     fetchNewFeedImages();
     fetchPopularFeedImages();
-    if (token) {
-      fetchLikedPosts();
-      fetchSavedPosts();
-      if (userCode) fetchFollowedUserPosts();
+  }, []);
+
+  const getUserInfo = async () => {
+    setUser((await findUser(token)).data);
+  };
+
+  useEffect(() => {
+    if (user.userCode != null) {
+      fetchLiked();
+      fetchSaved();
+      fetchFollowedUserPosts();
     }
-  }, [token, userCode]);
+  }, [user.userCode]);
+
   const fetchNewFeedImages = async () => {
-    const response = await axios.get("http://localhost:8080/api/post");
-    setNewFeedImages(response.data);
+    const response = await newFeed();
+    setNewFeedImages(response);
   };
   const fetchPopularFeedImages = async () => {
-    const response = await axios.get(
-      "http://localhost:8080/api/likes/post/ordered-by-likes"
-    );
-    setPopularFeedImages(response.data);
+    const response = await popularFeed();
+    setPopularFeedImages(response);
   };
   const fetchFollowedUserPosts = async () => {
-    const response = await axios.get(
-      `http://localhost:8080/api/posts/following/${userCode}`
-    );
-    setFollowingUserPosts(response.data);
+    const response = await FollowedUserPosts(user.userCode);
+    setFollowingUserPosts(response);
   };
+
   // Fetch liked posts
-  const fetchLikedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/likes/${userCode}/likes`
-      );
-      const likedPosts = response.data.postInfoList.map((post) => ({
-        ...post,
-        isLiked: true,
-      }));
-      setLikedPosts(likedPosts || []);
-    } catch (error) {
-      console.error("Error fetching liked posts", error);
-    }
+  const fetchLiked = async () => {
+    const response = await fetchLikedPosts(user.userCode);
+    const likedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isLiked: true,
+    }));
+    setLikedPosts(likedPosts || []);
   };
   // Fetch saved posts
-  const fetchSavedPosts = async () => {
-    try {
-      const response = await axios.get(
-        `http://localhost:8080/api/collection/${userCode}/collections`
-      );
-      const savedPosts = response.data.postInfoList.map((post) => ({
-        ...post,
-        isSaved: true,
-      }));
-      setSavedPosts(savedPosts || []);
-    } catch (error) {
-      console.error("Error fetching saved posts", error);
-    }
+  const fetchSaved = async () => {
+    const response = await fetchSavedPosts(user.userCode);
+    const savedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isSaved: true,
+    }));
+    setSavedPosts(savedPosts || []);
   };
   // Toggle like
-  const handleLikeToggle = async (postCode) => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/likes/toggle/${postCode}`,
-        user
-      );
-      fetchLikedPosts();
-    } catch (error) {
-      console.error("Error toggling like", error);
-    }
+  const handleLike = async (postCode) => {
+    await handleLikeToggle(postCode, user);
+    fetchLiked();
   };
   // Toggle save
-  const handleSaveToggle = async (postCode) => {
-    try {
-      await axios.post(
-        `http://localhost:8080/api/collection/toggle/${postCode}`,
-        user
-      );
-      fetchSavedPosts();
-    } catch (error) {
-      console.error("Error toggling save", error);
-    }
+  const handleSave = async (postCode) => {
+    await handleSaveToggle(postCode, user);
+    fetchSaved();
   };
+
   const detail = (postCode, e) => {
     // 막고 싶은 태그 리스트
     const blockedClasses = ["mx-2"];
@@ -137,12 +124,12 @@ const Main = () => {
                 POPULAR FEED
               </Link>
             </h2>
-            <div className="pf-con grid grid-cols-5 gap-4 flex justify-center content-center">
+            <div className="main-con grid grid-cols-5 gap-4 flex justify-center content-center">
               {popularFeedImages.slice(0, 10).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative bg-gray-300 rounded-lg group mb-5 main-feed"
+                    className="relative bg-gray-300 rounded-lg group main-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -164,7 +151,7 @@ const Main = () => {
                           <FaHeart
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleLikeToggle(post.postCode);
+                              handleLike(post.postCode);
                             }}
                             style={{ color: "red", fontSize: "30px" }}
                             className="mx-2"
@@ -173,7 +160,7 @@ const Main = () => {
                           <FaRegHeart
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleLikeToggle(post.postCode);
+                              handleLike(post.postCode);
                             }}
                             style={{ fontSize: "30px" }}
                             className="mx-2"
@@ -186,7 +173,7 @@ const Main = () => {
                           <BsCollectionFill
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleSaveToggle(post.postCode);
+                              handleSave(post.postCode);
                             }}
                             style={{ color: "white", fontSize: "30px" }}
                             className="mx-2"
@@ -195,7 +182,7 @@ const Main = () => {
                           <BsCollection
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleSaveToggle(post.postCode);
+                              handleSave(post.postCode);
                             }}
                             style={{ fontSize: "30px" }}
                             className="mx-2"
@@ -217,12 +204,12 @@ const Main = () => {
                 NEW FEED
               </Link>
             </h2>
-            <div className="nf-con grid grid-cols-5 gap-4">
+            <div className="main-con grid grid-cols-5 gap-4">
               {newFeedImages.slice(0, 10).map((post) =>
                 post.imageUrls.length > 0 ? (
                   <div
                     key={post.postCode}
-                    className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 main-feed"
+                    className="relative w-256 h-350 bg-gray-300 rounded-lg group main-feed"
                   >
                     <img
                       src={post.imageUrls[0]}
@@ -244,7 +231,7 @@ const Main = () => {
                           <FaHeart
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleLikeToggle(post.postCode);
+                              handleLike(post.postCode);
                             }}
                             style={{ color: "red", fontSize: "30px" }}
                             className="mx-2"
@@ -253,7 +240,7 @@ const Main = () => {
                           <FaRegHeart
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleLikeToggle(post.postCode);
+                              handleLike(post.postCode);
                             }}
                             style={{ fontSize: "30px" }}
                             className="mx-2"
@@ -266,7 +253,7 @@ const Main = () => {
                           <BsCollectionFill
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleSaveToggle(post.postCode);
+                              handleSave(post.postCode);
                             }}
                             style={{ color: "white", fontSize: "30px" }}
                             className="mx-2"
@@ -275,7 +262,7 @@ const Main = () => {
                           <BsCollection
                             onClick={(e) => {
                               e.stopPropagation(); // 이벤트 전파 막기
-                              handleSaveToggle(post.postCode);
+                              handleSave(post.postCode);
                             }}
                             style={{ fontSize: "30px" }}
                             className="mx-2"
@@ -291,8 +278,8 @@ const Main = () => {
         </section>
         {/* Follower's Feed Section */}
         {token && (
-          <section className="mb-8 flex justify-center">
-            <div className="flex flex-col main-section">
+          <section className="flex justify-center">
+            <div className="flex flex-col main-section mb-8">
               <h2 className="text-xl font-bold mb-4">
                 <Link to="/popularFeed" className="hover:underline">
                   MY FOLLOWER'S FEED
@@ -303,7 +290,7 @@ const Main = () => {
                   post.imageUrls.length > 0 ? (
                     <div
                       key={post.postCode}
-                      className="relative bg-gray-300 rounded-lg group mb-5 main-feed"
+                      className="relative bg-gray-300 rounded-lg group main-feed"
                     >
                       <img
                         src={post.imageUrls[0]}
@@ -325,7 +312,7 @@ const Main = () => {
                             <FaHeart
                               onClick={(e) => {
                                 e.stopPropagation(); // 이벤트 전파 막기
-                                handleLikeToggle(post.postCode);
+                                handleLike(post.postCode);
                               }}
                               style={{ color: "red", fontSize: "30px" }}
                               className="mx-2"
@@ -334,7 +321,7 @@ const Main = () => {
                             <FaRegHeart
                               onClick={(e) => {
                                 e.stopPropagation(); // 이벤트 전파 막기
-                                handleLikeToggle(post.postCode);
+                                handleLike(post.postCode);
                               }}
                               style={{ fontSize: "30px" }}
                               className="mx-2"
@@ -347,7 +334,7 @@ const Main = () => {
                             <BsCollectionFill
                               onClick={(e) => {
                                 e.stopPropagation(); // 이벤트 전파 막기
-                                handleSaveToggle(post.postCode);
+                                handleSave(post.postCode);
                               }}
                               style={{ color: "white", fontSize: "30px" }}
                               className="mx-2"
@@ -356,7 +343,7 @@ const Main = () => {
                             <BsCollection
                               onClick={(e) => {
                                 e.stopPropagation(); // 이벤트 전파 막기
-                                handleSaveToggle(post.postCode);
+                                handleSave(post.postCode);
                               }}
                               style={{ fontSize: "30px" }}
                               className="mx-2"

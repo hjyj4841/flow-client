@@ -139,10 +139,16 @@ export const popularFeed = async (page = 1) => {
 
 // 메인 화면 MyFollowerFeed
 export const myFollowerFeed = async (userCode, page = 1) => {
-  const response = await instance.get(`/posts/followed/${userCode}`, {
+  const response = await instance.get(`posts/followed/${userCode}`, {
     params: {
       page: page,
     },
   });
+  return response.data;
+};
+
+// 팔로잉 하느 유저의 게시물
+export const FollowedUserPosts = async (userCode) => {
+  const response = await instance.get(`posts/following/${userCode}`);
   return response.data;
 };

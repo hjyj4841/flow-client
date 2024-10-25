@@ -17,7 +17,11 @@ import {
   fetchSavedPosts,
 } from "../../api/post";
 import { findUser, findUserByCode } from "../../api/user";
-import { addComment as addCommentAPI, getAllComment } from "../../api/comment";
+import {
+  addComment as addCommentAPI,
+  deleteComment,
+  getAllComment,
+} from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
@@ -25,7 +29,6 @@ import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
-import Comment from "../../components/Comment";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -240,6 +243,19 @@ const Detail = () => {
     addMutation.mutate(newComment);
     setNewComment({ ...newComment, commentDesc: "" });
   };
+
+  // 댓글 삭제
+  const deleteMutation = useMutation({
+    mutationFn: (commentCode) => deleteComment(commentCode),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
+    },
+  });
+
+  const handleDelete = (commentCode) => {
+    deleteMutation.mutate(commentCode);
+  };
+
   // 작성자의 유저정보 페이지로 이동
   const goUserInfo = () => {
     navigate(`/mypage/${post.userCode}`);
@@ -501,8 +517,8 @@ const Detail = () => {
                   <>
                     <thead style={{ borderBottom: "1px solid gainsboro" }}>
                       <tr style={{ fontWeight: "bold" }}>
-                        <th style={{ paddingBottom: "5px" }}>제품명</th>
                         <th style={{ paddingBottom: "5px" }}>브랜드</th>
+                        <th style={{ paddingBottom: "5px" }}>제품명</th>
                         <th style={{ paddingBottom: "5px" }}>사이즈</th>
                         <th style={{ paddingBottom: "5px" }}>구매처</th>
                         <th style={{ paddingBottom: "5px" }}>구매링크</th>
@@ -512,10 +528,10 @@ const Detail = () => {
                       {post.products.map((product, index) => (
                         <tr key={index}>
                           <td style={{ padding: "10px", textAlign: "center" }}>
-                            {product.productName}
+                            {product.productBrand}
                           </td>
                           <td style={{ padding: "10px", textAlign: "center" }}>
-                            {product.productBrand}
+                            {product.productName}
                           </td>
                           <td style={{ padding: "10px", textAlign: "center" }}>
                             {product.productSize}
@@ -627,9 +643,25 @@ const Detail = () => {
                           >
                             <p>{comment.userCode.userNickname}</p>
                           </td>
-                          <div />
                           <td style={{ padding: "5px 5px 5px 10px" }}>
                             <p>{comment.commentDesc}</p>
+                          </td>
+                          <td>
+                            {user.userCode === comment.userCode.userCode && (
+                              <>
+                                <button
+                                  onClick={() =>
+                                    handleDelete(comment.commentCode)
+                                  }
+                                  className="text-black px-1 hover:text-red-500 text-gray-500"
+                                >
+                                  삭제
+                                </button>
+                                <button className="text-black px-1 hover:text-gray-900 text-gray-500">
+                                  수정
+                                </button>
+                              </>
+                            )}
                           </td>
                         </tr>
                       ))
