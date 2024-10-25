@@ -9,63 +9,45 @@ import { getKakaoCode } from "../../api/kakao";
 import { getGoogleCode } from "../../api/google";
 import { getNaverCode } from "../../api/naver";
 import { useParams } from "react-router-dom";
+import "../../assets/css/forNotUser.scss";
 
 const FollowStyleAndEffect = styled.div`
-    button {
-      color: #006666;
-      margin: 1px;
-      margin-top: 10px;
-      width: 6rem;
-      height: 3rem;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      background-color: #c6fcff;
-      box-shadow: inset 5px 0px 4px rgba(203, 249, 252, 1);
-      font-size: 1.2rem;
-      font-weight: 500;
-      font-family: "Poppins", sans-serif;
-    }
-    .loginAndRegister-container {
-      position: fixed;
-      top: 0px;
-      left: -16px;
-      display: flex;
-      width: 100%;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      justify-content: center;
-      align-items: center;
-      z-index: 4;
-      .modal-content {
-        display: flex;
-        width: 500px;
-        height: 700px;
-        flex-direction: column;
-        background-color: white;
-        align-items: center;
-        justify-content: center;
-        border-radius: 10px;
-        .register span {
-          margin: 4px;
-        }
-        .register .registerLink {
-          color: skyblue;
-          text-decoration: underline;
-          cursor: pointer;
-        }
+    .followButton {
+      button {
+        color: #FFFFFF; /* 텍스트와 테두리 색상을 차분한 청록색으로 */
+        margin: 1px;
+        margin-top: 10px;
+        width: 6rem;
+        height: 3rem;
+        border: 1px solid transparent;
+        border-radius: 8px;
+        cursor: pointer;
+        background-color: #E74C3C;
+        font-size: 1rem;
+        font-weight: 400;
+        font-family: "Poppins", sans-serif;
+        letter-spacing: 0.05em;
+        transition: transform 0.1s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+        -webkit-appearance: none; /* 브라우저 기본 스타일 제거 */
+        -moz-appearance: none;
+        appearance: none;
+          &:active {
+            transform: translateY(2px);
+            box-shadow: inset 1px 1px 1px rgba(150, 150, 150, 0.6);
+            background-color: #C0392B;
+          }
+          &:hover {
+            background-color: #FF6F61;
+            border-color: #FF6F61; 
+          }
+          &:hover:active {
+            background-color: #C0392B;
+            box-shadow: inset 1px 1px 1px rgba(150, 150, 150, 0.6);
+          }
       }
     }
   `;
 const FollowButton = ({ user, bool }) => {
-  // Google Fonts를 동적으로 로드하는 useEffect 훅
-  useEffect(() => {
-    const link = document.createElement("link");
-    link.href =
-      "https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap";
-    link.rel = "stylesheet";
-    document.head.appendChild(link); // <head>에 추가
-  }, []);
   const {followingUserCode} = useParams();
   const token = localStorage.getItem("token");
   const [isLogin, setIsLogin] = useState(false);
@@ -76,6 +58,7 @@ const FollowButton = ({ user, bool }) => {
       setIsLogin(true);
     }
   }, [token]);
+
   function parseJwt(token) {
     if (token !== null) {
       const base64Url = token.split(".")[1]; // 토큰의 두 번째 부분 (Payload)
@@ -156,6 +139,7 @@ const FollowButton = ({ user, bool }) => {
   return (
     <>
       <FollowStyleAndEffect>
+        <div className="followButton">
         {isLogin ? (
           <>
             {isFollow ? (
@@ -167,11 +151,14 @@ const FollowButton = ({ user, bool }) => {
         ) : (
           <button onClick={tryRegister}>팔로우</button>
         )}
+        </div>
+        </FollowStyleAndEffect>
         {showModal && (
-          <div className={"loginAndRegister-container"}>
-            <div className={"modal-content"}>
-              <h1 />
+          <div className="loginAndRegister-container">
+            <div className="modal-content">
+              <h1>로그인 후 이용하실 수 있습니다!</h1>
               <p>네이버, 구글, 카카오 계정으로 간편하게!</p>
+              <div className="divider"></div> {/* 구분선 */}
               <button
                 type="button"
                 className="google"
@@ -199,6 +186,7 @@ const FollowButton = ({ user, bool }) => {
                 NAVER
               </button>
               <button onClick={() => setShowModal(false)}>닫기</button>
+              <div className="divider"></div> {/* 구분선 */}
               <div className="register">
                 <span>아직 회원이 아니신가요?</span>
                 <span className="registerLink" onClick={toRegister}>
@@ -208,7 +196,6 @@ const FollowButton = ({ user, bool }) => {
             </div>
           </div>
         )}
-      </FollowStyleAndEffect>
     </>
   );
 };
