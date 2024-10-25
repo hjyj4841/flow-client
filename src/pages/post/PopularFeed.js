@@ -4,6 +4,7 @@ import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { SlArrowDown } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
+import "../../assets/css/popularfeed.css";
 
 const PopularFeed = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -119,22 +120,23 @@ const PopularFeed = () => {
                 />
                 <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity">
                   <p
-                    className="text-white mb-2 cursor-pointer"
+                    className="text-white cursor-pointer"
                     onClick={() => detail(post.postCode)}
                   >
                     {post.postDesc}
                   </p>
-                  <div className="flex items-center">
+                  <div className="flex items-center cursor-pointer">
                     {likedPosts.some(
                       (likedPost) => likedPost.post.postCode === post.postCode
                     ) ? (
                       <FaHeart
                         onClick={() => handleLikeToggle(post.postCode)}
-                        style={{ color: "red" }}
+                        style={{ color: "red", fontSize: "30px" }}
                         className="mx-2 cursor-pointer"
                       />
                     ) : (
                       <FaRegHeart
+                        style={{ fontSize: "30px" }}
                         onClick={() => handleLikeToggle(post.postCode)}
                         className="mx-2 cursor-pointer"
                       />
@@ -144,11 +146,12 @@ const PopularFeed = () => {
                     ) ? (
                       <BsCollectionFill
                         onClick={() => handleSaveToggle(post.postCode)}
-                        style={{ color: "black" }}
+                        style={{ color: "black", fontSize: "30px" }}
                         className="mx-2 cursor-pointer"
                       />
                     ) : (
                       <BsCollection
+                        style={{ fontSize: "30px" }}
                         onClick={() => handleSaveToggle(post.postCode)}
                         className="mx-2 cursor-pointer"
                       />

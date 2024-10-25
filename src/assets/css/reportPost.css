@@ -25,13 +25,18 @@
   font-size: 24px;
 }
 .buttonContainer {
-  position: relative;
   bottom: 5px;
-  width: 75px;
+  width: 200px;
 }
-.buttonContainer button {
+.delete-report-post-btn {
   width: 90px;
   background-color: rgb(255, 55, 55);
+  color: white;
+  font-weight: bold;
+}
+.ban-report-user-btn {
+  width: 90px;
+  background-color: black;
   color: white;
   font-weight: bold;
 }

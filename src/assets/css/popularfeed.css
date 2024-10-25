@@ -1,0 +1,8 @@
+p {
+  text-align: center;
+  width: 240px;
+  height: 32px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis !important;
+}
