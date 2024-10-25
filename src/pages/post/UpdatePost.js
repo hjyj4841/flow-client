@@ -37,7 +37,7 @@ const UpdatePost = () => {
     if (result.data.postDesc === null) {
       result.data.postDesc = "";
     }
-    console.log(result.data.postDesc);
+    // console.log(result.data.postDesc);
     setUpdate(result.data);
   };
 
@@ -78,11 +78,12 @@ const UpdatePost = () => {
         checkCareer[i].checked = false;
       }
     }
+
     setCareerTag(value);
   };
 
   const bodyCheck = (e) => {
-    const value = e.target.value;
+    const value = Number(e.target.value);
     const checkBody = document.getElementsByName("bodyType");
     for (let i = 0; i < checkBody.length; i++) {
       if (checkBody[i].value !== value) {
@@ -92,7 +93,7 @@ const UpdatePost = () => {
     }
 
     console.log(value);
-    setBodyTag(Number(value));
+    setBodyTag(value);
   };
 
   const tagCheck = (event) => {
@@ -136,7 +137,7 @@ const UpdatePost = () => {
       }
     });
     // console.log(update);
-    console.log(delProducts);
+    // console.log(delProducts);
   }, [update]);
 
   const setBrand = (e, i) => {
