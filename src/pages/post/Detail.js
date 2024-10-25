@@ -6,6 +6,7 @@ import {
   addReportUser,
   initState as reportState,
   reportReducer,
+  addReportComment,
 } from "../../reducers/reportReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { followStatus } from "../../store/followSlice";
@@ -68,6 +69,16 @@ const Detail = () => {
   // 유저 신고 관련
   const [reportUser, setReportUser] = useState({
     userReportDesc: "",
+    user: {
+      userCode: 0,
+    },
+  });
+  // 댓글 신고 관련
+  const [reportComment, setReportComment] = useState({
+    commentReportDesc: "",
+    comment: {
+      commentCode: 0,
+    },
     user: {
       userCode: 0,
     },
@@ -273,6 +284,12 @@ const Detail = () => {
   }, [user.userCode]);
   if (isLoading) return <>로딩중...</>;
   if (error) return <>에러 발생...</>;
+
+  // 댓글 신고 기능
+  const reportCommentBtn = (data) => {
+    addReportComment(data);
+    alert("댓글 신고 완료");
+  };
 
   return (
     <>
@@ -664,6 +681,14 @@ const Detail = () => {
                                 </button>
                               </>
                             )}
+                          </td>
+                          <td>
+                            <button
+                              className="report-comment-btn"
+                              type="button"
+                            >
+                              신고
+                            </button>
                           </td>
                         </tr>
                       ))

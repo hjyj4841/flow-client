@@ -4,22 +4,22 @@ import ReportUser from "../components/ReportUser";
 import { useState } from "react";
 import ReportComment from "../components/ReportComment";
 
-const ReportList = () => {
-  const ReportBtnDiv = styled.div`
-    .report-type-button {
-      display: flex;
-    }
-    .report-type-post {
-      margin: 10px;
-    }
-    .report-type-comment {
-      margin: 10px;
-    }
-    .report-type-user {
-      margin: 10px;
-    }
-  `;
+const ReportBtnDiv = styled.div`
+  .report-type-button {
+    display: flex;
+  }
+  .report-type-post {
+    margin: 10px;
+  }
+  .report-type-comment {
+    margin: 10px;
+  }
+  .report-type-user {
+    margin: 10px;
+  }
+`;
 
+const ReportList = () => {
   const [type, setType] = useState("");
 
   const showRpost = () => {

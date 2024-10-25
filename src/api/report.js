@@ -34,3 +34,17 @@ export const reportUser = async (data) => {
 export const getReportComment = async () => {
   return await instance.get("showAllCommentReport");
 };
+// 댓글 신고하기
+export const reportComment = async (data) => {
+  return await instance.post("reportComment", data);
+};
+// 신고된 댓글 취소
+export const cancelReportComment = async (commentReportCode) => {
+  return await instance.delete(
+    "cancelCommentReport?commentReportCode=" + commentReportCode
+  );
+};
+// 신고된 댓글 삭제하기
+export const deleteReportComment = async () => {};
+// 신고된 댓글을 쓴 유저 밴하기
+export const banReportComment = async () => {};
