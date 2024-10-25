@@ -6,7 +6,7 @@ import { addComment, updateComment, deleteComment } from "../api/comment";
 const Comment = ({ comment, postCode }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
-  const [commentDesc, setCommentDesc, setIsUpdating, isUpdating] = useState("");
+  const [commentDesc, setCommentDesc] = useState("");
   const [newComment, setNewComment] = useState({
     commentCode: 0,
     commentDesc: "",
@@ -25,10 +25,10 @@ const Comment = ({ comment, postCode }) => {
 
   // 댓글 수정
   const updateMutation = useMutation({
-    mutationFn: updateComment,
+    mutationFn: updateComment({ ...comment, commentDesc }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
-      setIsUpdating(false);
+      // setIsUpdating(false);
     },
   });
 
@@ -40,30 +40,29 @@ const Comment = ({ comment, postCode }) => {
     },
   });
 
-  // const handleUpdate = () => {
-  //   updateMutation.mutate({ ...comment, commentDesc });
-  // };
+  const handleUpdate = () => {
+    updateMutation.mutate({ ...comment, commentDesc });
+  };
 
   const handleDelete = () => {
     deleteMutation.mutate(comment.commentCode);
   };
 
-  return (
-    <div>
-      <tr>
-        <tr className="flex justify-between items-center" />
-        <p>{comment.commentDesc}</p>
-        {user.userCode === comment.userCode && (
-          <button
-            onClick={handleDelete}
-            className="ml-2 bg-red-500 text-white py-1 px-2 rounded"
-          >
-            삭제
-          </button>
-        )}
-      </tr>
-    </div>
-  );
+  return;
+  <>
+  {
+    user.commentCode === comment.commentCode && (
+      <button
+        type="text"
+        value={newComment.commentDesc}
+        onClick={() => handleUpdate(comment.commentDesc)}
+        className="text-black px-1 hover:text-gray-900 text-gray-500"
+      >
+        수정
+      </button>
+    );
+  }
+  </>
 };
 
 export default Comment;
