@@ -45,11 +45,15 @@ const FollowingPage = React.memo(({followingUserCode, search}) => {
           users.map((dto) => (
             <div className="userSection" key={dto.user.userCode}>
               <img src={dto.user.userProfileUrl} alt={dto.user.userNickname} />
-              <p>{dto.user.userNickname}</p>
-              <p>{dto.user.userEmail}</p>
+              <div className="infoBox">
+                <div className="nickBox">{dto.user.userNickname}</div>
+                <div className="etcBox">{dto.user.userEmail}</div>
+              </div>
               {(code !== dto.user.userCode && dto.following !== undefined) && (
                 <>
+                <div className="buttonContainer">
                   <FollowButton user={dto.user} key={dto.user.userCode} bool={dto.following} />
+                </div>
                 </>
               )}
             </div>
@@ -60,7 +64,7 @@ const FollowingPage = React.memo(({followingUserCode, search}) => {
   
     return (
       <>
-          <div className="following-users">{userList}</div>
+          {userList}
       </>
     );
   });
