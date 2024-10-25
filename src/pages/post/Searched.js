@@ -17,9 +17,9 @@ const Searched = () => {
 
   const fetchSearchedPosts = async (params) => {
     const {
-      jobs = [],
-      seasons = [],
-      moods = [],
+      job = [],
+      season = [],
+      mood = [],
       heightMin,
       heightMax,
       weightMin,
@@ -29,25 +29,33 @@ const Searched = () => {
 
     const query = new URLSearchParams();
 
-    if (jobs.length > 0) {
-      jobs.forEach((job) => query.append("jobs[]", job));
+    // 직업 필터 추가
+    if (job.length > 0) {
+      job.forEach((jobItem) => query.append("jobs[]", jobItem));
     }
 
-    const tagCodes = [...seasons, ...moods];
+    // 시즌 및 무드 필터 추가
+    const tagCodes = [...season, ...mood];
     if (tagCodes.length > 0) {
       query.append("tagCodes", tagCodes.join(","));
     }
 
+    // 키 범위 필터 추가
     if (heightMin !== undefined) query.append("heightMin", heightMin);
     if (heightMax !== undefined) query.append("heightMax", heightMax);
     if (weightMin !== undefined) query.append("weightMin", weightMin);
     if (weightMax !== undefined) query.append("weightMax", weightMax);
+
+    // 성별 필터 추가 (undefined일 경우 추가하지 않음)
     if (gender) query.append("gender", gender);
 
-    console.log(`Fetching from: /api/tags/posts?${query}`);
+    const queryStr = query.toString();
+    const apiUrl = `http://localhost:8080/api/tags/posts?${queryStr}`;
+    console.log(`Fetching from: ${apiUrl}`);
+    console.log(`Query Parameters: ${queryStr}`);
 
     try {
-      const response = await fetch(`/api/tags/posts?${query}`);
+      const response = await fetch(apiUrl);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
