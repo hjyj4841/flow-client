@@ -11,22 +11,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { followStatus } from "../../store/followSlice";
 import { useAuth } from "../../contexts/AuthContext";
-import {
-  delPost,
-  detailPost,
-  fetchLikedPosts,
-  fetchSavedPosts,
-} from "../../api/post";
+import { delPost, detailVote } from "../../api/post";
 import { findUser, findUserByCode } from "../../api/user";
 import { addComment as addCommentAPI, getAllComment } from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
-import { GrNext, GrPrevious } from "react-icons/gr";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { BsCollection, BsCollectionFill } from "react-icons/bs";
-import { handleLikeToggle } from "../../api/likes";
-import { handleSaveToggle } from "../../api/collection";
 
-const Detail = () => {
+const VoteDetail = () => {
   const navigate = useNavigate();
   const { postCode } = useParams();
   const queryClient = useQueryClient();
@@ -93,37 +83,11 @@ const Detail = () => {
   };
   // 1-2. 페이지에 해당하는 post 객체를 가져옴
   const fetchPost = async () => {
-    const response = await detailPost(postCode);
+    const response = await detailVote(postCode);
     setPost(response.data);
     setFollowUser((await findUserByCode(response.data.userCode)).data);
   };
 
-  // 2. likeRedering, saveRedering 값이 변화되는 시점
-  useEffect(() => {
-    if (token !== null) {
-      fetchLiked();
-      fetchSaved();
-    }
-  }, [likeRendering, saveRendering, post]); // 의존성 배열 추가
-
-  // 2-1. 좋아요 정보를 객체 배열로 담기
-  const fetchLiked = async () => {
-    const response = await fetchLikedPosts(user.userCode);
-    const likedPosts = response.data.postInfoList.map((post) => ({
-      ...post,
-      isLiked: true,
-    }));
-    setLikedPosts(likedPosts || []);
-  };
-  // 2-2. 북마크 정보를 객체 배열로 담기
-  const fetchSaved = async () => {
-    const response = await fetchSavedPosts(user.userCode);
-    const savedPosts = response.data.postInfoList.map((post) => ({
-      ...post,
-      isSaved: true,
-    }));
-    setSavedPosts(savedPosts || []);
-  };
   // 3. 작성자 유저 코드가 변경되는 시점
   useEffect(() => {
     if (post?.userCode !== undefined) {
@@ -188,35 +152,6 @@ const Detail = () => {
   const deleteAPI = async () => {
     await delPost(postCode);
   };
-  // 이미지(다음/이전) 변경 관련 메서드
-  const handleNextImage = () => {
-    if (post.imageUrls && post.imageUrls.length > 0) {
-      setCurrentImageIndex(
-        (prevIndex) => (prevIndex + 1) % post.imageUrls.length
-      );
-    }
-  };
-  const handlePreviousImage = () => {
-    if (post.imageUrls && post.imageUrls.length > 0) {
-      setCurrentImageIndex((prevIndex) =>
-        prevIndex === 0 ? post.imageUrls.length - 1 : prevIndex - 1
-      );
-    }
-  };
-
-  // 이미지 조회 관련
-  useEffect(() => {
-    setImageLoad([]);
-    if (post.imageUrls && post.imageUrls.length > 0) {
-      post.imageUrls.forEach((url) => {
-        const img = new Image();
-        img.src = url;
-        img.onload = () => {
-          setImageLoad((prev) => [...prev, url]);
-        };
-      });
-    }
-  }, [post.imageUrls]);
 
   // 댓글 조회
   const { data: comments, isLoading, error } = useQuery({
@@ -504,4 +439,5 @@ const Detail = () => {
     </>
   );
 };
-export default Detail;
+
+export default VoteDetail;
