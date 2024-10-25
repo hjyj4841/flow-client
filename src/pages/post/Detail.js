@@ -107,6 +107,7 @@ const Detail = () => {
       fetchLiked();
       fetchSaved();
     }
+    // console.log(post);
   }, [likeRendering, saveRendering, post]); // 의존성 배열 추가
 
   // 2-1. 좋아요 정보를 객체 배열로 담기
@@ -512,6 +513,7 @@ const Detail = () => {
               <p className="mb-10" style={{ lineHeight: "1.5rem" }}>
                 {post.postDesc}
               </p>
+
               <table className="mb-2" style={{ width: "100%" }}>
                 {post.products && post.products.length > 0 ? (
                   <>
@@ -675,6 +677,9 @@ const Detail = () => {
               </div>
             </>
           ) : null}
+          <p className="text-sm" style={{ color: "grey", marginTop: "10px" }}>
+            {post?.postDate.split("T")[0]}
+          </p>
         </main>
       </div>
     </>
