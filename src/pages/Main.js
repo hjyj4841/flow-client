@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/main.css";
@@ -13,8 +11,8 @@ import {
   newFeed,
   popularFeed,
 } from "../api/post";
-import { handleLikeToggle } from "../api/likes";
-import { handleSaveToggle } from "../api/collection";
+import LikeToggleButton from "./post/toggleBtn/LikeToggleButton";
+import SaveToggleButton from "./post/toggleBtn/SaveToggleButton";
 const Main = () => {
   // 토큰 받아오기
   const { token } = useAuth();
@@ -78,16 +76,6 @@ const Main = () => {
     }));
     setSavedPosts(savedPosts || []);
   };
-  // Toggle like
-  const handleLike = async (postCode) => {
-    await handleLikeToggle(postCode, user);
-    fetchLiked();
-  };
-  // Toggle save
-  const handleSave = async (postCode) => {
-    await handleSaveToggle(postCode, user);
-    fetchSaved();
-  };
 
   const detail = (postCode, e) => {
     // 막고 싶은 태그 리스트
@@ -144,50 +132,18 @@ const Main = () => {
                         {post.postDesc}
                       </p>
                       <div className="flex items-center">
-                        {likedPosts.some(
-                          (likedPost) =>
-                            likedPost.post.postCode === post.postCode
-                        ) ? (
-                          <FaHeart
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleLike(post.postCode);
-                            }}
-                            style={{ color: "red", fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        ) : (
-                          <FaRegHeart
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleLike(post.postCode);
-                            }}
-                            style={{ fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        )}
-                        {savedPosts.some(
-                          (savedPost) =>
-                            savedPost.post.postCode === post.postCode
-                        ) ? (
-                          <BsCollectionFill
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleSave(post.postCode);
-                            }}
-                            style={{ color: "white", fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        ) : (
-                          <BsCollection
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleSave(post.postCode);
-                            }}
-                            style={{ fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        )}
+                        <LikeToggleButton
+                          likedPosts={likedPosts}
+                          user={user}
+                          post={post}
+                          fetchLiked={fetchLiked}
+                        />
+                        <SaveToggleButton
+                          savedPosts={savedPosts}
+                          user={user}
+                          post={post}
+                          fetchSaved={fetchSaved}
+                        />
                       </div>
                     </div>
                   </div>
@@ -224,50 +180,18 @@ const Main = () => {
                         {post.postDesc}
                       </p>
                       <div className="flex items-center">
-                        {likedPosts.some(
-                          (likedPost) =>
-                            likedPost.post.postCode === post.postCode
-                        ) ? (
-                          <FaHeart
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleLike(post.postCode);
-                            }}
-                            style={{ color: "red", fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        ) : (
-                          <FaRegHeart
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleLike(post.postCode);
-                            }}
-                            style={{ fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        )}
-                        {savedPosts.some(
-                          (savedPost) =>
-                            savedPost.post.postCode === post.postCode
-                        ) ? (
-                          <BsCollectionFill
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleSave(post.postCode);
-                            }}
-                            style={{ color: "white", fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        ) : (
-                          <BsCollection
-                            onClick={(e) => {
-                              e.stopPropagation(); // 이벤트 전파 막기
-                              handleSave(post.postCode);
-                            }}
-                            style={{ fontSize: "30px" }}
-                            className="mx-2"
-                          />
-                        )}
+                        <LikeToggleButton
+                          likedPosts={likedPosts}
+                          user={user}
+                          post={post}
+                          fetchLiked={fetchLiked}
+                        />
+                        <SaveToggleButton
+                          savedPosts={savedPosts}
+                          user={user}
+                          post={post}
+                          fetchSaved={fetchSaved}
+                        />
                       </div>
                     </div>
                   </div>
@@ -305,50 +229,18 @@ const Main = () => {
                           {post.postDesc}
                         </p>
                         <div className="flex items-center">
-                          {likedPosts.some(
-                            (likedPost) =>
-                              likedPost.post.postCode === post.postCode
-                          ) ? (
-                            <FaHeart
-                              onClick={(e) => {
-                                e.stopPropagation(); // 이벤트 전파 막기
-                                handleLike(post.postCode);
-                              }}
-                              style={{ color: "red", fontSize: "30px" }}
-                              className="mx-2"
-                            />
-                          ) : (
-                            <FaRegHeart
-                              onClick={(e) => {
-                                e.stopPropagation(); // 이벤트 전파 막기
-                                handleLike(post.postCode);
-                              }}
-                              style={{ fontSize: "30px" }}
-                              className="mx-2"
-                            />
-                          )}
-                          {savedPosts.some(
-                            (savedPost) =>
-                              savedPost.post.postCode === post.postCode
-                          ) ? (
-                            <BsCollectionFill
-                              onClick={(e) => {
-                                e.stopPropagation(); // 이벤트 전파 막기
-                                handleSave(post.postCode);
-                              }}
-                              style={{ color: "white", fontSize: "30px" }}
-                              className="mx-2"
-                            />
-                          ) : (
-                            <BsCollection
-                              onClick={(e) => {
-                                e.stopPropagation(); // 이벤트 전파 막기
-                                handleSave(post.postCode);
-                              }}
-                              style={{ fontSize: "30px" }}
-                              className="mx-2"
-                            />
-                          )}
+                          <LikeToggleButton
+                            likedPosts={likedPosts}
+                            user={user}
+                            post={post}
+                            fetchLiked={fetchLiked}
+                          />
+                          <SaveToggleButton
+                            savedPosts={savedPosts}
+                            user={user}
+                            post={post}
+                            fetchSaved={fetchSaved}
+                          />
                         </div>
                       </div>
                     </div>
