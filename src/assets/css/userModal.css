@@ -1,0 +1,12 @@
+.userMenu {
+  margin-left: 20px;
+  width: 80px;
+}
+.menu-open-Button {
+  cursor: pointer;
+}
+.menu-content {
+  border: 1px solid black;
+  display: flex;
+  flex-direction: column;
+}

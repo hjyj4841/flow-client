@@ -124,11 +124,12 @@ const NewFeed = () => {
                     ) ? (
                       <FaHeart
                         onClick={() => handleLikeToggle(post.postCode)}
-                        style={{ color: "red" }}
+                        style={{ color: "red", fontSize: "30px" }}
                         className="mx-2 cursor-pointer"
                       />
                     ) : (
                       <FaRegHeart
+                        style={{ fontSize: "30px" }}
                         onClick={() => handleLikeToggle(post.postCode)}
                         className="mx-2 cursor-pointer"
                       />
@@ -138,11 +139,12 @@ const NewFeed = () => {
                     ) ? (
                       <BsCollectionFill
                         onClick={() => handleSaveToggle(post.postCode)}
-                        style={{ color: "black" }}
+                        style={{ color: "black", fontSize: "30px" }}
                         className="mx-2 cursor-pointer"
                       />
                     ) : (
                       <BsCollection
+                        style={{ fontSize: "30px" }}
                         onClick={() => handleSaveToggle(post.postCode)}
                         className="mx-2 cursor-pointer"
                       />
