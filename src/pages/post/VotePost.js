@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const VotePost = () => {
   const [token, setToken] = useState(null);
   const [newFeedImages, setNewFeedImages] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setToken(localStorage.getItem("token"));
@@ -17,9 +18,9 @@ const VotePost = () => {
     setNewFeedImages(response.data);
   };
 
-  const detail = (postCode, postType, e) => {
+  const detail = (postCode) => {
     // 나머지 태그에서는 네비게이션 동작
-    Navigate(`/votePost/${postCode}`);
+    navigate(`/votePost/${postCode}`);
   };
 
   return (

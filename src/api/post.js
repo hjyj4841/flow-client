@@ -22,7 +22,7 @@ export const addPostVote = async (data) => {
 
 // 투표 게시물 조회
 export const detailVote = async (postCode) => {
-  return await instance.get(`vote/${postCode}`);
+  return await instance.get(`votePost/${postCode}`);
 };
 
 // 게시물 추가

@@ -43,15 +43,14 @@ const router = createBrowserRouter([
       { path: "/authLoginGoogle", element: <AuthLoginGoogle /> },
       { path: "/reportList", element: <ReportList /> },
       {
-        path: "/votePost",
+        path: "/votePost/",
         element: <VotePost />,
-        children: [
-          {
-            path: ":postCode",
-            element: <VoteDetail />,
-          },
-        ],
       },
+      {
+        path: "/votePost/:postCode",
+        element: <VoteDetail />,
+      },
+
       { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드
       { path: "/uploadPost", element: <UploadPost /> },
       {
