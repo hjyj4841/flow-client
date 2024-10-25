@@ -1,5 +1,10 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { addComment, getAllComment, updateComment } from "../api/comment";
+import {
+  addComment,
+  getAllComment,
+  updateComment,
+  deleteComment,
+} from "../api/comment";
 
 export const createComment = createAsyncThunk(
   "comment/createComment",
@@ -13,6 +18,14 @@ export const modifyComment = createAsyncThunk(
   "comment/modifyComment",
   async (data, thunkAPI) => {
     await updateComment(data);
+    thunkAPI.dispatch(fetchComments(data.postCode));
+  }
+);
+
+export const removeComment = createAsyncThunk(
+  "comment/removeComment",
+  async (data, thunkAPI) => {
+    await deleteComment(data.commentCode);
     thunkAPI.dispatch(fetchComments(data.postCode));
   }
 );
