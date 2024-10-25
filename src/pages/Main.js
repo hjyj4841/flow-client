@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { useAuth } from "../contexts/AuthContext";
 import "../assets/css/main.css";
 import { findUser } from "../api/user";
@@ -10,7 +9,7 @@ import {
   newFeed,
   popularFeed,
 } from "../api/post";
-import MainPostsBox from "./post/MainPostsBox";
+import MainPostsBox from "../components/MainPostsBox";
 
 const Main = () => {
   // 토큰 받아오기
@@ -90,6 +89,16 @@ const Main = () => {
         </div>
       </section>
       <main className="container mx-auto">
+        <div className="mb-8 flex justify-center">
+          <video
+            src="http://192.168.10.51:8081/video/mainVideo.mp4"
+            autoPlay
+            loop
+            muted
+            width="1200px"
+            style={{ boxShadow: "0px 0px 10px 5px black" }}
+          />
+        </div>
         {/* Popular Feed Section */}
         <MainPostsBox
           user={user}

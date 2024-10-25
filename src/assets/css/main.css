@@ -17,9 +17,12 @@
 }
 .main-text {
   text-align: center;
-  width: 180px;
+  width: 210px;
   height: 32px;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis !important;
+  text-overflow: ellipsis;
+}
+.main-title-text > a {
+  color: gray;
 }

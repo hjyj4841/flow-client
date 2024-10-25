@@ -1,4 +1,4 @@
-import { handleSaveToggle } from "../../../api/collection";
+import { handleSaveToggle } from "../../api/collection";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 
 const SaveToggleButton = ({ savedPosts, user, post, fetchSaved }) => {
@@ -18,8 +18,8 @@ const SaveToggleButton = ({ savedPosts, user, post, fetchSaved }) => {
             e.stopPropagation(); // 이벤트 전파 막기
             handleSave(post.postCode);
           }}
-          style={{ color: "white", fontSize: "30px" }}
-          className="mx-2"
+          style={{ color: "white", fontSize: "20px" }}
+          className="m-2"
         />
       ) : (
         <BsCollection
@@ -27,8 +27,8 @@ const SaveToggleButton = ({ savedPosts, user, post, fetchSaved }) => {
             e.stopPropagation(); // 이벤트 전파 막기
             handleSave(post.postCode);
           }}
-          style={{ fontSize: "30px" }}
-          className="mx-2"
+          style={{ fontSize: "20px", color: "gainsboro" }}
+          className="m-2"
         />
       )}
     </>

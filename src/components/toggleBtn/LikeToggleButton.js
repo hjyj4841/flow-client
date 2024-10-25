@@ -1,4 +1,4 @@
-import { handleLikeToggle } from "../../../api/likes";
+import { handleLikeToggle } from "../../api/likes";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 
 const LikeToggleButton = ({ likedPosts, user, post, fetchLiked }) => {
@@ -18,8 +18,8 @@ const LikeToggleButton = ({ likedPosts, user, post, fetchLiked }) => {
             e.stopPropagation(); // 이벤트 전파 막기
             handleLike(post.postCode);
           }}
-          style={{ color: "red", fontSize: "30px" }}
-          className="mx-2"
+          style={{ color: "red", fontSize: "20px" }}
+          className="m-2"
         />
       ) : (
         <FaRegHeart
@@ -27,8 +27,8 @@ const LikeToggleButton = ({ likedPosts, user, post, fetchLiked }) => {
             e.stopPropagation(); // 이벤트 전파 막기
             handleLike(post.postCode);
           }}
-          style={{ fontSize: "30px" }}
-          className="mx-2"
+          style={{ fontSize: "20px", color: "gainsboro" }}
+          className="m-2"
         />
       )}
     </>
