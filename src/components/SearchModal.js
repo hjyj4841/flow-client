@@ -4,11 +4,17 @@ import "rc-slider/assets/index.css";
 import "../assets/css/SearchModal.css";
 import { useNavigate } from "react-router-dom";
 
-const SearchModal = ({ isOpen, onClose }) => {
+const SearchModal = ({ isOpen, onClose, user = {} }) => {
   const navigate = useNavigate();
-  const [heightRange, setHeightRange] = useState([140, 200]);
-  const [weightRange, setWeightRange] = useState([30, 120]);
-  const [gender, setGender] = useState("");
+  const [heightRange, setHeightRange] = useState([
+    user.heightMin || 140,
+    user.heightMax || 200,
+  ]);
+  const [weightRange, setWeightRange] = useState([
+    user.weightMin || 30,
+    user.weightMax || 120,
+  ]);
+  const [gender, setGender] = useState(user.gender || "");
   const [job, setJob] = useState({
     사무직: false,
     연구직: false,
@@ -42,27 +48,6 @@ const SearchModal = ({ isOpen, onClose }) => {
     기타: false,
   });
 
-  const seasonTagMapping = {
-    봄: 1,
-    여름: 2,
-    가을: 3,
-    겨울: 4,
-  };
-
-  const moodTagMapping = {
-    포멀: 9,
-    캐주얼: 10,
-    스트릿: 11,
-    아메카지: 12,
-    빈티지: 13,
-    시티보이: 14,
-    페미닌: 15,
-    미니멀: 16,
-    스포티: 17,
-    톰보이: 18,
-    기타: 19,
-  };
-
   const handleSlider1Change = (value) => {
     setHeightRange(value);
   };
@@ -75,14 +60,55 @@ const SearchModal = ({ isOpen, onClose }) => {
     setGender(event.target.value);
   };
 
-  const handleCheckboxChange = (setState, key) => {
-    setState((prev) => ({ ...prev, [key]: !prev[key] }));
+  const handleCheckboxChange = (setter, key) => {
+    setter((prev) => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  const handleSearch = () => {
+    const params = {
+      heightMin: heightRange[0],
+      heightMax: heightRange[1],
+      weightMin: weightRange[0],
+      weightMax: weightRange[1],
+      job: Object.keys(job).filter((key) => job[key]),
+      season: Object.keys(season).filter((key) => season[key]),
+      mood: Object.keys(mood).filter((key) => mood[key]),
+    };
+
+    // gender가 선택되지 않은 경우 요청에서 제외
+    if (gender) {
+      params.gender = gender;
+    } else {
+      params.gender = "all"; // 기본값 설정
+    }
+
+    const queryParams = new URLSearchParams(params).toString();
+    const url = `http://localhost:8080/api/tags/posts?${queryParams}`;
+
+    console.log("Fetching from:", url); // 요청 URL 확인
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("HTTP error! status: " + response.status);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // 데이터 처리 로직
+      })
+      .catch((error) => {
+        console.error("Error fetching posts:", error);
+      });
+
+    navigate("/searched", { state: { params } });
+    onClose();
   };
 
   const handleReset = () => {
-    setHeightRange([140, 200]);
-    setWeightRange([30, 120]);
-    setGender("");
+    setHeightRange([user.heightMin || 140, user.heightMax || 200]);
+    setWeightRange([user.weightMin || 30, user.weightMax || 120]);
+    setGender(user.gender || "");
     setJob({
       사무직: false,
       연구직: false,
@@ -115,43 +141,6 @@ const SearchModal = ({ isOpen, onClose }) => {
       톰보이: false,
       기타: false,
     });
-  };
-
-  const handleSearch = async () => {
-    const selectedJobs = Object.keys(job).filter((key) => job[key]);
-    const selectedSeasons = Object.keys(season).filter((key) => season[key]);
-    const selectedMoods = Object.keys(mood).filter((key) => mood[key]);
-
-    const selectedSeasonCodes = selectedSeasons.map(
-      (season) => seasonTagMapping[season]
-    );
-    const selectedMoodCodes = selectedMoods.map((mood) => moodTagMapping[mood]);
-
-    const params = {
-      heightMin: heightRange[0],
-      heightMax: heightRange[1],
-      weightMin: weightRange[0],
-      weightMax: weightRange[1],
-      gender: gender || undefined,
-      jobs: selectedJobs.length > 0 ? selectedJobs : undefined,
-      seasons: selectedSeasonCodes.length > 0 ? selectedSeasonCodes : undefined,
-      moods: selectedMoodCodes.length > 0 ? selectedMoodCodes : undefined,
-    };
-
-    const finalParams = {};
-
-    if (selectedJobs.length > 0) finalParams.jobs = params.jobs;
-    if (selectedSeasonCodes.length > 0) finalParams.seasons = params.seasons;
-    if (selectedMoodCodes.length > 0) finalParams.moods = params.moods;
-
-    finalParams.heightMin = params.heightMin;
-    finalParams.heightMax = params.heightMax;
-    finalParams.weightMin = params.weightMin;
-    finalParams.weightMax = params.weightMax;
-    if (gender) finalParams.gender = params.gender;
-
-    navigate("/searched", { state: { params: finalParams } });
-    onClose();
   };
 
   if (!isOpen) return null;
