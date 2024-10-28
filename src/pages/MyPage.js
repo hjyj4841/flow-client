@@ -30,6 +30,8 @@ import { FaHelmetSafety, FaComputer } from "react-icons/fa6";
 import { HiBeaker } from "react-icons/hi2";
 import { haveVote } from "../api/vote";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
+import LikeToggleButton from "../components/toggleBtn/LikeToggleButton";
+import SaveToggleButton from "../components/toggleBtn/SaveToggleButton";
 
 const MyPage = () => {
   const [pageState, setPageState] = useState("created");
@@ -73,6 +75,10 @@ const MyPage = () => {
       userCode: 0,
     },
   });
+
+  const [likedPosts, setLikedPosts] = useState([]);
+  const [savedPosts, setSavedPosts] = useState([]);
+
   useEffect(() => {
     setFollow({
       followingUser: {
@@ -174,6 +180,25 @@ const MyPage = () => {
     setIsVote((await haveVote(mypageUserCode)).data);
   };
 
+  // Fetch liked posts
+  const fetchLiked = async () => {
+    const response = await fetchLikedPosts(user.userCode);
+    const likedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isLiked: true,
+    }));
+    setLikedPosts(likedPosts || []);
+  };
+  // Fetch saved posts
+  const fetchSaved = async () => {
+    const response = await fetchSavedPosts(user.userCode);
+    const savedPosts = response.data.postInfoList.map((post) => ({
+      ...post,
+      isSaved: true,
+    }));
+    setSavedPosts(savedPosts || []);
+  };
+
   useEffect(() => {
     if (token !== null) getUserInfo();
     getMypageUserInfo();
@@ -183,14 +208,20 @@ const MyPage = () => {
     if (token === null || (mypageUser.userCode !== 0 && user.userCode !== 0)) {
       getVote();
       getCreatePosts();
-      dispatch(myFollower({
-        followingUserCode : mypageUser.userCode,
-        key : null
-      }));
-      dispatch(followMe({
-        followerUserCode : mypageUser.userCode,
-        key : null
-      }));
+      fetchLiked();
+      fetchSaved();
+      dispatch(
+        myFollower({
+          followingUserCode: mypageUser.userCode,
+          key: null,
+        })
+      );
+      dispatch(
+        followMe({
+          followerUserCode: mypageUser.userCode,
+          key: null,
+        })
+      );
       dispatch(
         followStatus({
           followingUserCode: user.userCode,
@@ -360,8 +391,8 @@ const MyPage = () => {
             </button>
           </div>
           {/* 게시물 나오는 부분 */}
-          <section className="postList">
-            <div className="grid grid-cols-3 gap-2">
+          <section className="flex justify-center postList">
+            <div className="grid grid-cols-3 gap-2 flex justify-center content-center">
               {createdPosts.postInfoList.map((item) => (
                 <div
                   key={item.post.postCode}
@@ -381,7 +412,43 @@ const MyPage = () => {
                   <div
                     onClick={() => detail(item.post.postCode)}
                     className="cursor-pointer rounded-lg absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
-                  />
+                  >
+                    <div className="flex items-start w-full ml-2">
+                      <LikeToggleButton
+                        likedPosts={likedPosts}
+                        user={user}
+                        post={item.post}
+                        fetchLiked={fetchLiked}
+                      />
+                      <SaveToggleButton
+                        savedPosts={savedPosts}
+                        user={user}
+                        post={item.post}
+                        fetchSaved={fetchSaved}
+                      />
+                    </div>
+                    <div className="h-full w-full flex justify-center items-center flex-col">
+                      <p className="w-11/12 truncate text-white text-center">
+                        {item.post.postDesc === null
+                          ? "내용 없음..."
+                          : item.post.postDesc}
+                      </p>
+                      <div className="flex justify-center items-center pt-2">
+                        <img
+                          src={item.post.user.userProfileUrl}
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <p className="text-white p-2 text-xs truncate w-4/5">
+                          {item.post.user.userNickname}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
