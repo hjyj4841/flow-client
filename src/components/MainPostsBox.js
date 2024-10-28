@@ -15,16 +15,13 @@ const MainPostsBox = ({
   const navigate = useNavigate();
 
   const detail = (postCode, e) => {
-    // 막고 싶은 태그 리스트
     const blockedClasses = ["mx-2"];
-    // 이벤트가 발생한 요소의 className 체크
     if (
       blockedClasses.some((className) => e.target.classList.contains(className))
     ) {
-      e.stopPropagation(); // 해당 태그일 경우 이벤트를 막음
+      e.stopPropagation();
       return;
     }
-    // 나머지 태그에서는 네비게이션 동작
     navigate(`/post/${postCode}`);
   };
 
@@ -54,58 +51,62 @@ const MainPostsBox = ({
         </div>
 
         <div className="main-con grid grid-cols-5 gap-4 flex justify-center content-center">
-          {posts.slice(0, 10).map((post) =>
-            post.imageUrls.length > 0 ? (
-              <div
-                key={post.postCode}
-                className="relative bg-gray-300 rounded-lg group main-feed"
-              >
-                <img
-                  src={post.imageUrls[0]}
-                  alt={post.postDesc}
-                  className="w-full h-full object-cover rounded-lg"
-                />
+          {(Array.isArray(posts) ? posts : posts.content || [])
+            .slice(0, 10)
+            .map((post) =>
+              post.imageUrls.length > 0 ? (
                 <div
-                  className="absolute inset-0 flex flex-col justify-start items-start bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
-                  onClick={(e) => detail(post.postCode, e)}
+                  key={post.postCode}
+                  className="relative bg-gray-300 rounded-lg group main-feed"
                 >
-                  <div className="flex">
-                    <LikeToggleButton
-                      likedPosts={likedPosts}
-                      user={user}
-                      post={post}
-                      fetchLiked={fetchLiked}
-                    />
-                    <SaveToggleButton
-                      savedPosts={savedPosts}
-                      user={user}
-                      post={post}
-                      fetchSaved={fetchSaved}
-                    />
-                  </div>
-                  <div className="h-full w-full flex justify-center items-center flex-col">
-                    <p className="main-text text-white">
-                      {post.postDesc === null ? "내용 없음..." : post.postDesc}
-                    </p>
-                    <div className="flex justify-center items-center">
-                      <img
-                        src={post.user.userProfileUrl}
-                        style={{
-                          width: "30px",
-                          height: "30px",
-                          borderRadius: "50%",
-                          objectFit: "cover",
-                        }}
+                  <img
+                    src={post.imageUrls[0]}
+                    alt={post.postDesc}
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                  <div
+                    className="absolute inset-0 flex flex-col justify-start items-start bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg"
+                    onClick={(e) => detail(post.postCode, e)}
+                  >
+                    <div className="flex">
+                      <LikeToggleButton
+                        likedPosts={likedPosts}
+                        user={user}
+                        post={post}
+                        fetchLiked={fetchLiked}
                       />
-                      <p className="text-white p-2 text-xs">
-                        {post.user.userNickname}
+                      <SaveToggleButton
+                        savedPosts={savedPosts}
+                        user={user}
+                        post={post}
+                        fetchSaved={fetchSaved}
+                      />
+                    </div>
+                    <div className="h-full w-full flex justify-center items-center flex-col">
+                      <p className="main-text text-white">
+                        {post.postDesc === null
+                          ? "내용 없음..."
+                          : post.postDesc}
                       </p>
+                      <div className="flex justify-center items-center">
+                        <img
+                          src={post.user.userProfileUrl}
+                          style={{
+                            width: "30px",
+                            height: "30px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                          }}
+                        />
+                        <p className="text-white p-2 text-xs">
+                          {post.user.userNickname}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ) : null
-          )}
+              ) : null
+            )}
         </div>
       </div>
     </section>

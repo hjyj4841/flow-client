@@ -11,6 +11,8 @@ const PopularFeed = () => {
   const [popularFeedImages, setPopularFeedImages] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0); // New state for total pages
   const navigate = useNavigate();
 
   let userCode = "";
@@ -24,18 +26,21 @@ const PopularFeed = () => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     if (token && userCode) {
-      fetchPosts();
+      fetchPosts(page);
       fetchLikedPosts();
       fetchSavedPosts();
     }
-  }, [token, userCode]);
+  }, [token, userCode, page]);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (currentPage) => {
     try {
       const response = await axios.get(
-        "http://localhost:8080/api/likes/post/ordered-by-likes"
+        `http://localhost:8080/api/likes/post/ordered-by-likes?page=${currentPage}`
       );
-      setPopularFeedImages(response.data);
+      const { content, totalPages } = response.data; // Decompose data structure
+      setPopularFeedImages((prev) => [...prev, ...content]);
+      setTotalPages(totalPages);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching popular feed", error);
     }
@@ -95,6 +100,12 @@ const PopularFeed = () => {
       fetchSavedPosts();
     } catch (error) {
       console.error("Error toggling save", error);
+    }
+  };
+
+  const loadMorePosts = () => {
+    if (page < totalPages) {
+      setPage((prevPage) => prevPage + 1);
     }
   };
 
@@ -162,7 +173,8 @@ const PopularFeed = () => {
             ) : null
           )}
         </div>
-        <SlArrowDown />
+        {page < totalPages && <SlArrowDown onClick={loadMorePosts} />}{" "}
+        {/* Conditionally render load more button */}
       </section>
     </main>
   );
