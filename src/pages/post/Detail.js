@@ -6,7 +6,6 @@ import {
   addReportUser,
   initState as reportState,
   reportReducer,
-  addReportComment,
 } from "../../reducers/reportReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { followStatus } from "../../store/followSlice";
@@ -22,6 +21,7 @@ import {
   addComment as addCommentAPI,
   deleteComment,
   getAllComment,
+  updateComment,
 } from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -30,8 +30,6 @@ import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
-import UserModal from "../../components/UserModal";
-
 const Detail = () => {
   const navigate = useNavigate();
   const { postCode } = useParams();
@@ -74,24 +72,14 @@ const Detail = () => {
       userCode: 0,
     },
   });
-  // 댓글 신고 관련
-  const [reportComment, setReportComment] = useState({
-    commentReportDesc: "",
-    comment: {
-      commentCode: 0,
-    },
-    user: {
-      userCode: 0,
-    },
-  });
   // 댓글 작성 관련
+  const [isUpdating, setIsUpdating] = useState(false);
   const [newComment, setNewComment] = useState({
     commentCode: null,
     commentDesc: "",
     postCode: postCode,
     userCode: 0,
   });
-
   // 1. 첫 페이지가 로드되는 시점
   useEffect(() => {
     // (1-1) 로그인 되어있는 유저라면 user에 접속중인 유저 정보 담기
@@ -101,7 +89,6 @@ const Detail = () => {
     // (1-2) 게시물 정보 불러오기
     fetchPost();
   }, []);
-
   // 1-1. 유저정보 가져오기
   const getUserInfo = async () => {
     setUser((await findUser(token)).data);
@@ -112,16 +99,13 @@ const Detail = () => {
     setPost(response.data);
     setFollowUser((await findUserByCode(response.data.userCode)).data);
   };
-
   // 2. likeRedering, saveRedering 값이 변화되는 시점
   useEffect(() => {
     if (token !== null) {
       fetchLiked();
       fetchSaved();
     }
-    // console.log(post);
   }, [likeRendering, saveRendering, post]); // 의존성 배열 추가
-
   // 2-1. 좋아요 정보를 객체 배열로 담기
   const fetchLiked = async () => {
     const response = await fetchLikedPosts(user.userCode);
@@ -164,11 +148,9 @@ const Detail = () => {
       );
     }
   }, [dispatch, user.userCode, followUser.userCode]);
-
   useEffect(() => {
     dispatchFollowStatus();
   }, [dispatchFollowStatus]);
-
   useEffect(() => {
     if (followBool !== undefined && followBool !== followCheck)
       setFollowCheck(followBool);
@@ -256,7 +238,6 @@ const Detail = () => {
     addMutation.mutate(newComment);
     setNewComment({ ...newComment, commentDesc: "" });
   };
-
   // 댓글 삭제
   const deleteMutation = useMutation({
     mutationFn: (commentCode) => deleteComment(commentCode),
@@ -264,11 +245,32 @@ const Detail = () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
     },
   });
-
   const handleDelete = (commentCode) => {
     deleteMutation.mutate(commentCode);
   };
+  // 댓글 수정
+  const updateMutation = useMutation({
+    mutationFn: (commentCode) => updateComment(commentCode),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
+    },
+  });
 
+  const update = (user, commentDesc, commentCode) => {
+    if (user === commentCode.user) {
+      setNewComment({ ...newComment, commentDesc, commentCode });
+    }
+  };
+
+  // 댓글 수정
+  const handleUpdate = (commentCode, commentDesc) => {
+    updateMutation.mutate({ ...commentCode, commentDesc });
+  };
+
+  // 댓글 수정 취소
+  const handleUpdateCancel = () => {
+    setNewComment({ ...newComment, commentDesc: "", commentCode: 0 });
+  };
   // 작성자의 유저정보 페이지로 이동
   const goUserInfo = () => {
     navigate(`/mypage/${post.userCode}`);
@@ -285,13 +287,6 @@ const Detail = () => {
   }, [user.userCode]);
   if (isLoading) return <>로딩중...</>;
   if (error) return <>에러 발생...</>;
-
-  // 댓글 신고 기능
-  const reportCommentBtn = (data) => {
-    addReportComment(data);
-    alert("댓글 신고 완료");
-  };
-
   return (
     <>
       <section className="bg-white py-4 shadow-md" />
@@ -316,7 +311,16 @@ const Detail = () => {
                 src={followUser.userProfileUrl}
                 onClick={goUserInfo}
               />
-              <UserModal user={followUser} />
+              <span
+                style={{
+                  padding: "0 10px",
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={goUserInfo}
+              >
+                {followUser.userNickname}
+              </span>
               <span
                 style={{ paddingRight: "10px", cursor: "pointer" }}
                 onClick={goUserInfo}
@@ -522,7 +526,6 @@ const Detail = () => {
               <p className="mb-10" style={{ lineHeight: "1.5rem" }}>
                 {post.postDesc}
               </p>
-
               <table className="mb-2" style={{ width: "100%" }}>
                 {post.products && post.products.length > 0 ? (
                   <>
@@ -660,6 +663,47 @@ const Detail = () => {
                           <td>
                             {user.userCode === comment.userCode.userCode && (
                               <>
+                                <div>
+                                  {isUpdating ? (
+                                    <>
+                                      <input
+                                        type="text"
+                                        value={newComment.commentDesc}
+                                        onChange={(e) =>
+                                          setNewComment({
+                                            ...newComment,
+                                            commentDesc: e.target.value,
+                                          })
+                                        }
+                                        className="border border-gray-300 rounded p-1"
+                                      />
+                                      <div className="edit-box">
+                                        <button onClick={handleUpdateCancel}>
+                                          취소
+                                        </button>
+                                        <button
+                                          onClick={() =>
+                                            handleUpdate(
+                                              comment.commentCode,
+                                              newComment.commentDesc
+                                            )
+                                          }
+                                        >
+                                          수정완료
+                                        </button>
+                                      </div>
+                                    </>
+                                  ) : (
+                                    <p>{comment.commentDesc}</p>
+                                  )}
+                                </div>
+                                <button
+                                  type="text"
+                                  onClick={() => setIsUpdating(true)}
+                                  className="text-black px-1 hover:text-gray-900 text-gray-500"
+                                >
+                                  수정
+                                </button>
                                 <button
                                   onClick={() =>
                                     handleDelete(comment.commentCode)
@@ -668,19 +712,8 @@ const Detail = () => {
                                 >
                                   삭제
                                 </button>
-                                <button className="text-black px-1 hover:text-gray-900 text-gray-500">
-                                  수정
-                                </button>
                               </>
                             )}
-                          </td>
-                          <td>
-                            <button
-                              className="report-comment-btn"
-                              type="button"
-                            >
-                              신고
-                            </button>
                           </td>
                         </tr>
                       ))
@@ -694,9 +727,6 @@ const Detail = () => {
               </div>
             </>
           ) : null}
-          <p className="text-sm" style={{ color: "grey", marginTop: "10px" }}>
-            {post?.postDate.split("T")[0]}
-          </p>
         </main>
       </div>
     </>

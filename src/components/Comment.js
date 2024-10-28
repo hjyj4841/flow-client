@@ -44,14 +44,17 @@ const Comment = ({ comment, postCode }) => {
     updateMutation.mutate({ ...comment, commentDesc });
   };
 
+  const handleUpdateCancel = () => {
+    setNewComment({ ...newComment, commentDesc: "", commentCode: 0 });
+  };
+
   const handleDelete = () => {
     deleteMutation.mutate(comment.commentCode);
   };
 
   return;
   <>
-  {
-    user.commentCode === comment.commentCode && (
+    {user.commentCode === comment.commentCode && (
       <button
         type="text"
         value={newComment.commentDesc}
@@ -60,9 +63,8 @@ const Comment = ({ comment, postCode }) => {
       >
         수정
       </button>
-    );
-  }
-  </>
+    )}
+  </>;
 };
 
 export default Comment;
