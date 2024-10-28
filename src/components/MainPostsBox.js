@@ -58,7 +58,7 @@ const MainPostsBox = ({
             post.imageUrls.length > 0 ? (
               <div
                 key={post.postCode}
-                className="relative bg-gray-300 rounded-lg group main-feed"
+                className="relative bg-gray-300 rounded-lg group main-feed drag-prevent"
               >
                 <img
                   src={post.imageUrls[0]}
@@ -84,8 +84,15 @@ const MainPostsBox = ({
                     />
                   </div>
                   <div className="h-full w-full flex justify-center items-center flex-col">
-                    <p className="main-text text-white">
-                      {post.postDesc === null ? "내용 없음..." : post.postDesc}
+                    <p
+                      className="main-text"
+                      style={
+                        post.postDesc === ""
+                          ? { color: "darkgray" }
+                          : { color: "white" }
+                      }
+                    >
+                      {post.postDesc === "" ? "내용 없음..." : post.postDesc}
                     </p>
                     <div className="flex justify-center items-center">
                       <img

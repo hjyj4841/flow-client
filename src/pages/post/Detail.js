@@ -152,7 +152,7 @@ const Detail = () => {
       });
       setCheck(post.userCode === user.userCode);
     }
-  }, [post?.userCode]);
+  }, [post?.userCode, user.userCode]);
   // 유저가 작성자를 팔로우 했는지 조회
   const dispatchFollowStatus = useCallback(() => {
     if (user.userCode !== 0 && followUser.userCode !== 0) {

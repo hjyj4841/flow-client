@@ -396,7 +396,7 @@ const MyPage = () => {
               {createdPosts.postInfoList.map((item) => (
                 <div
                   key={item.post.postCode}
-                  className="relative rounded-lg group postBox"
+                  className="relative rounded-lg group postBox drag-prevent"
                 >
                   {item.imageFiles && item.imageFiles.length > 0 ? (
                     <img
@@ -428,8 +428,15 @@ const MyPage = () => {
                       />
                     </div>
                     <div className="h-full w-full flex justify-center items-center flex-col">
-                      <p className="w-11/12 truncate text-white text-center">
-                        {item.post.postDesc === null
+                      <p
+                        className="w-11/12 truncate text-center"
+                        style={
+                          item.post.postDesc === ""
+                            ? { color: "darkgray" }
+                            : { color: "white" }
+                        }
+                      >
+                        {item.post.postDesc === ""
                           ? "내용 없음..."
                           : item.post.postDesc}
                       </p>
