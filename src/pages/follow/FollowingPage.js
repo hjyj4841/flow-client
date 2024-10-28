@@ -37,7 +37,7 @@ const FollowingPage = React.memo(({followingUserCode, search}) => {
       // Redux 액션을 디스패치하는 useEffect
       useEffect(() => {
         fetchFollowers();
-      }, [fetchFollowers]);
+      }, [fetchFollowers, search]);
     
       const userList = 
       useMemo(
@@ -49,13 +49,11 @@ const FollowingPage = React.memo(({followingUserCode, search}) => {
                 <div className="nickBox">{dto.user.userNickname}</div>
                 <div className="etcBox">{dto.user.userEmail}</div>
               </div>
-              {(code !== dto.user.userCode && dto.following !== undefined) && (
-                <>
                 <div className="buttonContainer">
-                  <FollowButton user={dto.user} key={dto.user.userCode} bool={dto.following} />
+                  {(code !== dto.user.userCode && dto.following !== undefined) && (
+                   <FollowButton user={dto.user} key={dto.user.userCode} bool={dto.following} />
+                  )}
                 </div>
-                </>
-              )}
             </div>
           )),
         [users]

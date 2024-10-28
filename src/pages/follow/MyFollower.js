@@ -6,11 +6,9 @@ import "../../assets/css/mypage_follow.css"
 import FollowingPage from "./FollowingPage";
 import FollowerPage from "./FollowerPage";
 
-const MyFollower = () => {
-  const location = useLocation();
+const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   const dispatch = useDispatch();
-  const logic = location.state;
-  const { followingUserCode } = useParams();
+  const { mypageUserCode } = useParams();
   const count = useSelector((state) => state.follow.countFollower);
   const counter = useSelector((state) => state.follow.counter);
   const [bool, setBool] = useState(logic);
@@ -26,17 +24,17 @@ const MyFollower = () => {
   }, []);
 
   useEffect(() => {
-    if(followingUserCode !== undefined) {
+    if(mypageUserCode !== undefined) {
       dispatch(myFollower({
-        followingUserCode : parseInt(followingUserCode),
+        followingUserCode : parseInt(mypageUserCode),
         key : key
       }));
       dispatch(followMe({
-        followerUserCode : parseInt(followingUserCode),
+        followerUserCode : parseInt(mypageUserCode),
         key : key
       }));
     }
-  }, [dispatch, followingUserCode]);
+  }, [dispatch, mypageUserCode, key]);
 
   useEffect(() => {
     let timeout;
@@ -89,39 +87,48 @@ const MyFollower = () => {
       if (timeout) clearTimeout(timeout);
     };
   }, []);
+  
   return (
     <>
-      <div className="following-userInfo">
-        <header style={{ opacity, transition: 'opacity 0.3s ease' }}>
-          <div className={`section ${bool ? "active" : ""}`} onClick={warp1}>
-            <h1>팔로잉</h1>
-            <p>{count}</p>
+      <button onClick={() => setIsModalOpen(true)}>{logic ? "팔로워" : "팔로잉"}</button>
+
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="following-userInfo">
+              <header style={{ opacity, transition: 'opacity 0.3s ease' }}>
+                <div className={`section ${bool ? 'active' : ''}`} onClick={warp1}>
+                  <h1>팔로잉</h1>
+                  <p>{count}</p>
+                </div>
+                <div className={`section ${!bool ? 'active' : ''}`} onClick={warp2}>
+                  <h1>팔로워</h1>
+                  <p>{counter}</p>
+                </div>
+                <div className="section">
+                  <h1>추천 팔로워</h1>
+                </div>
+              </header>
+              <div className="searchBar" style={{ opacity, transition: 'opacity 0.3s ease' }}>
+                <input
+                  type="text"
+                  placeholder="검색"
+                  value={key}
+                  onChange={(e) => setKey(e.target.value)}
+                />
+              </div>
+              <div className="following-users">
+                <div style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
+                  <FollowingPage followingUserCode={mypageUserCode} search={key} />
+                </div>
+                <div style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
+                  <FollowerPage followingUserCode={mypageUserCode} search={key} />
+                </div>
+              </div>
+            </div>
           </div>
-          <div className={`section ${!bool ? "active" : ""}`} onClick={warp2}>
-            <h1>팔로워</h1>
-            <p>{counter}</p>
-          </div>
-          <div className="section">
-            <h1>추천 팔로워</h1>
-          </div>
-        </header>
-        <div className="searchBar" style={{ opacity, transition: 'opacity 0.3s ease' }}>
-          <input
-            type="text"
-            placeholder="검색" 
-            value={key}
-            onChange={(e) => {setKey(e.target.value)}}
-          />
         </div>
-        <div className="following-users">
-          <div style={{ display: bool ? 'flex' : 'none', flexDirection: 'column'}}>
-            <FollowingPage followingUserCode={followingUserCode} search={key}/>
-          </div>
-          <div style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column'}}>
-            <FollowerPage followingUserCode={followingUserCode} search={key}/>
-          </div>
-        </div>
-      </div>
+      )}
     </>
   );
 };
