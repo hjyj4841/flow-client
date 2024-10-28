@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { TiDelete } from "react-icons/ti";
 import "../assets/css/post.css";
 
 const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
@@ -268,7 +268,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
 
         <div className="mb-4">
           {post.products?.map((item, index) => (
-            <div className="text-sm" key={index}>
+            <div className="text-sm" style={{ margin: "10px 2px" }} key={index}>
               <input
                 type="text"
                 placeholder="브랜드"
@@ -278,7 +278,6 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 style={{
                   borderBottom: "1px solid #bbb",
                   width: "18%",
-                  margin: "10px 2px",
                 }}
               />
               <input
@@ -326,10 +325,15 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 }}
               />
               <button
-                style={{ marginLeft: "10px" }}
+                style={{
+                  marginLeft: "10px",
+                  position: "relative",
+                  top: "8px",
+                  fontSize: "1.8rem",
+                }}
                 onClick={() => deleteProduct(index)}
               >
-                <RiDeleteBin6Line />
+                <TiDelete />
               </button>
             </div>
           ))}

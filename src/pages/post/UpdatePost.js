@@ -1,6 +1,5 @@
 import { useParams } from "react-router-dom";
 import { delImg, delProduct, detailPost, editPost } from "../../api/post";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { TiDelete } from "react-icons/ti";
 import { useState, useEffect } from "react";
 
@@ -33,11 +32,6 @@ const UpdatePost = () => {
   // 기존 post 내용 가져오기
   const detailView = async () => {
     const result = await detailPost(postCode);
-    // null 처리
-    if (result.data.postDesc === null) {
-      result.data.postDesc = "";
-    }
-    // console.log(result.data.postDesc);
     setUpdate(result.data);
   };
 
@@ -136,7 +130,7 @@ const UpdatePost = () => {
         setBodyTag(item);
       }
     });
-    // console.log(update);
+    console.log(update);
     // console.log(delProducts);
   }, [update]);
 
@@ -183,7 +177,8 @@ const UpdatePost = () => {
 
   // - 제품 삭제 버튼
   const deleteProduct = (index, productCode) => {
-    // console.log(productCode);
+    // console.log(delProducts);
+
     setDelProducts((prevDelProducts) => [...prevDelProducts, productCode]);
 
     setUpdate((prevPost) => {
@@ -200,8 +195,9 @@ const UpdatePost = () => {
       await delImg([...imgCode]);
     }
 
+    // product 삭제
     delProductAPI(delProducts);
-    // console.log(delProducts);
+
     try {
       if (careerTag === 0 && bodyTag === 0) {
         await editPost(update);
@@ -354,7 +350,12 @@ const UpdatePost = () => {
                 }}
               />
               <button
-                style={{ marginLeft: "10px", fontSize: "1.8rem" }}
+                style={{
+                  marginLeft: "10px",
+                  position: "relative",
+                  top: "8px",
+                  fontSize: "1.8rem",
+                }}
                 onClick={() => deleteProduct(index, post.productCode)}
               >
                 <TiDelete />
