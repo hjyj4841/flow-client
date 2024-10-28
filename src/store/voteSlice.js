@@ -61,49 +61,49 @@ export const totalNCount = createAsyncThunk(
 
 const voteSlice = createSlice({
   name: "voteSlice",
-  initialState: { votes: null, count:0, countY: 0, countN: 0, isVote: false },
+  initialState: { votes: null, count: 0, countY: 0, countN: 0, isVote: false },
   reducers: {},
   extraReducers: (builder) => {
     builder
-    .addCase(voteYorN.fulfilled, (state, action) => {
-      state.votes = action.payload;
-      state.count += 1;
-      state.isVote = true;
-    })
-    .addCase(delVote.fulfilled, (state, action) => {
-      state.votes = null;
-      state.count -= 1;
-      state.countY -= 1;
-      state.countN -= 1;
-      state.isVote = false;
-    })
-    .addCase(checkVoteState.fulfilled, (state, action) => {
-      if(action.payload === ""){
-        state.isVote = false;
-        state.votes = null;
-      } else {
-        state.isVote = true;
+      .addCase(voteYorN.fulfilled, (state, action) => {
         state.votes = action.payload;
-      }
-    })
-    .addCase(totalVoteCount.fulfilled, (state, action) => {
-      state.votes = action.payload;
-      state.count = action.payload;
-      state.countY = action.payload;
-      state.countN = action.payload;
-    })
-    .addCase(totalYCount.fulfilled, (state, action) => {
-      state.votes = action.payload;
-      state.count = action.payload;
-      state.countY = action.payload;
-      state.countN = action.payload;
-    })
-    .addCase(totalNCount.fulfilled, (state, action) => {
-      state.votes = action.payload;
-      state.count = action.payload;
-      state.countY = action.payload;
-      state.countN = action.payload;
-    })
+        state.count += 1;
+        state.isVote = true;
+      })
+      .addCase(delVote.fulfilled, (state, action) => {
+        state.votes = null;
+        state.count -= 1;
+        state.countY -= 1;
+        state.countN -= 1;
+        state.isVote = false;
+      })
+      .addCase(checkVoteState.fulfilled, (state, action) => {
+        if (action.payload === "") {
+          state.isVote = false;
+          state.votes = null;
+        } else {
+          state.isVote = true;
+          state.votes = action.payload;
+        }
+      })
+      .addCase(totalVoteCount.fulfilled, (state, action) => {
+        state.votes = action.payload;
+        state.count = action.payload;
+        state.countY = action.payload;
+        state.countN = action.payload;
+      })
+      .addCase(totalYCount.fulfilled, (state, action) => {
+        state.votes = action.payload;
+        state.count = action.payload;
+        state.countY = action.payload;
+        state.countN = action.payload;
+      })
+      .addCase(totalNCount.fulfilled, (state, action) => {
+        state.votes = action.payload;
+        state.count = action.payload;
+        state.countY = action.payload;
+        state.countN = action.payload;
+      });
   },
 });
 

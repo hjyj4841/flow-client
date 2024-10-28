@@ -9,6 +9,16 @@ export const addVote = async (data) => {
   return await instance.post("postVote", data);
 };
 
+// 찬성 투표
+export const voteY = async (data) => {
+  return await instance.post("postVote", data);
+};
+
+// 반대 투표
+export const voteN = async (data) => {
+  return await instance.post("postVote", data);
+};
+
 // 투표 취소
 export const removeVote = async (voteCode) => {
   return await instance.delete(`postVote/${voteCode}`);
