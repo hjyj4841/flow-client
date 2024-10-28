@@ -1,0 +1,27 @@
+.Report-content {
+  background-color: white;
+  height: 100px;
+  width: 200px;
+  position: absolute;
+  border: 1px solid gray;
+  display: flex;
+  flex-direction: column;
+  top: -1px;
+  right: -1px;
+  border-radius: 4px;
+}
+.report-user {
+  margin-top: 20px;
+  margin-left: 4px;
+  width: 190px;
+  border-bottom: 1px solid black;
+  outline: none;
+}
+.report-user-button {
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: rgb(250, 109, 109);
+  box-shadow: none;
+  margin-left: 55px !important;
+  margin-top: 10px !important;
+}
