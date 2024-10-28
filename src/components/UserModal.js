@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import UserReportModal from "./UserReportModal";
 import "../assets/css/userModal.css";
@@ -8,13 +8,16 @@ const UserModal = ({ user }) => {
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef();
 
-  const goUserInfo = (user) => {
+  const goUserInfo = () => {
     navigate(`/mypage/${user.userCode}`);
   };
 
   return (
     <div className="userMenu">
-      <span className="menu-open-Button" onClick={() => setUserMenuOpen(true)}>
+      <span
+        className="menu-open-Button"
+        onClick={() => setUserMenuOpen((prev) => !prev)}
+      >
         {user.userNickname}
       </span>
       {userMenuOpen && (
@@ -27,7 +30,10 @@ const UserModal = ({ user }) => {
             }
           }}
         >
-          <button onClick={goUserInfo}>유저 페이지</button>
+          <button className="user-button" onClick={goUserInfo}>
+            유저 페이지
+          </button>
+          <UserReportModal className="Report-button" />
         </div>
       )}
     </div>

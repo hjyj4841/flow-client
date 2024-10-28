@@ -1,12 +1,35 @@
 .userMenu {
+  display: flex;
+  position: relative;
   margin-left: 20px;
   width: 80px;
+  z-index: 4;
 }
 .menu-open-Button {
+  bottom: -7px;
+  width: 100px;
+  position: absolute;
   cursor: pointer;
+  margin-left: 5px;
+  user-select: none;
 }
 .menu-content {
-  border: 1px solid black;
+  height: 100px;
+  width: 200px;
+  position: absolute;
+  border: 1px solid gray;
   display: flex;
   flex-direction: column;
+  top: 30px;
+  right: -45px;
+  border-radius: 4px;
+}
+.menu-content button {
+  margin-top: 12px;
+  margin-left: 8px;
+  width: 180px;
+  height: 30px;
+  border: 1px solid black;
+  border-radius: 5px;
+  box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.5);
 }

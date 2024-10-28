@@ -9,6 +9,7 @@ import {
   delReportComment,
 } from "../reducers/reportReducer";
 import { delReportUser, banUserReport } from "../reducers/reportReducer";
+import "../assets/css/reportComment.css";
 
 const ReportComment = () => {
   const [state, dispatch] = useReducer(reportReducer, rCommentState);

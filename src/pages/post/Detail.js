@@ -361,7 +361,8 @@ const Detail = () => {
                 <></>
               )}
             </div>
-            {check ? (
+            {check ==
+            (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button
                   className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
@@ -376,30 +377,6 @@ const Detail = () => {
                   onClick={deletePost}
                 >
                   삭제
-                </button>
-              </div>
-            ) : (
-              <div style={{ display: "flex" }}>
-                <input
-                  className="report-user-desc"
-                  type="text"
-                  placeholder="신고 내용"
-                  value={reportUser.userReportDesc}
-                  onChange={(e) =>
-                    setReportUser({
-                      ...reportUser,
-                      userReportDesc: e.target.value,
-                    })
-                  }
-                />
-                <button
-                  className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2 report-user-btn"
-                  style={{ margin: "5px", width: "80px" }}
-                  onClick={() => {
-                    reportUserBtn(reportUser);
-                  }}
-                >
-                  유저 신고
                 </button>
               </div>
             )}
