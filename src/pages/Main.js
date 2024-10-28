@@ -13,7 +13,7 @@ import MainPostsBox from "../components/MainPostsBox";
 
 const Main = () => {
   // 토큰 받아오기
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [user, setUser] = useState({
     userCode: 0,
   });
@@ -32,7 +32,9 @@ const Main = () => {
   }, []);
 
   const getUserInfo = async () => {
-    setUser((await findUser(token)).data);
+    const respones = (await findUser(token)).data;
+    if (respones.error) logout();
+    else setUser(respones);
   };
 
   const fetchNewFeedImages = async () => {

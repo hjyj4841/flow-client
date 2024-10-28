@@ -30,14 +30,10 @@ const Header = () => {
 
   // 유저 정보 뽑기
   const getUserInfo = async () => {
-    setUser((await findUser(token)).data);
+    const respones = (await findUser(token)).data;
+    if (respones.error) logout();
+    else setUser(respones);
   };
-
-  // useEffect(() => {
-  //   if (token !== null) {
-  //     getUserInfo();
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (token !== null) {
