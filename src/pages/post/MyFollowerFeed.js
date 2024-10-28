@@ -9,6 +9,7 @@ const MyFollowerFeed = () => {
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
+  const [page, setPage] = useState(1); // Page state for pagination
 
   let userCode = "";
   if (token) {
@@ -21,18 +22,18 @@ const MyFollowerFeed = () => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     if (token && userCode) {
-      fetchFollowingUserPosts();
+      fetchFollowingUserPosts(page);
       fetchLikedPosts();
       fetchSavedPosts();
     }
-  }, [token, userCode]);
+  }, [token, userCode, page]);
 
-  const fetchFollowingUserPosts = async () => {
+  const fetchFollowingUserPosts = async (currentPage) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/posts/following/${userCode}`
+        `http://localhost:8080/api/posts/following/${userCode}?page=${currentPage}`
       );
-      setFollowingUserPosts(response.data);
+      setFollowingUserPosts((prev) => [...prev, ...response.data]);
     } catch (error) {
       console.error("Error fetching follower posts", error);
     }
@@ -97,13 +98,15 @@ const MyFollowerFeed = () => {
     navigate(`/post/${postCode}`);
   };
 
+  const loadMorePosts = () => setPage((prev) => prev + 1); // Increase page for loading more posts
+
   return (
     <div className="bg-gray-100 text-gray-800">
       <main className="container">
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">MY FOLLOWER'S FEED</h2>
           <div className="mff-con grid grid-cols-5 gap-4">
-            {followingUserPosts.slice(0, 10).map((post) =>
+            {followingUserPosts.map((post) =>
               post.imageUrls.length > 0 ? (
                 <div
                   key={post.postCode}
@@ -168,6 +171,9 @@ const MyFollowerFeed = () => {
               ) : null
             )}
           </div>
+          <button onClick={loadMorePosts} className="load-more-button">
+            Load More
+          </button>
         </section>
       </main>
     </div>

@@ -11,6 +11,7 @@ const NewFeed = () => {
   const [newFeedImages, setNewFeedImages] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
+  const [page, setPage] = useState(1); // Page state
   const navigate = useNavigate();
 
   let userCode = "";
@@ -20,6 +21,24 @@ const NewFeed = () => {
     const userData = JSON.parse(window.atob(base64));
     userCode = userData.userCode;
   }
+
+  useEffect(() => {
+    setToken(localStorage.getItem("token"));
+    if (token && userCode) {
+      fetchPosts(page);
+      fetchLikedPosts();
+      fetchSavedPosts();
+    }
+  }, [token, userCode, page]);
+
+  const fetchPosts = async (currentPage) => {
+    try {
+      const data = await newFeed(currentPage);
+      setNewFeedImages((prev) => [...prev, ...data]); // Append new data
+    } catch (error) {
+      console.error("Error fetching new feed images:", error);
+    }
+  };
 
   const fetchLikedPosts = async () => {
     if (userCode) {
@@ -55,17 +74,6 @@ const NewFeed = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const data = await newFeed(1);
-      setNewFeedImages(data);
-    };
-
-    fetchPosts();
-    fetchLikedPosts();
-    fetchSavedPosts();
-  }, [token, userCode]);
-
   // Toggle like
   const handleLikeToggle = async (postCode) => {
     try {
@@ -90,6 +98,8 @@ const NewFeed = () => {
       console.error("Error toggling save", error);
     }
   };
+
+  const loadMorePosts = () => setPage((prev) => prev + 1); // Load more handler
 
   const detail = (postCode) => {
     navigate(`/post/${postCode}`);
@@ -155,7 +165,7 @@ const NewFeed = () => {
             ) : null
           )}
         </div>
-        <SlArrowDown />
+        <SlArrowDown onClick={loadMorePosts} />
       </section>
     </main>
   );
