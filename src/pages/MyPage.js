@@ -32,6 +32,8 @@ import { haveVote } from "../api/vote";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import LikeToggleButton from "../components/toggleBtn/LikeToggleButton";
 import SaveToggleButton from "../components/toggleBtn/SaveToggleButton";
+import "../pages/follow/MyFollower.js";
+import MyFollower from "../pages/follow/MyFollower.js";
 
 const MyPage = () => {
   const [pageState, setPageState] = useState("created");
@@ -67,6 +69,10 @@ const MyPage = () => {
   const [isVote, setIsVote] = useState(false);
 
   // 팔로우 기능
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
   const [follow, setFollow] = useState({
     followingUser: {
       userCode: 0,
@@ -269,7 +275,16 @@ const MyPage = () => {
               <span>
                 게시물 <span>{createdPosts.totalPosts}</span>
               </span>
-              <span
+              {/* 팔로우 경로 */}
+              <span onClick={openModal}>
+                <MyFollower
+                  setIsModalOpen={setIsModalOpen}
+                  isModalOpen={isModalOpen}
+                  logic={true}
+                />
+                <span>{followerCount}</span>
+              </span>
+              {/* <span
                 onClick={() =>
                   navigate(
                     mypageUserCode === user.userCode
@@ -281,9 +296,17 @@ const MyPage = () => {
                   )
                 }
               >
-                팔로워 <span>{followerCount}</span>
+                팔로워 
+              </span> */}
+              <span onClick={openModal}>
+                <MyFollower
+                  setIsModalOpen={setIsModalOpen}
+                  isModalOpen={isModalOpen}
+                  logic={false}
+                />
+                <span>{followingCount}</span>
               </span>
-              <span
+              {/* <span
                 onClick={() =>
                   navigate(
                     mypageUserCode === user.userCode
@@ -295,8 +318,8 @@ const MyPage = () => {
                   )
                 }
               >
-                팔로잉 <span>{followingCount}</span>
-              </span>
+                팔로잉 
+              </span> */}
             </div>
             <div className="myJobBox">
               <i>

@@ -5,11 +5,11 @@ import {
 } from "../../store/followSlice";
 import { useDispatch} from "react-redux";
 import styled from "styled-components";
-import { getKakaoCode } from "../../api/kakao";
-import { getGoogleCode } from "../../api/google";
-import { getNaverCode } from "../../api/naver";
 import { useParams } from "react-router-dom";
 import "../../assets/css/forNotUser.scss";
+import "../../components/RegisterModal.js"
+import ForNotUser from "./ForNotUserModal.js";
+import ToRegister from "./ToRegister.js";
 
 const FollowStyleAndEffect = styled.div`
     .followButton {
@@ -52,6 +52,7 @@ const FollowButton = ({ user, bool }) => {
   const token = localStorage.getItem("token");
   const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [registerOpen, setRegisterOpen] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
     if (token) {
@@ -132,7 +133,10 @@ const FollowButton = ({ user, bool }) => {
       unfollow();
     }
   };
-  const toRegister = () => {};
+  const toRegister = () => {
+   setShowModal(false);
+   setRegisterOpen(true);
+  };
   const tryRegister = () => {
     setShowModal(true);
   }
@@ -154,48 +158,11 @@ const FollowButton = ({ user, bool }) => {
         </div>
         </FollowStyleAndEffect>
         {showModal && (
-          <div className="loginAndRegister-container">
-            <div className="modal-content">
-              <h1>로그인 후 이용하실 수 있습니다!</h1>
-              <p>네이버, 구글, 카카오 계정으로 간편하게!</p>
-              <div className="divider"></div> {/* 구분선 */}
-              <button
-                type="button"
-                className="google"
-                onClick={() => getGoogleCode("login")}
-              >
-                <span className="blue">G</span>
-                <span className="red">o</span>
-                <span className="yellow">o</span>
-                <span className="blue">g</span>
-                <span className="green">l</span>
-                <span className="red">e</span>
-              </button>
-              <button
-                type="button"
-                className="kakao"
-                onClick={() => getKakaoCode("login")}
-              >
-                Kakao
-              </button>
-              <button
-                type="button"
-                className="naver"
-                onClick={() => getNaverCode("login")}
-              >
-                NAVER
-              </button>
-              <button onClick={() => setShowModal(false)}>닫기</button>
-              <div className="divider"></div> {/* 구분선 */}
-              <div className="register">
-                <span>아직 회원이 아니신가요?</span>
-                <span className="registerLink" onClick={toRegister}>
-                  가입
-                </span>
-              </div>
-            </div>
-          </div>
+         <ForNotUser setShowModal={setShowModal} toRegister={toRegister}/>
         )}
+        {registerOpen && (
+        <ToRegister setRegisterOpen={setRegisterOpen}/>
+      )}
     </>
   );
 };
