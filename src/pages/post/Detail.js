@@ -361,8 +361,7 @@ const Detail = () => {
                 <></>
               )}
             </div>
-            {check ==
-            (
+            {check && (
               <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button
                   className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
