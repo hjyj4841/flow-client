@@ -34,10 +34,6 @@ const VoteDetail = () => {
   const [check, setCheck] = useState(false); // 게시글 작성자와 현재 접속중인 유저가 같은 유저인지 체크
   // 게시물
   const [post, setPost] = useState(null); // 해당 페이지에 해당하는 게시물 객체
-  const [likedPosts, setLikedPosts] = useState([]); // 좋아요 정보를 담는 배열 객체
-  const [likeRendering, setLikeRendering] = useState([]);
-  const [savedPosts, setSavedPosts] = useState([]); // 북마크 정보를 담는 배열 객체
-  const [saveRendering, setSaveRendering] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0); // 게시물 이미지 변경(다음/이전) 관련
   const [imageLoad, setImageLoad] = useState([]); // 이미지 배열 객체
   // 팔로우
@@ -288,23 +284,80 @@ const VoteDetail = () => {
                 className="relative mb-4"
                 style={{ display: "flex", justifyContent: "center" }}
               >
-                {post.imageUrls && post.imageUrls.length > 0 ? (
-                  <div>
+                {post.imageUrls && post.imageUrls.length === 1 ? (
+                  <div
+                    className="relative bg-gray-300 rounded-lg group mb-5 n-feed"
+                    style={{ height: "600px", width: "400px" }}
+                  >
                     <img
-                      src={post.imageUrls[currentImageIndex]}
-                      alt={`Post Image ${currentImageIndex}`}
+                      src={post.imageUrls[0]}
                       className="rounded-lg"
                       style={{
                         height: "600px",
                         width: "400px",
                         objectFit: "cover",
+                        position: "absolute",
                       }}
                     />
+                    <div
+                      style={{
+                        display: "flex",
+                        height: "600px",
+                        width: "400px",
+                        position: "absolute",
+                        opacity: "50%",
+                      }}
+                    >
+                      <div
+                        className="hover:opacity-100 opacity-0"
+                        style={{
+                          height: "100%",
+                          width: "50%",
+                          backgroundColor: "black",
+                        }}
+                      />
+                      <div
+                        className="hover:opacity-100 opacity-0"
+                        style={{
+                          height: "100%",
+                          width: "50%",
+                          backgroundColor: "black",
+                        }}
+                      />
+                    </div>
                   </div>
                 ) : (
-                  <p>No images available</p>
+                  <div style={{ display: "flex" }}>
+                    <div className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed">
+                      <img
+                        src={post.imageUrls[0]}
+                        alt={`Post Image ${currentImageIndex}`}
+                        className="rounded-lg"
+                        style={{
+                          height: "600px",
+                          width: "400px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+                    </div>
+                    <div className="relative w-256 h-350 bg-gray-300 rounded-lg group mb-5 n-feed">
+                      <img
+                        src={post.imageUrls[1]}
+                        alt={`Post Image ${currentImageIndex}`}
+                        className="rounded-lg "
+                        style={{
+                          height: "600px",
+                          width: "400px",
+                          objectFit: "cover",
+                        }}
+                      />
+                      <div className="absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg" />
+                    </div>
+                  </div>
                 )}
               </div>
+              <div />
               <div
                 className="flex text-sm text-gray-600 mb-4"
                 style={{ justifyContent: "space-between" }}
