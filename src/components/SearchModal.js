@@ -48,12 +48,8 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
     기타: false,
   });
 
-  const handleSlider1Change = (value) => {
-    setHeightRange(value);
-  };
-
-  const handleSlider2Change = (value) => {
-    setWeightRange(value);
+  const handleSliderChange = (setter) => (value) => {
+    setter(value);
   };
 
   const handleGenderChange = (event) => {
@@ -66,40 +62,25 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
 
   const handleSearch = () => {
     const params = {
-      heightMin: heightRange[0],
-      heightMax: heightRange[1],
-      weightMin: weightRange[0],
-      weightMax: weightRange[1],
-      job: Object.keys(job).filter((key) => job[key]),
-      season: Object.keys(season).filter((key) => season[key]),
-      mood: Object.keys(mood).filter((key) => mood[key]),
+      userJob: Object.keys(job).filter((key) => job[key]),
+      userGender: gender || undefined,
+      userHeightMin: heightRange[0],
+      userHeightMax: heightRange[1],
+      userWeightMin: weightRange[0],
+      userWeightMax: weightRange[1],
+      tags: [
+        ...Object.keys(season).filter((key) => season[key]),
+        ...Object.keys(mood).filter((key) => mood[key]),
+      ],
     };
 
-    // gender가 선택되지 않은 경우 요청에서 제외
-    if (gender) {
-      params.gender = gender;
-    } else {
-      params.gender = "all"; // 기본값 설정
-    }
-
-    const queryParams = new URLSearchParams(params).toString();
-    const url = `http://localhost:8080/api/tags/posts?${queryParams}`;
-
-    console.log("Fetching from:", url); // 요청 URL 확인
-
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("HTTP error! status: " + response.status);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        // 데이터 처리 로직
-      })
-      .catch((error) => {
-        console.error("Error fetching posts:", error);
-      });
+    Object.keys(params).forEach((key) => {
+      if (Array.isArray(params[key]) && params[key].length === 0) {
+        delete params[key];
+      } else if (params[key] === undefined) {
+        delete params[key];
+      }
+    });
 
     navigate("/searched", { state: { params } });
     onClose();
@@ -122,12 +103,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
       농림어업직: false,
       기타: false,
     });
-    setSeason({
-      봄: false,
-      여름: false,
-      가을: false,
-      겨울: false,
-    });
+    setSeason({ 봄: false, 여름: false, 가을: false, 겨울: false });
     setMood({
       포멀: false,
       캐주얼: false,
@@ -170,7 +146,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               min={140}
               max={200}
               value={heightRange}
-              onChange={handleSlider1Change}
+              onChange={handleSliderChange(setHeightRange)}
               className="mb-4"
             />
           </div>
@@ -186,7 +162,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               min={30}
               max={120}
               value={weightRange}
-              onChange={handleSlider2Change}
+              onChange={handleSliderChange(setWeightRange)}
               className="mb-4"
             />
           </div>
@@ -197,9 +173,9 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               <input
                 type="radio"
                 name="gender"
-                value="men"
+                value="남성"
                 className="checkbox-input"
-                checked={gender === "men"}
+                checked={gender === "남성"}
                 onChange={handleGenderChange}
               />
             </div>
@@ -208,9 +184,9 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               <input
                 type="radio"
                 name="gender"
-                value="women"
+                value="여성"
                 className="checkbox-input"
-                checked={gender === "women"}
+                checked={gender === "여성"}
                 onChange={handleGenderChange}
               />
             </div>
