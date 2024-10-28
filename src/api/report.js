@@ -44,7 +44,21 @@ export const cancelReportComment = async (commentReportCode) => {
     "cancelCommentReport?commentReportCode=" + commentReportCode
   );
 };
-// 신고된 댓글 삭제하기
-export const deleteReportComment = async () => {};
-// 신고된 댓글을 쓴 유저 밴하기
-export const banReportComment = async () => {};
+// 신고된 글 취소
+export const cancelReportPost = async (postReportCode) => {
+  return await instance.delete(
+    "cancelPostReport?postReportCode=" + postReportCode
+  );
+};
+// 신고된 유저 취소
+export const cancelReportUser = async (userReportCode) => {
+  return await instance.delete(
+    "cancelUserReport?userReportCode=" + userReportCode
+  );
+};
+// 신고된 댓글 한개 삭제하기
+export const deleteReportComment = async (commentReportCode) => {
+  return await instance.delete(
+    "delCommentReport?commentReportCode=" + commentReportCode
+  );
+};

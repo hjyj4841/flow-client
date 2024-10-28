@@ -1,3 +1,6 @@
+.buttonContainer {
+  display: flex;
+}
 .delete-report-user-btn {
   width: 90px;
   background-color: rgb(255, 55, 55);
@@ -7,6 +10,18 @@
 .ban-report-user-btn {
   width: 90px;
   background-color: black;
+  color: white;
+  font-weight: bold;
+}
+.cancel-report-user-btn {
+  width: 90px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+.delete-report-comment-btn {
+  width: 90px;
+  background-color: rgb(255, 55, 55);
   color: white;
   font-weight: bold;
 }
