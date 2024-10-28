@@ -9,6 +9,9 @@ import {
   getReportComment,
   cancelReportComment,
   reportComment,
+  cancelReportPost,
+  cancelReportUser,
+  deleteReportComment,
 } from "../api/report";
 export const initState = {
   reportPosts: [],
@@ -65,6 +68,18 @@ export const addReportComment = async (dispatch, data) => {
   const response = await reportComment(data);
   dispatch({ type: "REPORT_COMMENT" });
 };
+export const cancelRPost = async (dispatch, postReportCode) => {
+  await cancelReportPost(postReportCode);
+  dispatch({ type: "CANCEL_REPORT_POST" });
+};
+export const cancelRUser = async (dispatch, userReportCode) => {
+  await cancelReportUser(userReportCode);
+  dispatch({ type: "CANCEL_REPORT_USER" });
+};
+export const delReportComment = async (dispatch, commentReportCode) => {
+  await deleteReportComment(commentReportCode);
+  dispatch({ type: "DELELTE_REPORT_COMMENT" });
+};
 
 export const reportReducer = (state, action) => {
   switch (action.type) {
@@ -88,6 +103,12 @@ export const reportReducer = (state, action) => {
     case "CANCEL_REPORT_COMMENT":
       return state;
     case "REPORT_COMMENT":
+      return state;
+    case "CANCEL_REPORT_POST":
+      return state;
+    case "CANCEL_REPORT_USER":
+      return state;
+    case "DELELTE_REPORT_COMMENT":
       return state;
     default:
       return state;

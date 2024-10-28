@@ -46,6 +46,12 @@
   color: white;
   font-weight: bold;
 }
+.cancel-report-post-btn {
+  width: 90px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
 .ban-report-comment-user-btn {
   width: 90px;
   background-color: black;

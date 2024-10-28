@@ -2,6 +2,7 @@ import React, { useState, useEffect, useReducer } from "react";
 import { Card, CardContent, Divider, Typography } from "@mui/material";
 import Paging from "./Paging";
 import {
+  cancelRPost,
   fetchReportPost,
   initState as reportPostState,
   reportReducer,
@@ -50,8 +51,14 @@ const ReportPost = () => {
   const banUser = (userCode, postReportCode) => {
     // 밴 기능
     banUserReport(dispatch, userCode);
-    fetchDeleteReportPost(dispatch, postReportCode);
+    cancelRPost(dispatch, postReportCode);
     alert("관리자에 의해 밴되었습니다.");
+  };
+
+  const cancelPost = (postReportCode) => {
+    // 취소 기능
+    cancelRPost(dispatch, postReportCode);
+    alert("관리자에 의해 취소되었습니다.");
   };
 
   return (
@@ -74,6 +81,13 @@ const ReportPost = () => {
                 </Typography>
 
                 <div className="buttonContainer">
+                  <button
+                    className="cancel-report-post-btn"
+                    type="button"
+                    onClick={() => cancelPost(post.postReportCode)}
+                  >
+                    취소
+                  </button>
                   <button
                     className="delete-report-post-btn"
                     type="button"

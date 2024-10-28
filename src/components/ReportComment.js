@@ -6,6 +6,7 @@ import {
   rCommentState,
   reportReducer,
   cancelRComment,
+  delReportComment,
 } from "../reducers/reportReducer";
 import { delReportUser, banUserReport } from "../reducers/reportReducer";
 
@@ -39,7 +40,7 @@ const ReportComment = () => {
   };
 
   const cancleComment = (commentReportCode) => {
-    // 삭제 기능
+    // 취소 기능
     cancelRComment(dispatch, commentReportCode);
     alert("관리자에 의해 취소되었습니다.");
   };
@@ -49,6 +50,12 @@ const ReportComment = () => {
     banUserReport(dispatch, userCode);
     cancelRComment(dispatch, commentReportCode);
     alert("관리자에 의해 밴되었습니다.");
+  };
+
+  const deleteComment = (commentReportCode) => {
+    // 댓글삭제
+    delReportComment(dispatch, commentReportCode);
+    alert("관리자에 의해 삭제되었습니다.");
   };
 
   return (
@@ -81,9 +88,7 @@ const ReportComment = () => {
                   <button
                     className="delete-report-comment-btn"
                     type="button"
-                    //   onClick={() =>
-                    //     나중에 커밋하고
-                    //   }
+                    onClick={() => deleteComment(comment.commentReportCode)}
                   >
                     삭제
                   </button>
