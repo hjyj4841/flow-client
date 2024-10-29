@@ -1,17 +1,11 @@
 .userMenu {
   display: flex;
   position: relative;
-  margin-left: 20px;
-  width: 80px;
-  z-index: 4;
+  align-items: center;
 }
 .menu-open-Button {
-  bottom: -7px;
-  width: 100px;
-  position: absolute;
   cursor: pointer;
-  margin-left: 5px;
-  user-select: none;
+  padding-left: 5px;
 }
 .menu-content {
   height: 100px;

@@ -6,6 +6,7 @@ import {
   addReportUser,
   initState as reportState,
   reportReducer,
+  addReportComment,
 } from "../../reducers/reportReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { followStatus } from "../../store/followSlice";
@@ -21,16 +22,19 @@ import {
   addComment as addCommentAPI,
   deleteComment,
   getAllComment,
-  updateComment,
+  updateComment as updateCommentAPI,
 } from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
+import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { PiSirenLight } from "react-icons/pi";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
 import UserModal from "../../components/UserModal";
+import "../../assets/css/detail.scoped.scss";
+
 const Detail = () => {
   const navigate = useNavigate();
   const { postCode } = useParams();
@@ -81,6 +85,14 @@ const Detail = () => {
     postCode: postCode,
     userCode: 0,
   });
+
+  const [updateComment, setUpdateComment] = useState({
+    commentCode: null,
+    commentDesc: "",
+    postCode: postCode,
+    userCode: 0,
+  });
+
   // 1. 첫 페이지가 로드되는 시점
   useEffect(() => {
     // (1-1) 로그인 되어있는 유저라면 user에 접속중인 유저 정보 담기
@@ -178,6 +190,23 @@ const Detail = () => {
       userReportDesc: "",
     });
   };
+  // 댓글 신고
+  const reportCommentBtn = (data) => {
+    addReportComment(reportDispatch, data);
+    alert("신고가 완료되었습니다");
+    console.log(reportComment);
+    setReportComment({
+      ...reportComment,
+      commentReportDesc: "",
+    });
+  };
+  // 댓글 신고 관련
+  const [reportComment, setReportComment] = useState({
+    commentReportDesc: "",
+    comment: {
+      commentCode: 0,
+    },
+  });
   // 게시물 삭제
   const deletePost = () => {
     deleteAPI();
@@ -251,27 +280,33 @@ const Detail = () => {
   };
   // 댓글 수정
   const updateMutation = useMutation({
-    mutationFn: (commentCode) => updateComment(commentCode),
+    mutationFn: (updateComment) => updateCommentAPI(updateComment),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["comments", postCode] });
     },
   });
 
-  const update = (user, commentDesc, commentCode) => {
-    if (user === commentCode.user) {
-      setNewComment({ ...newComment, commentDesc, commentCode });
-    }
+  const update = (comment) => {
+    setUpdateComment({
+      commentCode: comment.commentCode,
+      commentDesc: comment.commentDesc,
+      postCode: postCode,
+      userCode: user.userCode,
+    });
+    setIsUpdating(comment.commentCode); // 수정할 댓글 코드 설정
   };
 
-  // 댓글 수정
-  const handleUpdate = (commentCode, commentDesc) => {
-    updateMutation.mutate({ ...commentCode, commentDesc });
+  const handleUpdate = () => {
+    updateMutation.mutate(updateComment);
+    setIsUpdating(null); // 수정 상태 초기화
+    setUpdateComment({ ...updateComment, commentDesc: "" }); // 입력 필드 초기화
   };
 
-  // 댓글 수정 취소
   const handleUpdateCancel = () => {
-    setNewComment({ ...newComment, commentDesc: "", commentCode: 0 });
+    setIsUpdating(null); // 수정 상태 초기화
+    setUpdateComment({ ...updateComment, commentDesc: "", commentCode: 0 }); // 입력 필드 초기화
   };
+
   // 작성자의 유저정보 페이지로 이동
   const goUserInfo = () => {
     navigate(`/mypage/${post.userCode}`);
@@ -291,411 +326,377 @@ const Detail = () => {
   return (
     <>
       <section className="bg-white py-4 shadow-md" />
-      <div className="max-w-4xl mx-auto p-4">
-        <main className="bg-white p-6 rounded-lg shadow-md">
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              paddingBottom: "10px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center" }}>
-              <img
-                style={{
-                  width: "40px",
-                  height: "40px",
-                  objectFit: "cover",
-                  borderRadius: "50%",
-                  cursor: "pointer",
-                }}
-                src={followUser.userProfileUrl}
-                onClick={goUserInfo}
-              />
-              <UserModal user={followUser} />
-              <span
-                style={{ paddingRight: "10px", cursor: "pointer" }}
-                onClick={goUserInfo}
-              >
-                {followUser.userGender === "남성" ? (
-                  <CgGenderMale style={{ color: "skyblue" }} />
-                ) : (
-                  <CgGenderFemale style={{ color: "pink" }} />
-                )}
-              </span>
-              <span
-                style={{
-                  paddingRight: "10px",
-                  cursor: "pointer",
-                  fontSize: "0.8rem",
-                }}
-                onClick={goUserInfo}
-              >
-                {followUser.userJob}
-              </span>
-              {followUser.userBodySpecYn === "Y" ? (
-                <span
-                  style={{
-                    paddingRight: "10px",
-                    fontSize: "0.8rem",
-                    cursor: "pointer",
-                  }}
-                  onClick={goUserInfo}
-                >
-                  {followUser.userHeight}cm · {followUser.userWeight}kg
-                </span>
-              ) : (
-                <></>
-              )}
-              {!check && followCheck !== null ? (
-                <FollowButton user={followUser} bool={followCheck} />
-              ) : (
-                <></>
-              )}
-            </div>
-            {check && (
-              <div style={{ display: "flex", justifyContent: "flex-end" }}>
-                <button
-                  className="border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
-                  style={{ margin: "5px", width: "60px" }}
-                  onClick={updatePost}
-                >
-                  수정
-                </button>
-                <button
-                  className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2"
-                  style={{ margin: "5px", width: "60px" }}
-                  onClick={deletePost}
-                >
-                  삭제
-                </button>
-              </div>
-            )}
-          </div>
-          {post ? (
-            <>
-              <div
-                className="relative mb-4"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
+      <div className="detail-con">
+        <div className="detail-box">
+          <div className="detail-img">
+            {post ? (
+              <>
                 {post.imageUrls && post.imageUrls.length > 0 ? (
                   <>
                     <button
                       onClick={handlePreviousImage}
-                      className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-lg"
+                      className="shadow-lg prev-button"
                     >
                       <GrPrevious />
                     </button>
-                    <img
-                      src={post.imageUrls[currentImageIndex]}
-                      alt={`Post Image ${currentImageIndex}`}
-                      className="rounded-lg"
-                      style={{
-                        height: "600px",
-                        width: "400px",
-                        objectFit: "cover",
-                      }}
-                    />
-                    <button
-                      onClick={handleNextImage}
-                      className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 p-2 rounded-full shadow-lg"
-                    >
+                    <img src={post.imageUrls[currentImageIndex]} />
+                    <button onClick={handleNextImage} className="next-button">
                       <GrNext />
                     </button>
                   </>
                 ) : (
-                  <p>No images available</p>
-                )}
-              </div>
-              <div
-                className="flex text-sm text-gray-600 mb-5"
-                style={{ justifyContent: "space-between" }}
-              >
-                <div>
-                  <span
-                    className="flex items-center space-x-2 mr-4"
-                    style={{ fontSize: "1.2rem" }}
-                  >
-                    {likedPosts.find(
-                      (likedPost) => likedPost.post.postCode === post.postCode
-                    ) ? (
-                      <>
-                        <FaHeart
-                          onClick={() => handleLike(post.postCode)}
-                          style={{ color: "red" }}
-                        />
-                        <p style={{ paddingRight: "20px" }}>{post.likeCount}</p>
-                      </>
-                    ) : (
-                      <>
-                        <FaRegHeart onClick={() => handleLike(post.postCode)} />
-                        <p style={{ paddingRight: "20px" }}>{post.likeCount}</p>
-                      </>
-                    )}
-                    {savedPosts.some(
-                      (savedPost) => savedPost.post.postCode === post.postCode
-                    ) ? (
-                      <>
-                        <BsCollectionFill
-                          onClick={() => handleSave(post.postCode)}
-                          style={{ color: "black" }}
-                        />
-                        <p>{post.collectionCount}</p>
-                      </>
-                    ) : (
-                      <>
-                        <BsCollection
-                          onClick={() => handleSave(post.postCode)}
-                        />
-                        <p>{post.collectionCount}</p>
-                      </>
-                    )}
-                  </span>
-                </div>
-                <div>
-                  {!check ? (
-                    <>
-                      <input
-                        className="report-post-desc"
-                        type="text"
-                        placeholder="신고 내용"
-                        value={reportPost.postReportDesc}
-                        onChange={(e) =>
-                          setReportPost({
-                            ...reportPost,
-                            postReportDesc: e.target.value,
-                          })
-                        }
-                      />
-                      <button
-                        className="border border-gray-300 rounded bg-red-200 hover:bg-red-300 mt-2 report-post-btn"
-                        style={{ width: "100px" }}
-                        onClick={() => {
-                          reportPostBtn(reportPost);
-                        }}
-                      >
-                        게시글 신고
-                      </button>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </div>
-              <p className="mb-8 text-blue-500">
-                {post.tags && post.tags.length > 0
-                  ? post.tags.map((tag, index) => (
-                      <span key={index}>
-                        #{tag.tagName} {tag.tagType === "체형" ? "체형 " : ""}
-                      </span>
-                    ))
-                  : null}
-              </p>
-              <p className="mb-10" style={{ lineHeight: "1.5rem" }}>
-                {post.postDesc}
-              </p>
-              <table className="mb-2" style={{ width: "100%" }}>
-                {post.products && post.products.length > 0 ? (
-                  <>
-                    <thead style={{ borderBottom: "1px solid gainsboro" }}>
-                      <tr style={{ fontWeight: "bold" }}>
-                        <th style={{ paddingBottom: "5px" }}>브랜드</th>
-                        <th style={{ paddingBottom: "5px" }}>제품명</th>
-                        <th style={{ paddingBottom: "5px" }}>사이즈</th>
-                        <th style={{ paddingBottom: "5px" }}>구매처</th>
-                        <th style={{ paddingBottom: "5px" }}>구매링크</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {post.products.map((product, index) => (
-                        <tr key={index}>
-                          <td style={{ padding: "10px", textAlign: "center" }}>
-                            {product.productBrand}
-                          </td>
-                          <td style={{ padding: "10px", textAlign: "center" }}>
-                            {product.productName}
-                          </td>
-                          <td style={{ padding: "10px", textAlign: "center" }}>
-                            {product.productSize}
-                          </td>
-                          <td style={{ padding: "10px", textAlign: "center" }}>
-                            {product.productBuyFrom}
-                          </td>
-                          <td style={{ padding: "10px", textAlign: "center" }}>
-                            <a
-                              href={
-                                product.productLink === "" ||
-                                (product.productLink.includes("http://") ||
-                                  product.productLink.includes("https://"))
-                                  ? product.productLink
-                                  : `https://${product.productLink}`
-                              }
-                              className="text-blue-500 hover:text-blue-800"
-                            >
-                              {product.productLink === "" ||
-                              (product.productLink.includes("http://") ||
-                                product.productLink.includes("https://"))
-                                ? product.productLink
-                                : `https://${product.productLink}`}
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </>
-                ) : null}
-              </table>
-              <div className="border-t border-gray-300 pt-4">
-                <h2 className="font-bold mb-2">
-                  댓글 {comments ? comments.data.length : 0}개
-                </h2>
-                {token !== null ? (
-                  <>
-                    <div className="mt-4">
-                      <input
-                        type="text"
-                        placeholder="내용을 작성해주세요!"
-                        value={newComment.commentDesc}
-                        onChange={(e) =>
-                          setNewComment({
-                            ...newComment,
-                            commentDesc: e.target.value,
-                          })
-                        }
-                        className="w-5/6 p-2 border border-gray-300 rounded mb-2"
-                      />
-                      <button
-                        className="w-1/6 border border-black-300 bg-black text-white py-2 rounded p-2 mb-2 hover:bg-gray-700"
-                        style={{ height: "39px" }}
-                        onClick={addComment}
-                      >
-                        댓글 등록
-                      </button>
-                    </div>
-                  </>
-                ) : (
                   <></>
                 )}
-                <table>
-                  <tbody>
-                    {isLoading ? (
-                      <tr>
-                        <td>로딩 중...</td>
-                      </tr>
-                    ) : error ? (
-                      <tr>
-                        <td>댓글을 불러오는 데 문제가 발생했습니다.</td>
-                      </tr>
-                    ) : comments.data && comments.data.length > 0 ? (
-                      comments.data.map((comment, index) => (
-                        <tr
-                          key={index}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            padding: "5px",
-                          }}
+              </>
+            ) : (
+              <p>No images available</p>
+            )}
+          </div>
+          <div className="detail-desc">
+            {post ? (
+              <>
+                <div className="detail-desc-top">
+                  <div>
+                    <div className="detail-like">
+                      <span>
+                        {likedPosts.find(
+                          (likedPost) =>
+                            likedPost.post.postCode === post.postCode
+                        ) ? (
+                          <FaHeart
+                            onClick={() => handleLike(post.postCode)}
+                            style={{ color: "red" }}
+                          />
+                        ) : (
+                          <FaRegHeart
+                            onClick={() => handleLike(post.postCode)}
+                          />
+                        )}
+                        <p>{post.likeCount}</p>
+                      </span>
+                    </div>
+                    <div className="detail-save">
+                      <span>
+                        {savedPosts.some(
+                          (savedPost) =>
+                            savedPost.post.postCode === post.postCode
+                        ) ? (
+                          <BsCollectionFill
+                            onClick={() => handleSave(post.postCode)}
+                            style={{ color: "black" }}
+                          />
+                        ) : (
+                          <BsCollection
+                            onClick={() => handleSave(post.postCode)}
+                          />
+                        )}
+                        <p>{post.collectionCount}</p>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="detail-post-report">
+                    {check && (
+                      <div>
+                        <button
+                          className="bg-gray-200 hover:bg-gray-300"
+                          onClick={updatePost}
                         >
-                          <td
-                            style={{ cursor: "pointer" }}
-                            onClick={() => {
-                              navigate(`/mypage/${comment.userCode.userCode}`);
-                            }}
-                          >
-                            <img
-                              src={comment.userCode.userProfileUrl}
-                              style={{
-                                width: "30px",
-                                height: "30px",
-                                borderRadius: "50%",
-                                objectFit: "cover",
-                              }}
-                            />
-                          </td>
-                          <td
-                            style={{
-                              borderRight: "1px solid gainsboro",
-                              padding: "5px",
-                              fontWeight: "bold",
-                              cursor: "pointer",
-                            }}
-                            onClick={() => {
-                              navigate(`/mypage/${comment.userCode.userCode}`);
-                            }}
-                          >
-                            <p>{comment.userCode.userNickname}</p>
-                          </td>
-                          <td style={{ padding: "5px 5px 5px 10px" }}>
-                            <p>{comment.commentDesc}</p>
-                          </td>
-                          <td>
-                            {user.userCode === comment.userCode.userCode && (
-                              <>
-                                <div>
-                                  {isUpdating ? (
-                                    <>
-                                      <input
-                                        type="text"
-                                        value={newComment.commentDesc}
-                                        onChange={(e) =>
-                                          setNewComment({
-                                            ...newComment,
-                                            commentDesc: e.target.value,
-                                          })
-                                        }
-                                        className="border border-gray-300 rounded p-1"
-                                      />
-                                      <div className="edit-box">
-                                        <button onClick={handleUpdateCancel}>
-                                          취소
-                                        </button>
-                                        <button
-                                          onClick={() =>
-                                            handleUpdate(
-                                              comment.commentCode,
-                                              newComment.commentDesc
-                                            )
-                                          }
-                                        >
-                                          수정완료
-                                        </button>
-                                      </div>
-                                    </>
+                          수정
+                        </button>
+                        <button
+                          className="bg-red-200 hover:bg-red-300"
+                          onClick={deletePost}
+                        >
+                          삭제
+                        </button>
+                      </div>
+                    )}
+                    {!check ? (
+                      <span>
+                        <input
+                          className="report-post-desc"
+                          type="text"
+                          placeholder="신고 내용(변경예정)"
+                          value={reportPost.postReportDesc}
+                          onChange={(e) =>
+                            setReportPost({
+                              ...reportPost,
+                              postReportDesc: e.target.value,
+                            })
+                          }
+                        />
+                        <PiSirenLight
+                          onClick={() => {
+                            reportPostBtn(reportPost);
+                          }}
+                        />
+                      </span>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                </div>
+                <div className="detail-desc-mid">
+                  <div className="detail-post-date">
+                    <p>{post?.postDate.split("T")[0]}</p>
+                  </div>
+                  <div className="detail-post-tag">
+                    <p>
+                      {post.tags && post.tags.length > 0
+                        ? post.tags.map((tag, index) => (
+                            <span key={index}>
+                              #{tag.tagName}
+                              {tag.tagType === "체형" ? "체형 " : ""}
+                            </span>
+                          ))
+                        : null}
+                    </p>
+                  </div>
+                  <div className="detail-post-info">
+                    <div className="detail-post-desc">
+                      <p>{post.postDesc}</p>
+                    </div>
+                    <div className="detail-post-product">
+                      <table>
+                        {post.products && post.products.length > 0 ? (
+                          <>
+                            <thead>
+                              <tr>
+                                <th>브랜드</th>
+                                <th>제품명</th>
+                                <th>사이즈</th>
+                                <th>구매처</th>
+                                <th>구매링크</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {post.products.map((product, index) => (
+                                <tr key={index}>
+                                  <td>{product.productBrand}</td>
+                                  <td>{product.productName}</td>
+                                  <td>{product.productSize}</td>
+                                  <td>{product.productBuyFrom}</td>
+                                  <td>
+                                    <a
+                                      href={
+                                        product.productLink === "" ||
+                                        (product.productLink.includes(
+                                          "http://"
+                                        ) ||
+                                          product.productLink.includes(
+                                            "https://"
+                                          ))
+                                          ? product.productLink
+                                          : `https://${product.productLink}`
+                                      }
+                                    >
+                                      {product.productLink === "" ||
+                                      (product.productLink.includes(
+                                        "http://"
+                                      ) ||
+                                        product.productLink.includes(
+                                          "https://"
+                                        ))
+                                        ? product.productLink
+                                        : `https://${product.productLink}`}
+                                    </a>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </>
+                        ) : null}
+                      </table>
+                    </div>
+                  </div>
+                  <div className="detail-post-user">
+                    <div className="post-user-desc">
+                      <div className="post-user-img">
+                        <img
+                          src={followUser.userProfileUrl}
+                          onClick={goUserInfo}
+                        />
+                      </div>
+                      <div className="post-user-info">
+                        <UserModal user={followUser} />
+                        <div className="post-user-more">
+                          <span>
+                            {followUser.userGender === "남성" ? (
+                              <CgGenderMale style={{ color: "skyblue" }} />
+                            ) : (
+                              <CgGenderFemale style={{ color: "pink" }} />
+                            )}
+                          </span>
+                          <span>{followUser.userJob}</span>
+                          {followUser.userBodySpecYn === "Y" ? (
+                            <span>
+                              {followUser.userHeight}cm ·{" "}
+                              {followUser.userWeight}
+                              kg
+                            </span>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="post-user-follow">
+                      {!check && followCheck !== null ? (
+                        <FollowButton user={followUser} bool={followCheck} />
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                </div>
+                <div className="detail-desc-bot">
+                  <div>
+                    <div className="comment-count">
+                      <p>댓글 {comments ? comments.data.length : 0}개</p>
+                    </div>
+                    <div className="comment-con">
+                      {isLoading ? (
+                        <div>로딩 중...</div>
+                      ) : error ? (
+                        <div>댓글을 불러오는 데 문제가 발생했습니다.</div>
+                      ) : comments.data && comments.data.length > 0 ? (
+                        comments.data.map((comment, index) => (
+                          <div className="comment-contents" key={index}>
+                            <div className="comment-user-img">
+                              <img src={comment.userCode.userProfileUrl} />
+                            </div>
+                            <div className="comment-info">
+                              <div className="comment-info-top">
+                                <div className="comment-user-nick">
+                                  <p>{comment.userCode.userNickname}</p>
+                                </div>
+                                <div className="comment-desc">
+                                  {isUpdating === comment.commentCode ? (
+                                    <input
+                                      type="text"
+                                      value={updateComment.commentDesc}
+                                      onChange={(e) =>
+                                        setUpdateComment({
+                                          ...updateComment,
+                                          commentDesc: e.target.value,
+                                        })
+                                      }
+                                    />
                                   ) : (
                                     <p>{comment.commentDesc}</p>
                                   )}
                                 </div>
-                                <button
-                                  type="text"
-                                  onClick={() => setIsUpdating(true)}
-                                  className="text-black px-1 hover:text-gray-900 text-gray-500"
-                                >
-                                  수정
-                                </button>
-                                <button
-                                  onClick={() =>
-                                    handleDelete(comment.commentCode)
-                                  }
-                                  className="text-black px-1 hover:text-red-500 text-gray-500"
-                                >
-                                  삭제
-                                </button>
-                              </>
-                            )}
-                          </td>
-                        </tr>
-                      ))
+                              </div>
+                              <div className="comment-info-bot">
+                                <div className="comment-date">2024-10-31</div>
+                                <div className="comment-button">
+                                  {user.userCode ===
+                                    comment.userCode.userCode && (
+                                    <>
+                                      {isUpdating === comment.commentCode ? (
+                                        <>
+                                          <button
+                                            onClick={handleUpdateCancel}
+                                            className="hover:text-gray-900 text-gray-500"
+                                          >
+                                            취소
+                                          </button>
+                                          <button
+                                            onClick={handleUpdate}
+                                            className="hover:text-gray-900 text-gray-500"
+                                          >
+                                            수정완료
+                                          </button>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <button
+                                            onClick={() => update(comment)}
+                                            className="hover:text-gray-900 text-gray-500"
+                                          >
+                                            수정
+                                          </button>
+                                          <button
+                                            onClick={() =>
+                                              handleDelete(comment.commentCode)
+                                            }
+                                            className="hover:text-red-500 text-gray-500"
+                                          >
+                                            삭제
+                                          </button>
+                                        </>
+                                      )}
+                                    </>
+                                  )}
+                                  <input
+                                    className="report-comment-desc ml-2"
+                                    type="text"
+                                    placeholder="신고 내용"
+                                    value={reportComment.commentReportDesc}
+                                    onChange={(e) =>
+                                      setReportComment({
+                                        commentReportDesc: e.target.value,
+                                        comment: {
+                                          commentCode: comment.commentCode,
+                                        },
+                                      })
+                                    }
+                                  />
+                                  <button
+                                    className="report-comment-btn"
+                                    type="button"
+                                    style={{
+                                      color: "red",
+                                    }}
+                                    onClick={() =>
+                                      reportCommentBtn(reportComment)
+                                    }
+                                  >
+                                    신고
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ))
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                  <div className="comment-add">
+                    {token !== null ? (
+                      <div>
+                        <input
+                          type="text"
+                          placeholder="내용을 작성해주세요!"
+                          value={newComment.commentDesc}
+                          onChange={(e) =>
+                            setNewComment({
+                              ...newComment,
+                              commentDesc: e.target.value,
+                            })
+                          }
+                        />
+                        <button
+                          className="hover:bg-gray-700"
+                          style={{ height: "39px" }}
+                          onClick={addComment}
+                        >
+                          댓글 등록
+                        </button>
+                      </div>
                     ) : (
-                      <tr>
-                        <td>댓글이 없습니다.</td>
-                      </tr>
+                      <></>
                     )}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          ) : null}
-        </main>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <p>댓글이 없습니다.</p>
+            )}
+          </div>
+        </div>
       </div>
     </>
   );

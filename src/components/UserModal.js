@@ -20,6 +20,7 @@ const UserModal = ({ user }) => {
       >
         {user.userNickname}
       </span>
+
       {userMenuOpen && (
         <div
           className="menu-content"

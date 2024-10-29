@@ -1,0 +1,345 @@
+.detail-con {
+  display: flex;
+  justify-content: center;
+
+  width: 100vw;
+  padding-top: 30px;
+
+  .detail-box {
+    display: flex;
+    width: 1200px;
+    height: 700px;
+    border-radius: 30px;
+    overflow: hidden;
+
+    > div {
+      width: 50%;
+      height: 100%;
+    }
+
+    .detail-img {
+      position: relative;
+      display: flex;
+      justify-content: center;
+
+      button {
+        position: absolute;
+        top: 50%;
+        transform: translateY(50%);
+        background-color: white;
+        opacity: 90%;
+        border-radius: 50%;
+        padding: 8px;
+        transition: 0.2s;
+      }
+      button:hover {
+        background-color: gainsboro;
+      }
+      .prev-button {
+        left: 0;
+        margin-left: 10px;
+      }
+      .next-button {
+        right: 0;
+        margin-right: 10px;
+      }
+
+      img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .detail-desc {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .detail-desc-top {
+        display: flex;
+        justify-content: space-between;
+        width: 90%;
+        height: 50px;
+
+        > div {
+          display: flex;
+          align-items: center;
+        }
+        .detail-like,
+        .detail-save {
+          span {
+            display: flex;
+            padding: 10px;
+
+            svg {
+              cursor: pointer;
+            }
+
+            p {
+              padding-left: 10px;
+            }
+          }
+        }
+
+        .detail-post-report {
+          div {
+            display: flex;
+            button {
+              border: 1px solid gainsboro;
+              border-radius: 5px;
+              margin-left: 5px;
+              padding: 5px;
+              width: 60px;
+            }
+          }
+
+          span {
+            display: flex;
+
+            input {
+              font-size: 0.8rem;
+              margin-right: 20px;
+            }
+
+            svg {
+              cursor: pointer;
+              font-size: 1.5rem;
+            }
+            svg:hover {
+              color: red;
+            }
+          }
+        }
+      }
+
+      .detail-desc-mid {
+        width: 90%;
+        height: 450px;
+
+        .detail-post-date {
+          display: flex;
+          justify-content: flex-end;
+          font-size: 0.8rem;
+          color: grey;
+        }
+
+        .detail-post-tag {
+          padding: 5px;
+          p {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            span {
+              padding: 3px;
+            }
+          }
+        }
+
+        .detail-post-info {
+          height: 340px;
+          overflow-y: scroll;
+
+          .detail-post-desc {
+            padding: 5px;
+            p {
+              line-height: 1.3rem;
+            }
+          }
+
+          .detail-post-product {
+            padding-top: 10px;
+
+            table {
+              width: 100%;
+              thead {
+                border-bottom: 1px solid gainsboro;
+                th {
+                  padding-bottom: 5px;
+                  font-size: 0.9rem;
+                  font-weight: 550;
+                }
+              }
+              tbody {
+                td {
+                  padding: 10px;
+                  text-align: center;
+                  font-size: 0.8rem;
+                  a {
+                    color: #3b82f6;
+                  }
+                  a:hover {
+                    color: blue;
+                  }
+                }
+              }
+            }
+          }
+        }
+        .detail-post-user {
+          display: flex;
+          justify-content: space-between;
+          padding: 5px 10px;
+          background-color: #eee;
+          border-radius: 10px;
+
+          .post-user-desc {
+            display: flex;
+
+            .post-user-img {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              img {
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+                border-radius: 50%;
+              }
+            }
+
+            .post-user-info {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              padding: 10px;
+
+              .post-user-more {
+                display: flex;
+                font-size: 0.8rem;
+                color: grey;
+                padding-top: 8px;
+
+                span {
+                  padding-right: 5px;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .detail-desc-bot {
+        width: 90%;
+        height: 200px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .comment-count {
+          font-weight: 550;
+          font-size: 0.8rem;
+          padding: 5px;
+          height: 20px;
+        }
+
+        .comment-con {
+          width: 100%;
+          height: 140px;
+          overflow-y: scroll;
+
+          .comment-contents {
+            width: 100%;
+            display: flex;
+            padding: 2px;
+
+            .comment-user-img {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              padding: 5px;
+
+              img {
+                width: 30px;
+                height: 30px;
+                border-radius: 50%;
+                object-fit: cover;
+              }
+            }
+
+            .comment-info {
+              width: 100%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+
+              > div {
+                display: flex;
+                align-items: center;
+                padding: 3px;
+              }
+
+              .comment-info-top {
+                .comment-user-nick {
+                  font-weight: bold;
+                  font-size: 0.9rem;
+                }
+                .comment-desc {
+                  padding-left: 10px;
+                }
+              }
+              .comment-info-bot {
+                .comment-date {
+                  color: darkgray;
+                  font-size: 0.8rem;
+                }
+                .comment-button {
+                  button {
+                    padding-left: 5px;
+                    font-size: 0.8rem;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .comment-add {
+        width: 100%;
+        height: 40px;
+
+        div {
+          position: relative;
+
+          input {
+            position: absolute;
+            width: 100%;
+            padding-right: 100px;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 0.9rem;
+          }
+
+          input:focus {
+            outline: none;
+          }
+
+          button {
+            position: absolute;
+            z-index: 10;
+            width: 80px;
+            right: 0;
+            border-radius: 10px;
+            background-color: black;
+            color: white;
+            font-size: 0.8rem;
+          }
+        }
+      }
+    }
+  }
+}
+
+.comment-con::-webkit-scrollbar,
+.detail-post-info::-webkit-scrollbar {
+  width: 5px;
+}
+.comment-con::-webkit-scrollbar-thumb,
+.detail-post-info::-webkit-scrollbar-thumb {
+  background-color: gray;
+}
+.comment-con::-webkit-scrollbar-track,
+.detail-post-info::-webkit-scrollbar-track {
+  background-color: gainsboro;
+}
