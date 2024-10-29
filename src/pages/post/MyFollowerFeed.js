@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { SlArrowDown } from "react-icons/sl";
 
 const MyFollowerFeed = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
@@ -10,7 +11,7 @@ const MyFollowerFeed = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0); // Total pages state
+  const [totalPages, setTotalPages] = useState(0);
 
   let userCode = "";
   if (token) {
@@ -32,13 +33,17 @@ const MyFollowerFeed = () => {
   const fetchFollowingUserPosts = async (currentPage) => {
     try {
       const response = await axios.get(
-        `http://localhost:8080/api/posts/following/${userCode}?page=${currentPage}`
+        `http://localhost:8080/api/posts/following/${userCode}?page=${currentPage -
+          1}`
       );
-      console.log(response.data); // 데이터를 확인하는 로그 추가
+
+      console.log("Response data:", response.data);
+
       setFollowingUserPosts((prev) => [
         ...prev,
         ...(response.data.content || []),
       ]);
+      setTotalPages(response.data.totalPages); // Set total pages from backend response
     } catch (error) {
       console.error("Error fetching follower posts", error);
     }
@@ -105,7 +110,7 @@ const MyFollowerFeed = () => {
 
   const loadMorePosts = () => {
     if (page < totalPages) {
-      setPage((prev) => prev + 1); // Increase page only if not at the end
+      setPage((prev) => prev + 1); // Only increment if not at the last page
     }
   };
 
@@ -180,11 +185,7 @@ const MyFollowerFeed = () => {
               ) : null
             )}
           </div>
-          {page < totalPages && (
-            <button onClick={loadMorePosts} className="load-more-button">
-              Load More
-            </button>
-          )}
+          {page < totalPages && <SlArrowDown onClick={loadMorePosts} />}
         </section>
       </main>
     </div>
