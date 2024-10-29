@@ -100,9 +100,7 @@ const UploadPost = () => {
           upload={upload}
           post={post}
           setPost={setPost}
-          bodyTag={bodyTag}
           setBodyTag={setBodyTag}
-          careerTag={careerTag}
           setCareerTag={setCareerTag}
         />
       </div>
