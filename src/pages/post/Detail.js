@@ -695,6 +695,9 @@ const Detail = () => {
               </div>
             </>
           ) : null}
+          <p className="text-sm" style={{ color: "grey", marginTop: "10px" }}>
+            {post?.postDate.split("T")[0]}
+          </p>
         </main>
       </div>
     </>
