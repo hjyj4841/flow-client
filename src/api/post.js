@@ -152,3 +152,9 @@ export const followedUserPosts = async (userCode) => {
   const response = await instance.get(`posts/following/${userCode}`);
   return response.data;
 };
+
+// 검색된 게시물 조회
+export const fetchSearchedPosts = async (searchDTO) => {
+  const response = await instance.post("search/posts", searchDTO);
+  return response.data;
+};

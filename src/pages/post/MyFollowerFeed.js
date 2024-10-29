@@ -9,7 +9,7 @@ const MyFollowerFeed = () => {
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [page, setPage] = useState(1); // Page state for pagination
+  const [page, setPage] = useState(1);
 
   let userCode = "";
   if (token) {
@@ -98,7 +98,7 @@ const MyFollowerFeed = () => {
     navigate(`/post/${postCode}`);
   };
 
-  const loadMorePosts = () => setPage((prev) => prev + 1); // Increase page for loading more posts
+  const loadMorePosts = () => setPage((prev) => prev + 1);
 
   return (
     <div className="bg-gray-100 text-gray-800">

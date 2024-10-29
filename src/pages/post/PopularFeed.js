@@ -12,7 +12,7 @@ const PopularFeed = () => {
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0); // New state for total pages
+  const [totalPages, setTotalPages] = useState(0);
   const navigate = useNavigate();
 
   let userCode = "";
@@ -37,7 +37,7 @@ const PopularFeed = () => {
       const response = await axios.get(
         `http://localhost:8080/api/likes/post/ordered-by-likes?page=${currentPage}`
       );
-      const { content, totalPages } = response.data; // Decompose data structure
+      const { content, totalPages } = response.data;
       setPopularFeedImages((prev) => [...prev, ...content]);
       setTotalPages(totalPages);
       console.log(response.data);
@@ -174,7 +174,6 @@ const PopularFeed = () => {
           )}
         </div>
         {page < totalPages && <SlArrowDown onClick={loadMorePosts} />}{" "}
-        {/* Conditionally render load more button */}
       </section>
     </main>
   );
