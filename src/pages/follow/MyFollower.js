@@ -1,4 +1,4 @@
-import { useParams, useLocation} from "react-router-dom";
+import { useParams} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { myFollower, followMe } from "../../store/followSlice";
 import { useState, useCallback, useEffect} from "react";
@@ -14,6 +14,9 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   const [bool, setBool] = useState(logic);
   const [key, setKey] = useState("");
   const [opacity, setOpacity] = useState(1);
+   const [position, setPosition] = useState({ x: -250, y: -180 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [offset, setOffset] = useState({ x: 0, y: 0 });
 
   const warp1 = useCallback(() => {
     setBool(true);
@@ -36,76 +39,63 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
     }
   }, [dispatch, mypageUserCode, key]);
 
-  useEffect(() => {
-    let timeout;
-    let isScrolling = false;
-  
-    const handleScroll = () => {
-      const followingUsersDiv = document.querySelector('.following-users');
-      const { scrollTop, scrollHeight, clientHeight } = followingUsersDiv;
-  
-      // 스크롤이 가능한 상태일 때만 실행
-      if (scrollTop + clientHeight < scrollHeight) {
-        setOpacity(0.3);
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          setOpacity(1); // 스크롤 멈춘 후 원래 상태로 복원
-        }, 500);
-      }
-  
-      isScrolling = true; // 스크롤 중
-    };
-  
-    const handleWheel = (e) => {
-      const followingUsersDiv = document.querySelector('.following-users');
-      const { scrollTop, scrollHeight, clientHeight } = followingUsersDiv;
-  
-      // 스크롤이 끝에 도달했는지 확인
-      const isAtScrollEnd = scrollTop + clientHeight >= scrollHeight;
-  
-      if (isAtScrollEnd) {
-        // 스크롤이 끝에 도달한 상태에서 휠을 돌리면 opacity를 조정
-        setOpacity(0.3);
-        if (timeout) clearTimeout(timeout);
-        timeout = setTimeout(() => {
-          setOpacity(1); // 휠 멈춘 후 원래 상태로 복원
-        }, 50);
-      }
-    };
-  
-    const followingUsersDiv = document.querySelector('.following-users');
-    if (followingUsersDiv) {
-      followingUsersDiv.addEventListener('scroll', handleScroll); // 스크롤 이벤트 추가
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setOffset({
+      x: e.clientX - position.x,
+      y: e.clientY - position.y,
+    });
+    document.body.style.userSelect = "none";
+  };
+
+  const handleMouseMove = (e) => {
+    if (isDragging) {
+      setPosition({
+        x: e.clientX - offset.x,
+        y: e.clientY - offset.y,
+      });
+      document.body.style.userSelect = "auto";
     }
-  
-    // Cleanup event listener on unmount
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
     return () => {
-      if (followingUsersDiv) {
-        followingUsersDiv.removeEventListener('scroll', handleScroll);
-        followingUsersDiv.removeEventListener('wheel', handleWheel);
-      }
-      if (timeout) clearTimeout(timeout);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
     };
-  }, []);
-  
+  }, [isDragging]);
+
   return (
     <>
-      <button onClick={() => setIsModalOpen(true)}>{logic ? "팔로워" : "팔로잉"}</button>
-
       {isModalOpen && (
-        <div className="modal-overlay" onClick={() => setIsModalOpen(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-content"
+          onMouseDown={handleMouseDown} 
+          onClick={(e) => e.stopPropagation()}
+          style={{
+            transform: `translate(${position.x}px, ${position.y}px)`, // 위치를 translate로 제어
+          }}
+          >
+            <button className="close-button" onClick={() => {
+              setIsModalOpen(false);
+              setBool(logic);
+              }}>✕</button>
             <div className="following-userInfo">
               <header style={{ opacity, transition: 'opacity 0.3s ease' }}>
                 <div className={`section ${bool ? 'active' : ''}`} onClick={warp1}>
                   <h1>팔로잉</h1>
                   <p>{count}</p>
                 </div>
-                <div className={`section ${!bool ? 'active' : ''}`} onClick={warp2}>
+                <div id="center-section" className={`section ${!bool ? 'active' : ''}`} onClick={warp2}>
                   <h1>팔로워</h1>
                   <p>{counter}</p>
                 </div>
-                <div className="section">
+                <div className="section" id="last-section">
                   <h1>추천 팔로워</h1>
                 </div>
               </header>
@@ -118,16 +108,15 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
                 />
               </div>
               <div className="following-users">
-                <div style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowingPage followingUserCode={mypageUserCode} search={key} />
+                <div className="scroll" style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
+                  <FollowingPage followingUserCode={mypageUserCode} search={key}/>
                 </div>
-                <div style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowerPage followingUserCode={mypageUserCode} search={key} />
+                <div className="scroll" style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
+                  <FollowerPage followingUserCode={mypageUserCode} search={key}/>
                 </div>
               </div>
             </div>
           </div>
-        </div>
       )}
     </>
   );

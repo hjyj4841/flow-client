@@ -16,9 +16,8 @@ const FollowStyleAndEffect = styled.div`
       button {
         color: #FFFFFF; /* 텍스트와 테두리 색상을 차분한 청록색으로 */
         margin: 1px;
-        margin-top: 10px;
-        width: 6rem;
-        height: 3rem;
+        width: 5.7rem;
+        height: 2.7rem;
         border: 1px solid transparent;
         border-radius: 8px;
         cursor: pointer;

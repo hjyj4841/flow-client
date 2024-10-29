@@ -1,59 +1,127 @@
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
+
+.modal-content {
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 840px;
-    height: 80vh;
+    border: 1px solid rgba(0, 0, 0, 0.027);
+    border-radius: 12px;
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
+    width: 600px;
+    max-width: 600px;
+    min-height: 750px; /* 최소 높이 설정 */
+    max-height: 750px;
     padding: 0;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* 모달 전체에서 스크롤 숨기기 */
-    position: relative;
-  }
+    position: fixed;
+    cursor: move;
+    z-index: 3;
+    transform: translate(0, 0);
+    transition: transform 0.1s ease;
+    user-select: none; /* 텍스트 선택 방지 */
+}
   
-  .following-userInfo {
+.following-userInfo {
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-  }
+    padding-top: 40px; /* 상단 공간 추가 (닫기 버튼 자리) */
+    user-select: none; /* 텍스트 선택 방지 */
+ }
   
   .following-userInfo header {
     display: flex;
     width: 100%;
-    height: 80px;
+    height: 75px;
     justify-content: center;
     align-items: center;
-    background-color: white;
     z-index: 2;
+    /* box-shadow: 0 2px 3px 0 rgba(0, 0, 0, 0.1); hover 시 약간의 그림자 */
+    border-bottom: 1px solid rgba(0, 0, 0, 0.089);
+    border-top: 1px solid rgba(0, 0, 0, 0.089);
   }
+
+  .following-userInfo .section {
+    flex-grow: 1;
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+    cursor: pointer; /* 탭이 클릭 가능하다는 느낌 */
+    padding: 10px 0;
+    background-color: white;
+}
+#center-section {
+    border-right: 1px solid rgba(0, 0, 0, 0.034); /* 더 부드러운 테두리 */
+    border-left: 1px solid rgba(0, 0, 0, 0.034);
+}
+
+.section h1 {
+    font-family: 'Pretendard', sans-serif;
+    font-size: 1.1rem; 
+    font-weight: 500; 
+    letter-spacing: 0.05em;
+    color: #535353;
+    margin-bottom: 10px;
+    margin-top: 3px;
+}
+
+#last-section h1{
+    margin: 0;
+}
+
+.section p {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700; 
+    color: #464444; /* 살짝 연한 텍스트#535151; */
+
+}
+
+.section:hover {
+    background-color: white; /* hover 시 어두운 색 */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* hover 시 약간의 그림자 */
+}
+
+.section.active {
+    background-color: white; /* 선택된 탭에 더 진한 색상 */
+    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.1); /* 안쪽 그림자 */
+}
+
+.section.active:hover {
+    background-color: white; /* hover에도 색 유지 */
+}
+
+  .close-button {
+    position: absolute;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 22px;
+    cursor: pointer;
+    color: #333;
+    z-index: 3;
+}
 
   .following-userInfo .searchBar {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 840px;
-    height: 120px;
-    background-color: #333333;
+    height: 110px;
+    position: fixed;
+    bottom: 0;
+    background-color: white;
+    padding: 20px 0;
     z-index: 2;
-    border: 1px solid rgba(150, 150, 150, 1);
+    border-radius: 0 0 12px 12px;
+    /* box-shadow: 0 -1px 1px 0 rgba(0, 0, 0, 0.1); */
+    border-top: 1px solid rgba(0, 0, 0, 0.089);
   }
 
 
@@ -66,10 +134,10 @@
     border-radius: 25px; /* 둥근 테두리 */
     outline: none; /* 클릭 시 파란 테두리 제거 */
     transition: border 0.3s ease; /* 테두리 변화 애니메이션 */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.07);
     position: relative; /* 가상 요소를 위한 상대적 위치 지정 */
     z-index: 1; /* 가상 요소보다 위에 보이도록 */
-    background-color: white; /* 가상 요소와 구분되도록 배경 색 지정 */
+    background-color: #f7f7f7; /* 가상 요소와 구분되도록 배경 색 지정 */
     transition: box-shadow 0.5s ease-in-out;
 }
 
@@ -105,63 +173,11 @@
 
 .searchBar input:focus {
     border: 2px solid transparent;
-    box-shadow: 0 0 10px rgba(30, 144, 255, 0.8), /* 네온 블루 빛 */
-                0 0 15px rgba(30, 144, 255, 0.6); /* 더 부드러운 블루 빛 */
+    box-shadow: 0 0 7px rgba(30, 144, 255, 0.4), /* 네온 블루 빛 */
+                0 0 12px rgba(30, 144, 255, 0.3); /* 더 부드러운 블루 빛 */
     transition: box-shadow 0.5s ease-in-out;
 }
 
-.section {
-    flex-grow: 1;
-    text-align: center;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    border-right: 1px solid rgba(0, 0, 0, 0.2); /* 더 부드러운 테두리 */
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.3s ease, color 0.3s ease;
-    cursor: pointer; /* 탭이 클릭 가능하다는 느낌 */
-    padding: 10px 0;
-    background-color: #333333;
-    color: #f0f0f0;
-}
-
-.section h1 {
-    font-family: 'Spoqa Han Sans Neo', sans-serif;
-    font-size: 1.2rem; 
-    font-weight: 100; 
-    letter-spacing: 0.05em;
-    color: white;
-}
-
-.section p {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
-    font-weight: 300; 
-    color: #e0e0e0; /* 살짝 연한 텍스트 */
-    margin-top: 15px;
-}
-
-.section:hover {
-    background-color: #4d4d4d; /* hover 시 어두운 색 */
-    color: #ffffff; /* 글자색을 하얗게 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* hover 시 약간의 그림자 */
-}
-
-.section.active {
-    background-color: #555555; /* 선택된 탭에 더 진한 색상 */
-    color: #e0e0e0;
-    box-shadow: inset 0 4px 6px rgba(0, 0, 0, 0.2); /* 안쪽 그림자 */
-    border-right: 1px solid rgba(0, 0, 0, 0.2);
-    border-left: 1px solid rgba(0, 0, 0, 0.2);
-}
-
-.section.active:hover {
-    background-color: #555555; /* hover에도 색 유지 */
-    color: #e0e0e0;
-}
 
 .following-users {
     display: flex;
@@ -170,43 +186,48 @@
     align-items: center;
     flex-grow: 1;
     width: 100%;
-    max-width: 840px;
-    max-height: calc(80vh - 200px); /* 모달 높이에서 헤더와 검색바를 제외한 공간 */
-    overflow-y: auto;
-    padding: 20px 0; /* 위아래 패딩 추가 */
-    box-sizing: border-box; /* 내부 패딩을 포함한 크기 계산 */
-  }
+    height: 100%;
+    box-sizing: border-box;
+    overflow: hidden; /* 상위 요소에서 스크롤 제거 */
+}
 
-
+.following-users .scroll {
+    width: 100%;
+    max-height: calc(750px - 150px); /* 원하는 높이 제한 */
+    overflow-y: auto; /* 스크롤을 scroll div에만 적용 */
+    box-sizing: border-box;
+    padding-bottom: 70px;
+    padding-top: 20px;
+}
 /* 스크롤바 전체 영역 */
-.following-users::-webkit-scrollbar {
+.scroll::-webkit-scrollbar {
     width: 16px; /* 스크롤바의 너비 */
     height: 12px; /* 가로 스크롤바의 높이 */
 }
 
 /* 스크롤바의 트랙 (배경) */
-.following-users::-webkit-scrollbar-track {
+.scroll::-webkit-scrollbar-track {
     background: #f0f0f0; /* 트랙 배경색 */
     border-radius: 10px; /* 둥근 모서리 */
 }
 
 /* 스크롤바의 핸들 (움직이는 부분) */
-.following-users::-webkit-scrollbar-thumb {
+.scroll::-webkit-scrollbar-thumb {
     background: #888; /* 스크롤 핸들 색상 */
     border-radius: 10px; /* 둥근 모서리 */
     border: 3px solid #f0f0f0; /* 핸들 주변에 트랙과 같은 색으로 여백 */
 }
 
 /* 스크롤바의 핸들 호버 시 색상 */
-.following-users::-webkit-scrollbar-thumb:hover {
+.scroll::-webkit-scrollbar-thumb:hover {
     background: #555; /* 호버 시 더 진한 색상 */
 }
 
 
 .userSection {
     width: 100%;
-    max-width: 800px;
-    height: 130px;
+    max-width: 500px;
+    height: 90px;
     margin: 0 auto 20px; /* 아래쪽 마진 추가 */
     padding: 20px 30px;
     border-radius: 8px;
@@ -219,6 +240,7 @@
     gap: 20px;
     transition: box-shadow 0.3s ease, transform 0.3s ease;
     box-sizing: border-box;
+    cursor: pointer;
   }
 
 .userSection:hover {
@@ -227,8 +249,8 @@
 }
 
 .userSection img {
-    width: 7rem;
-    height: 7rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 50%;
     margin-right: 20px;
     object-fit: cover;
@@ -247,13 +269,13 @@
     font-family: 'Pretendard', sans-serif;
     color: #333333;
     font-weight: 500; 
-    font-size: 1.1rem;
+    font-size: 1.0rem;
     margin-top: 6px;
 }
 
 .userSection .infoBox .etcBox {
     font-family: 'Roboto', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     color: #666666; /* 중간 회색 */
     margin-bottom: 4px;
 }
