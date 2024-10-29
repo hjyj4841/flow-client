@@ -30,6 +30,7 @@ import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
+import UserModal from "../../components/UserModal";
 const Detail = () => {
   const navigate = useNavigate();
   const { postCode } = useParams();
@@ -311,16 +312,7 @@ const Detail = () => {
                 src={followUser.userProfileUrl}
                 onClick={goUserInfo}
               />
-              <span
-                style={{
-                  padding: "0 10px",
-                  fontWeight: "bold",
-                  cursor: "pointer",
-                }}
-                onClick={goUserInfo}
-              >
-                {followUser.userNickname}
-              </span>
+              <UserModal user={followUser} />
               <span
                 style={{ paddingRight: "10px", cursor: "pointer" }}
                 onClick={goUserInfo}
