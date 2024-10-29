@@ -11,7 +11,7 @@ const NewFeed = () => {
   const [newFeedImages, setNewFeedImages] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [page, setPage] = useState(1); // Page state
+  const [page, setPage] = useState(1);
   const navigate = useNavigate();
 
   let userCode = "";
@@ -34,7 +34,7 @@ const NewFeed = () => {
   const fetchPosts = async (currentPage) => {
     try {
       const data = await newFeed(currentPage);
-      setNewFeedImages((prev) => [...prev, ...data]); // Append new data
+      setNewFeedImages((prev) => [...prev, ...data]);
     } catch (error) {
       console.error("Error fetching new feed images:", error);
     }
@@ -99,7 +99,7 @@ const NewFeed = () => {
     }
   };
 
-  const loadMorePosts = () => setPage((prev) => prev + 1); // Load more handler
+  const loadMorePosts = () => setPage((prev) => prev + 1);
 
   const detail = (postCode) => {
     navigate(`/post/${postCode}`);
