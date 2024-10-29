@@ -6,8 +6,10 @@ import { useEffect, useState, useCallback, useMemo} from "react";
 import "../../assets/css/mypage_follow.css"
 import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const FollowerPage = React.memo(({followingUserCode, search}) => {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const followee = useSelector((state) => state.follow.followee);
     const {token} = useAuth();
@@ -41,7 +43,11 @@ const FollowerPage = React.memo(({followingUserCode, search}) => {
       useMemo(
         () =>
           users.map((dto) => (
-            <div className="userSection" key={dto.user.userCode}>
+            <div className="userSection" key={dto.user.userCode}
+            onClick={() => {
+              navigate(`/mypage/${dto.user.userCode}`);
+            }}
+            >
               <img src={dto.user.userProfileUrl} alt={dto.user.userNickname} />
               <div className="infoBox">
                 <div className="nickBox">{dto.user.userNickname}</div>

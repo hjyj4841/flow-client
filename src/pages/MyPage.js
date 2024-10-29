@@ -69,9 +69,15 @@ const MyPage = () => {
   const [isVote, setIsVote] = useState(false);
 
   // 팔로우 기능
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => {
-    setIsModalOpen(true);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+  const openModal1 = () => {
+    setIsModalOpen1(true);
+    setIsModalOpen2(false);
+  };
+  const [isModalOpen2, setIsModalOpen2] = useState(false);
+  const openModal2 = () => {
+    setIsModalOpen2(true);
+    setIsModalOpen1(false);
   };
   const [follow, setFollow] = useState({
     followingUser: {
@@ -208,7 +214,7 @@ const MyPage = () => {
   useEffect(() => {
     if (token !== null) getUserInfo();
     getMypageUserInfo();
-  }, []);
+  }, [mypageUserCode]);
 
   useEffect(() => {
     if (token === null || (mypageUser.userCode !== 0 && user.userCode !== 0)) {
@@ -276,50 +282,24 @@ const MyPage = () => {
                 게시물 <span>{createdPosts.totalPosts}</span>
               </span>
               {/* 팔로우 경로 */}
-              <span onClick={openModal}>
+              <span onClick={openModal1}>
+                팔로우 <span>{followerCount}</span>
                 <MyFollower
-                  setIsModalOpen={setIsModalOpen}
-                  isModalOpen={isModalOpen}
-                  logic={true}
-                />
-                <span>{followerCount}</span>
-              </span>
-              {/* <span
-                onClick={() =>
-                  navigate(
-                    mypageUserCode === user.userCode
-                      ? `/mypage/follow/myFollower/${user.userCode}`
-                      : `/mypage/follow/myFollower/${mypageUserCode}`,
-                    {
-                      state: false,
-                    }
-                  )
-                }
-              >
-                팔로워 
-              </span> */}
-              <span onClick={openModal}>
-                <MyFollower
-                  setIsModalOpen={setIsModalOpen}
-                  isModalOpen={isModalOpen}
+                  setIsModalOpen={setIsModalOpen1}
+                  isModalOpen={isModalOpen1}
                   logic={false}
                 />
-                <span>{followingCount}</span>
               </span>
-              {/* <span
-                onClick={() =>
-                  navigate(
-                    mypageUserCode === user.userCode
-                      ? `/mypage/follow/myFollower/${user.userCode}`
-                      : `/mypage/follow/myFollower/${mypageUserCode}`,
-                    {
-                      state: true,
-                    }
-                  )
-                }
-              >
-                팔로잉 
-              </span> */}
+             
+              <span onClick={openModal2}>
+                팔로잉 <span>{followingCount}</span>
+                <MyFollower
+                  setIsModalOpen={setIsModalOpen2}
+                  isModalOpen={isModalOpen2}
+                  logic={true}
+                />
+              </span>
+             
             </div>
             <div className="myJobBox">
               <i>
