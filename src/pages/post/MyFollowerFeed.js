@@ -9,7 +9,8 @@ const MyFollowerFeed = () => {
   const [followingUserPosts, setFollowingUserPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const [page, setPage] = useState(1); // Page state for pagination
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0); // Total pages state
 
   let userCode = "";
   if (token) {
@@ -33,7 +34,11 @@ const MyFollowerFeed = () => {
       const response = await axios.get(
         `http://localhost:8080/api/posts/following/${userCode}?page=${currentPage}`
       );
-      setFollowingUserPosts((prev) => [...prev, ...response.data]);
+      console.log(response.data); // 데이터를 확인하는 로그 추가
+      setFollowingUserPosts((prev) => [
+        ...prev,
+        ...(response.data.content || []),
+      ]);
     } catch (error) {
       console.error("Error fetching follower posts", error);
     }
@@ -98,7 +103,11 @@ const MyFollowerFeed = () => {
     navigate(`/post/${postCode}`);
   };
 
-  const loadMorePosts = () => setPage((prev) => prev + 1); // Increase page for loading more posts
+  const loadMorePosts = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1); // Increase page only if not at the end
+    }
+  };
 
   return (
     <div className="bg-gray-100 text-gray-800">
@@ -171,9 +180,11 @@ const MyFollowerFeed = () => {
               ) : null
             )}
           </div>
-          <button onClick={loadMorePosts} className="load-more-button">
-            Load More
-          </button>
+          {page < totalPages && (
+            <button onClick={loadMorePosts} className="load-more-button">
+              Load More
+            </button>
+          )}
         </section>
       </main>
     </div>

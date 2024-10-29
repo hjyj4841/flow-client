@@ -34,7 +34,8 @@ const NewFeed = () => {
   const fetchPosts = async (currentPage) => {
     try {
       const data = await newFeed(currentPage);
-      setNewFeedImages((prev) => [...prev, ...data]); // Append new data
+      const content = data.content || []; // `content`를 안전하게 추출
+      setNewFeedImages((prev) => [...prev, ...content]);
     } catch (error) {
       console.error("Error fetching new feed images:", error);
     }
