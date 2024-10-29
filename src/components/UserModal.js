@@ -34,7 +34,10 @@ const UserModal = ({ user }) => {
           <button className="user-button" onClick={goUserInfo}>
             유저 페이지
           </button>
-          <UserReportModal className="Report-button" />
+          <UserReportModal
+            className="Report-button"
+            closeUserModal={() => setUserMenuOpen(false)}
+          />
         </div>
       )}
     </div>
