@@ -358,6 +358,7 @@ const VoteDetail = () => {
                 )}
               </div>
               <div />
+              
               <div
                 className="flex text-sm text-gray-600 mb-4"
                 style={{ justifyContent: "space-between" }}

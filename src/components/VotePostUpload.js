@@ -8,11 +8,10 @@ const VoteUpload = ({ upload, post, setPost }) => {
 
   const imageUpload = (e) => {
     let files = Array.from(e.target.files);
-
     const currentFiles = post.imageFiles || [];
     const newFiles = [...currentFiles, ...files];
 
-    // 최대 2개 파일 체크
+    // Maximum of 2 files check
     if (newFiles.length > 2) {
       alert("이미지는 최대 2개까지 업로드할 수 있습니다.");
       e.target.value = "";
@@ -20,7 +19,6 @@ const VoteUpload = ({ upload, post, setPost }) => {
     }
 
     setPost({ ...post, imageFiles: newFiles });
-
     const newPreviews = newFiles.map((file) => URL.createObjectURL(file));
     setImgPreviews(newPreviews);
     setClick([]);
@@ -50,17 +48,37 @@ const VoteUpload = ({ upload, post, setPost }) => {
 
   useEffect(() => {
     if (post.imageFiles.length === sortedFiles.length) {
-      setPost((prevPost) => ({ ...prevPost, imageFiles: sortedFiles })); // 기존 post 상태 유지
+      setPost((prevPost) => ({ ...prevPost, imageFiles: sortedFiles }));
     }
   }, [sortedFiles]);
 
   return (
     <>
       <div>
-        <textarea
-          placeholder="내용을 입력해 투표를 진행해 보세요!"
-          value={post.postDesc}
-          onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
+      <textarea
+            id="content"
+            className="w-full border border-gray-300 rounded px-3 py-2 h-32"
+            placeholder="내용을 입력해 다른이들과 소통해보세요!"
+            value={post.postDesc}
+            onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
+          />
+        <input
+          type="text"
+          placeholder="투표 내용 1을 입력하세요"
+          value={post.voteContent1 || ""}
+          onChange={(e) =>
+            setPost({ ...post, voteContent1: e.target.value })
+          }
+          style={{ marginTop: "10px", width: "100%", padding: "10px" }}
+        />
+        <input
+          type="text"
+          placeholder="투표 내용 2를 입력하세요"
+          value={post.voteContent2 || ""}
+          onChange={(e) =>
+            setPost({ ...post, voteContent2: e.target.value })
+          }
+          style={{ marginTop: "10px", width: "100%", padding: "10px" }}
         />
       </div>
       <div
@@ -101,7 +119,7 @@ const VoteUpload = ({ upload, post, setPost }) => {
                     objectFit: "cover",
                     margin: "5px",
                   }}
-                  onClick={() => handleImageClick(index)} // 클릭 이벤트 추가
+                  onClick={() => handleImageClick(index)}
                 />
                 {click.includes(index) && (
                   <span
@@ -122,7 +140,7 @@ const VoteUpload = ({ upload, post, setPost }) => {
                 )}
                 <button
                   onClick={(e) => {
-                    handleDelete(index); // 삭제 함수 호출
+                    handleDelete(index);
                   }}
                   style={{
                     position: "absolute",
