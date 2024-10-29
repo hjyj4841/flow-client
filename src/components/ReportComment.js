@@ -111,7 +111,7 @@ const ReportComment = () => {
           ))
         ) : (
           <div className="report-post-list">
-            <h1>신고된 글이 없습니다.</h1>
+            <h1>신고된 댓글이 없습니다.</h1>
           </div>
         )}
         <Paging page={currentPage} count={count} setPage={setPage} />

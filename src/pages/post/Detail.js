@@ -6,6 +6,7 @@ import {
   addReportUser,
   initState as reportState,
   reportReducer,
+  addReportComment,
 } from "../../reducers/reportReducer";
 import { useDispatch, useSelector } from "react-redux";
 import { followStatus } from "../../store/followSlice";
