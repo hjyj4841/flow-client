@@ -1,6 +1,5 @@
 import { useParams} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { myFollower, followMe } from "../../store/followSlice";
 import { useState, useCallback, useEffect} from "react";
 import "../../assets/css/mypage_follow.css"
 import FollowingPage from "./FollowingPage";
@@ -25,19 +24,6 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   const warp2 = useCallback(() => {
     setBool(false);
   }, []);
-
-  useEffect(() => {
-    if(mypageUserCode !== undefined) {
-      dispatch(myFollower({
-        followingUserCode : parseInt(mypageUserCode),
-        key : key
-      }));
-      dispatch(followMe({
-        followerUserCode : parseInt(mypageUserCode),
-        key : key
-      }));
-    }
-  }, [dispatch, mypageUserCode, key]);
 
   const handleMouseDown = (e) => {
     setIsDragging(true);
@@ -85,6 +71,7 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
               setIsModalOpen(false);
               setBool(logic);
               }}>✕</button>
+              <div className="imageBar"></div>
             <div className="following-userInfo">
               <header style={{ opacity, transition: 'opacity 0.3s ease' }}>
                 <div className={`section ${bool ? 'active' : ''}`} onClick={warp1}>
@@ -109,10 +96,10 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
               </div>
               <div className="following-users">
                 <div className="scroll" style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowingPage followingUserCode={mypageUserCode} search={key}/>
+                  <FollowingPage followingUserCode={mypageUserCode} search={key} />
                 </div>
                 <div className="scroll" style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowerPage followingUserCode={mypageUserCode} search={key}/>
+                  <FollowerPage followingUserCode={mypageUserCode} search={key} />
                 </div>
               </div>
             </div>
