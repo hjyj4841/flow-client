@@ -40,21 +40,10 @@
   color: white;
   font-weight: bold;
 }
-.cancel-report-comment-btn {
-  width: 90px;
-  background-color: black;
-  color: white;
-  font-weight: bold;
-}
 .cancel-report-post-btn {
   width: 90px;
-  background-color: black;
+  background-color: gray;
   color: white;
   font-weight: bold;
-}
-.ban-report-comment-user-btn {
-  width: 90px;
-  background-color: black;
-  color: white;
-  font-weight: bold;
+  border-radius: 15px;
 }
