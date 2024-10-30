@@ -69,7 +69,7 @@ export const delProduct = async (productCode) => {
 };
 
 // 메인 화면 NewFeed
-export const newFeed = async (page = 1, keyword = "") => {
+export const newFeed = async (page = 0, keyword = "") => {
   const response = await instance.get(`post`, {
     params: {
       page: page,
@@ -80,7 +80,7 @@ export const newFeed = async (page = 1, keyword = "") => {
 };
 
 // 투표 게시판 메인 화면 NEW VOTE
-export const newVote = async (page = 1, keyword = "") => {
+export const newVote = async (page = 0, keyword = "") => {
   const response = await instance.get(`votePost`, {
     params: {
       page: page,
@@ -128,7 +128,7 @@ export const fetchVotedPosts = async (userCode) => {
 };
 
 // 메인 화면 PopularFeed
-export const popularFeed = async (page = 1) => {
+export const popularFeed = async (page = 0) => {
   const response = await instance.get(`likes/post/ordered-by-likes`, {
     params: {
       page: page,
@@ -138,7 +138,7 @@ export const popularFeed = async (page = 1) => {
 };
 
 // 메인 화면 MyFollowerFeed
-export const myFollowerFeed = async (userCode, page = 1) => {
+export const myFollowerFeed = async (userCode, page = 0) => {
   const response = await instance.get(`posts/followed/${userCode}`, {
     params: {
       page: page,

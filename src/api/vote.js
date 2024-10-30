@@ -6,32 +6,19 @@ const instance = axios.create({
 
 // 찬/반 투표
 export const addVote = async (data) => {
-  return await instance.post("postVote", data);
+  return await instance.post(`votePost/${data.postCode}`, data);
 };
 
-// 찬성 투표
-export const voteY = async (data) => {
-  return await instance.post("postVote", data);
-};
-
-// 반대 투표
-export const voteN = async (data) => {
-  return await instance.post("postVote", data);
+// 해당 게시물에 해당유저가 투표했는지 조회
+export const checkPostVote = async (userCode, postCode) => {
+  return await instance.get(
+    `votePost/checkVote?userCode=${userCode}&postCode=${postCode}`
+  );
 };
 
 // 투표 취소
 export const removeVote = async (voteCode) => {
-  return await instance.delete(`postVote/${voteCode}`);
-};
-
-// 투표 했는지 체크
-export const checkVote = async (data) => {
-  return await instance.post("postVote", data);
-};
-
-// 투표 수정
-export const updateVote = async (data) => {
-  return await instance.put("postVote", data);
+  return await instance.delete(`removeVote/${voteCode}`);
 };
 
 // 전체 투표 현황
@@ -47,6 +34,11 @@ export const countY = async (voteYn) => {
 // 반대 투표 형황
 export const countN = async (voteYn) => {
   return await instance.get("postVote", voteYn);
+};
+
+// 투표 했는지 체크
+export const checkVote = async (data) => {
+  return await instance.post("postVote", data);
 };
 
 // 투표 생성 유무 조회

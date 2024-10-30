@@ -3,7 +3,6 @@ import {
   addVote,
   removeVote,
   checkVote,
-  updateVote,
   countVote,
   countY,
   countN,
@@ -23,14 +22,6 @@ export const checkVoteState = createAsyncThunk(
   "vote/checkVoteState",
   async (data) => {
     const response = await checkVote(data);
-    return response.data;
-  }
-);
-
-export const updateVotes = createAsyncThunk(
-  "vote/updateVoteData",
-  async (data) => {
-    const response = await updateVote(data);
     return response.data;
   }
 );

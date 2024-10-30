@@ -55,29 +55,25 @@ const VoteUpload = ({ upload, post, setPost }) => {
   return (
     <>
       <div>
-      <textarea
-            id="content"
-            className="w-full border border-gray-300 rounded px-3 py-2 h-32"
-            placeholder="내용을 입력해 다른이들과 소통해보세요!"
-            value={post.postDesc}
-            onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
-          />
+        <textarea
+          id="content"
+          className="w-full border border-gray-300 rounded px-3 py-2 h-32"
+          placeholder="내용을 입력해 다른이들과 소통해보세요!"
+          value={post.postDesc}
+          onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
+        />
         <input
           type="text"
           placeholder="투표 내용 1을 입력하세요"
-          value={post.voteContent1 || ""}
-          onChange={(e) =>
-            setPost({ ...post, voteContent1: e.target.value })
-          }
+          value={post.voteTextFirst}
+          onChange={(e) => setPost({ ...post, voteTextFirst: e.target.value })}
           style={{ marginTop: "10px", width: "100%", padding: "10px" }}
         />
         <input
           type="text"
           placeholder="투표 내용 2를 입력하세요"
-          value={post.voteContent2 || ""}
-          onChange={(e) =>
-            setPost({ ...post, voteContent2: e.target.value })
-          }
+          value={post.voteTextSecond}
+          onChange={(e) => setPost({ ...post, voteTextSecond: e.target.value })}
           style={{ marginTop: "10px", width: "100%", padding: "10px" }}
         />
       </div>

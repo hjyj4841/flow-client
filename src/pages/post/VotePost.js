@@ -1,21 +1,18 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { newVote } from "../../api/post";
 
 const VotePost = () => {
-  const [token, setToken] = useState(null);
   const [newFeedImages, setNewFeedImages] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setToken(localStorage.getItem("token"));
     fetchNewFeedImages();
   }, []);
 
   const fetchNewFeedImages = async () => {
-    const response = await axios.get("http://localhost:8080/api/post");
-    console.log(response.data);
-    setNewFeedImages(response.data);
+    const response = await newVote();
+    setNewFeedImages(response);
   };
 
   const detail = (postCode) => {
@@ -39,6 +36,7 @@ const VotePost = () => {
       <Link className="text-sm" to={"/uploadVote"}>
         투표업로드
       </Link>
+
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-4">
           <Link to="/votePost" className="hover:underline">
@@ -46,7 +44,7 @@ const VotePost = () => {
           </Link>
         </h2>
         <div className="nf-con grid grid-cols-5 gap-4">
-          {newFeedImages.slice(0, 10).map((post) =>
+          {newFeedImages.map((post) =>
             post.imageUrls.length > 0 ? (
               <div
                 key={post.postCode}

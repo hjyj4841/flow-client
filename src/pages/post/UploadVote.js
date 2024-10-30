@@ -19,6 +19,8 @@ const UploadVote = () => {
     postPublicYn: "Y",
     postType: "vote",
     userCode: "",
+    voteTextFirst: "",
+    voteTextSecond: "",
   });
 
   const upload = async () => {
@@ -37,6 +39,8 @@ const UploadVote = () => {
     formData.append("userCode", userCode);
     formData.append("postDesc", post.postDesc);
     formData.append("postPublicYn", post.postPublicYn);
+    formData.append("voteTextFirst", post.voteTextFirst);
+    formData.append("voteTextSecond", post.voteTextSecond);
 
     try {
       await addPostVote(formData);

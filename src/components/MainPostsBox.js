@@ -28,27 +28,33 @@ const MainPostsBox = ({
   return (
     <section className="flex justify-center">
       <div className="flex flex-col main-section mb-8">
-        <div className="mb-4 flex items-center">
-          <h2 className="text-xl inline-block w-1/5 flex justify-center main-title-text">
-            <Link
-              to={
-                feed === "popularFeed"
-                  ? "/popularFeed"
-                  : feed === "newFeed"
-                  ? "/newFeed"
-                  : "/myFollowerFeed"
-              }
-              className="hover:underline"
-            >
-              {feed === "popularFeed"
-                ? "Popular Feed"
-                : feed === "newFeed"
-                ? "New Feed"
-                : "My Follower's Feed"}
-            </Link>
-          </h2>
-          <div className="w-4/5 h-1 border-b-2 border-solid border-gray-400" />
-        </div>
+        {feed !== "newVote" ? (
+          <>
+            <div className="mb-4 flex items-center">
+              <h2 className="text-xl inline-block w-1/5 flex justify-center main-title-text">
+                <Link
+                  to={
+                    feed === "popularFeed"
+                      ? "/popularFeed"
+                      : feed === "newFeed"
+                      ? "/newFeed"
+                      : "/myFollowerFeed"
+                  }
+                  className="hover:underline"
+                >
+                  {feed === "popularFeed"
+                    ? "Popular Feed"
+                    : feed === "newFeed"
+                    ? "New Feed"
+                    : "My Follower's Feed"}
+                </Link>
+              </h2>
+              <div className="w-4/5 h-1 border-b-2 border-solid border-gray-400" />
+            </div>
+          </>
+        ) : (
+          <></>
+        )}
 
         <div className="main-con grid grid-cols-5 gap-4 flex justify-center content-center">
           {(Array.isArray(posts) ? posts : posts.content || [])
@@ -110,7 +116,9 @@ const MainPostsBox = ({
                     </div>
                   </div>
                 </div>
-              ) : null
+              ) : (
+                <div onClick={(e) => detail(post.postCode, e)} />
+              )
             )}
         </div>
       </div>
