@@ -23,6 +23,7 @@ import {
   deleteComment,
   getAllComment,
   updateComment as updateCommentAPI,
+  deleteParent,
 } from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -78,14 +79,17 @@ const Detail = () => {
     },
   });
   // 댓글 작성 관련
+  const [parents, setParents] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
   const [newComment, setNewComment] = useState({
     commentCode: null,
     commentDesc: "",
     postCode: postCode,
     userCode: 0,
+    parentCommentCode: 0,
   });
 
+  // 댓글 수정 관련
   const [updateComment, setUpdateComment] = useState({
     commentCode: null,
     commentDesc: "",
@@ -296,15 +300,23 @@ const Detail = () => {
     setIsUpdating(comment.commentCode); // 수정할 댓글 코드 설정
   };
 
+  // 댓글 수정 완료
   const handleUpdate = () => {
     updateMutation.mutate(updateComment);
     setIsUpdating(null); // 수정 상태 초기화
     setUpdateComment({ ...updateComment, commentDesc: "" }); // 입력 필드 초기화
   };
 
+  // 댓글 수정 취소
   const handleUpdateCancel = () => {
     setIsUpdating(null); // 수정 상태 초기화
     setUpdateComment({ ...updateComment, commentDesc: "", commentCode: 0 }); // 입력 필드 초기화
+  };
+
+  // 대댓글 작성
+  const parentCommentCode = () => {
+    addMutation.mutate(newComment);
+    setNewComment({ ...newComment, commentDesc: "", parentCommentCode: 0 });
   };
 
   // 작성자의 유저정보 페이지로 이동
@@ -581,6 +593,11 @@ const Detail = () => {
                                           commentDesc: e.target.value,
                                         })
                                       }
+                                      style={{
+                                        width: "140%",
+                                        border: "1px #808080 solid",
+                                        borderRadius: "5px",
+                                      }}
                                     />
                                   ) : (
                                     <p>{comment.commentDesc}</p>
@@ -624,6 +641,64 @@ const Detail = () => {
                                           >
                                             삭제
                                           </button>
+                                          <button
+                                            onClick={() =>
+                                              setNewComment({
+                                                ...newComment,
+                                                parentCommentCode:
+                                                  comment.commentCode,
+                                              })
+                                            }
+                                          >
+                                            답글
+                                          </button>
+                                          {user === comment.user && (
+                                            <button
+                                              onClick={() =>
+                                                deleteComment(
+                                                  comment.commentCode
+                                                )
+                                              }
+                                            >
+                                              삭제
+                                            </button>
+                                          )}
+                                        </>
+                                      )}
+                                      {newComment.parentCommentCode ===
+                                        comment.commentCode && (
+                                        <>
+                                          <input
+                                            type="text"
+                                            value={newComment.commentDesc}
+                                            onChange={(e) =>
+                                              setNewComment({
+                                                ...newComment,
+                                                commentDesc: e.target.value,
+                                              })
+                                            }
+                                            style={{
+                                              width: "100%",
+                                              border: "1px #808080 solid",
+                                              borderRadius: "5px",
+                                            }}
+                                          />
+                                          <div className="parent-box">
+                                            <button
+                                              onClick={() =>
+                                                setNewComment({
+                                                  ...newComment,
+                                                  commentDesc: "",
+                                                  parentCommentCode: 0,
+                                                })
+                                              }
+                                            >
+                                              취소
+                                            </button>
+                                            <button onClick={parentCommentCode}>
+                                              답글 완료
+                                            </button>
+                                          </div>
                                         </>
                                       )}
                                     </>
