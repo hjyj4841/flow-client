@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useReducer, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { HiMiniLink } from "react-icons/hi2";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   addReportPost,
@@ -118,6 +119,7 @@ const Detail = () => {
       fetchLiked();
       fetchSaved();
     }
+    console.log(post);
   }, [likeRendering, saveRendering, post]); // 의존성 배열 추가
   // 2-1. 좋아요 정보를 객체 배열로 담기
   const fetchLiked = async () => {
@@ -333,16 +335,23 @@ const Detail = () => {
               <>
                 {post.imageUrls && post.imageUrls.length > 0 ? (
                   <>
-                    <button
-                      onClick={handlePreviousImage}
-                      className="shadow-lg prev-button"
-                    >
-                      <GrPrevious />
-                    </button>
+                    {currentImageIndex > 0 && (
+                      <button
+                        onClick={handlePreviousImage}
+                        className="shadow-lg prev-button"
+                      >
+                        <GrPrevious />
+                      </button>
+                    )}
                     <img src={post.imageUrls[currentImageIndex]} />
-                    <button onClick={handleNextImage} className="next-button">
-                      <GrNext />
-                    </button>
+                    {currentImageIndex < post.imageUrls.length - 1 && (
+                      <button
+                        onClick={handleNextImage}
+                        className="shadow-lg next-button"
+                      >
+                        <GrNext />
+                      </button>
+                    )}
                   </>
                 ) : (
                   <></>
@@ -457,6 +466,9 @@ const Detail = () => {
                       <p>{post.postDesc}</p>
                     </div>
                     <div className="detail-post-product">
+                      {post.products.length > 0 && (
+                        <p>제품 {post.products.length}개</p>
+                      )}
                       <table>
                         {post.products && post.products.length > 0 ? (
                           <>
@@ -464,9 +476,9 @@ const Detail = () => {
                               <tr>
                                 <th>브랜드</th>
                                 <th>제품명</th>
-                                <th>사이즈</th>
+                                <th>컬러/사이즈</th>
                                 <th>구매처</th>
-                                <th>구매링크</th>
+                                {/* <th>구매링크</th> */}
                               </tr>
                             </thead>
                             <tbody>
@@ -475,8 +487,56 @@ const Detail = () => {
                                   <td>{product.productBrand}</td>
                                   <td>{product.productName}</td>
                                   <td>{product.productSize}</td>
-                                  <td>{product.productBuyFrom}</td>
                                   <td>
+                                    {product.productBuyFrom === "" &&
+                                    product.productLink === "" ? (
+                                      ""
+                                    ) : product.productBuyFrom === "" &&
+                                      product.productLink !== "" ? (
+                                      <a
+                                        href={
+                                          product.productLink === "" ||
+                                          (product.productLink.includes(
+                                            "http://"
+                                          ) ||
+                                            product.productLink.includes(
+                                              "https://"
+                                            ))
+                                            ? product.productLink
+                                            : `https://${product.productLink}`
+                                        }
+                                      >
+                                        <HiMiniLink />
+                                      </a>
+                                    ) : product.productBuyFrom !== "" &&
+                                      product.productLink !== "" ? (
+                                      <a
+                                        href={
+                                          product.productLink === "" ||
+                                          (product.productLink.includes(
+                                            "http://"
+                                          ) ||
+                                            product.productLink.includes(
+                                              "https://"
+                                            ))
+                                            ? product.productLink
+                                            : `https://${product.productLink}`
+                                        }
+                                        style={{
+                                          display: "flex",
+                                          textAlign: "center",
+                                        }}
+                                      >
+                                        {product.productBuyFrom}
+                                        <HiMiniLink />
+                                      </a>
+                                    ) : product.productBuyFrom !== "" &&
+                                      product.productLink === "" ? (
+                                      product.productBuyFrom
+                                    ) : null}
+                                  </td>
+
+                                  {/* <td>
                                     <a
                                       href={
                                         product.productLink === "" ||
@@ -500,7 +560,7 @@ const Detail = () => {
                                         ? product.productLink
                                         : `https://${product.productLink}`}
                                     </a>
-                                  </td>
+                                  </td> */}
                                 </tr>
                               ))}
                             </tbody>

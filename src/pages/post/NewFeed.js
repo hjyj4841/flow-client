@@ -5,6 +5,7 @@ import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { SlArrowDown } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import "../../assets/css/newfeed.css";
 
 const NewFeed = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));

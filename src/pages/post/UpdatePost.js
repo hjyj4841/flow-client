@@ -188,6 +188,19 @@ const UpdatePost = () => {
     });
   };
 
+  const switched = (e) => {
+    let checked = e.target.checked;
+    // console.log(checked);
+
+    if (checked) {
+      console.log("공개->비공개 " + checked);
+      setUpdate({ ...update, postPublicYn: "N" });
+    } else {
+      console.log("비공개->공개 " + checked);
+      setUpdate({ ...update, postPublicYn: "Y" });
+    }
+  };
+
   // 수정 완료 버튼
   const updateForm = async () => {
     if (imgCode.length > 0) {
@@ -318,7 +331,7 @@ const UpdatePost = () => {
               />
               <input
                 type="text"
-                placeholder="제품 사이즈"
+                placeholder="컬러/사이즈"
                 value={post.productSize}
                 onChange={(e) => setSize(e, index)}
                 style={{
@@ -372,14 +385,14 @@ const UpdatePost = () => {
           </button>
         </div>
 
-        <div className="mb-4 text-sm">
+        <div className="mb-4 text-sm" style={{ display: "flex" }}>
           <label
             htmlFor="content"
             className="block text-sm font-bold font-medium mb-2"
           >
             공개 여부
           </label>
-          <div>
+          {/*<div>
             <label>
               <input
                 type="radio"
@@ -402,6 +415,19 @@ const UpdatePost = () => {
                 style={{ marginLeft: "15px" }}
               />
               비공개
+            </label>
+          </div>*/}
+          <div>
+            <label className="switch">
+              <input
+                type="checkbox"
+                onChange={switched}
+                checked={update.postPublicYn === "N"}
+              />
+              <span>
+                <em />
+                <strong />
+              </span>
             </label>
           </div>
         </div>
