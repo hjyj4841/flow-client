@@ -13,41 +13,54 @@ import ToRegister from "./ToRegister.js";
 
 const FollowStyleAndEffect = styled.div`
     .followButton {
-      button {
-        color: #FFFFFF; /* 텍스트와 테두리 색상을 차분한 청록색으로 */
-        margin: 1px;
-        width: 5.7rem;
-        height: 2.7rem;
-        border: 1px solid transparent;
-        border-radius: 8px;
+      #follow, #unfollow {
+        width: 5.5rem;
+        height: 2.4rem;
+        border-radius: 5px;
         cursor: pointer;
-        background-color: #E74C3C;
-        font-size: 1rem;
-        font-weight: 400;
-        font-family: "Poppins", sans-serif;
-        letter-spacing: 0.05em;
+        font-size: 0.85rem;
+        font-family: "Pretendard", sans-serif;
         transition: transform 0.1s ease, box-shadow 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
         -webkit-appearance: none; /* 브라우저 기본 스타일 제거 */
         -moz-appearance: none;
         appearance: none;
-          &:active {
-            transform: translateY(2px);
-            box-shadow: inset 1px 1px 1px rgba(150, 150, 150, 0.6);
-            background-color: #C0392B;
-          }
-          &:hover {
-            background-color: #FF6F61;
-            border-color: #FF6F61; 
-          }
-          &:hover:active {
-            background-color: #C0392B;
-            box-shadow: inset 1px 1px 1px rgba(150, 150, 150, 0.6);
-          }
+      }
+      #unfollow {
+        background-color: white;
+        color: #DC143C;
+        border: 1.2px solid #DC143C;
+        font-weight: 500;
+        letter-spacing: 1px;
+        &:hover {
+          border: 1px solid transparent;
+          background-color: #DC143C;
+          color: white;
+        }
+        &:hover:active {
+          transform: translateY(2px);
+          box-shadow: inset 1px 1px 4px rgba(139, 0, 0, 0.5);
+        }
+      }
+      #follow{
+        color: white;
+        background-color: #6EC6FF;
+        border: 1px solid transparent;
+        &:hover {
+          border: 1.2px solid #40E0D0;
+          background-color: white;
+          color: #40E0D0;
+        }
+        &:hover:active {
+          transform: translateY(2px);
+          box-shadow: inset 1px 1px 4px rgba(64, 224, 208, 0.4);
+          border-color: #40E0D0;
+          background-color: white; /* 살짝 연한 청록색 배경으로 변화 */
+        }
       }
     }
   `;
-const FollowButton = ({ user, bool }) => {
-  const {followingUserCode} = useParams();
+const FollowButton = ({ user, bool}) => {
+  const {mypageUserCode} = useParams();
   const token = localStorage.getItem("token");
   const [isLogin, setIsLogin] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -102,10 +115,12 @@ const FollowButton = ({ user, bool }) => {
   useEffect(() => {
     setIsFollow(bool);
   }, [bool]);
+
   let isSelf = 0;
+
   const addFollowRelative = () => {
-    if((tokenCode !==0 && followingUserCode !==0 && follow.followingUser.userCode !== 0)) {
-      isSelf = (tokenCode === parseInt(followingUserCode) ? 1 : ((tokenCode !== parseInt(followingUserCode)) && (parseInt(followingUserCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
+    if((tokenCode !==0 && mypageUserCode !==0 && follow.followingUser.userCode !== 0)) {
+      isSelf = (tokenCode === parseInt(mypageUserCode) ? 1 : ((tokenCode !== parseInt(mypageUserCode)) && (parseInt(mypageUserCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
     } // isSelf 계산
     dispatch(createFollowRelative({isSelf, 
       follow}));
@@ -113,8 +128,8 @@ const FollowButton = ({ user, bool }) => {
   };
 
   const unfollow = () => {
-    if((tokenCode !==0 && followingUserCode !==0 && follow.followingUser.userCode !== 0)) {
-      isSelf = (tokenCode === parseInt(followingUserCode) ? 1 : ((tokenCode !== parseInt(followingUserCode)) && (parseInt(followingUserCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
+    if((tokenCode !==0 && mypageUserCode !==0 && follow.followingUser.userCode !== 0)) {
+      isSelf = (tokenCode === parseInt(mypageUserCode) ? 1 : ((tokenCode !== parseInt(mypageUserCode)) && (parseInt(mypageUserCode) === parseInt(follow.followingUser.userCode))) ? 2 : 0);
     } // isSelf 계산
     dispatch(
       removeFollowRelative({
@@ -125,7 +140,8 @@ const FollowButton = ({ user, bool }) => {
     );
     setIsFollow(false);
   };
-  const submit = () => {
+  const submit = (event) => {
+    event.stopPropagation();
     if (!isFollow) {
       addFollowRelative();
     } else {
@@ -146,13 +162,17 @@ const FollowButton = ({ user, bool }) => {
         {isLogin ? (
           <>
             {isFollow ? (
-              <button onClick={submit}>언팔로우</button>
+              <button id="unfollow" onClick={(event) => {
+                submit(event);
+              }}>언팔로우</button>
             ) : (
-              <button onClick={submit}>팔로우</button>
+              <button id="follow" onClick={(event) => {
+                submit(event);
+              }}>팔로우</button>
             )}
           </>
         ) : (
-          <button onClick={tryRegister}>팔로우</button>
+          <button id="follow" onClick={tryRegister}>팔로우</button>
         )}
         </div>
         </FollowStyleAndEffect>
@@ -160,7 +180,7 @@ const FollowButton = ({ user, bool }) => {
          <ForNotUser setShowModal={setShowModal} toRegister={toRegister}/>
         )}
         {registerOpen && (
-        <ToRegister setRegisterOpen={setRegisterOpen}/>
+        <ToRegister setRegisterOpen={setRegisterOpen} setShowModal={setShowModal}/>
       )}
     </>
   );

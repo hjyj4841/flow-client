@@ -212,6 +212,8 @@ const MyPage = () => {
   };
 
   useEffect(() => {
+    setIsModalOpen1(false);
+    setIsModalOpen2(false);
     if (token !== null) getUserInfo();
     getMypageUserInfo();
   }, [mypageUserCode]);
