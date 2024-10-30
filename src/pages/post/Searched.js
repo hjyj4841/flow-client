@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useAuth } from "../../contexts/AuthContext";
+import { findUser } from "../../api/user";
 import {
   fetchSearchedPosts,
   fetchLikedPosts,
@@ -8,65 +10,79 @@ import {
 import SearchedPostsBox from "../../components/SearchedPostsBox";
 
 const Searched = () => {
+  const { token, logout } = useAuth();
+  const [user, setUser] = useState({ userCode: 0 });
   const location = useLocation();
   const { params } = location.state || {};
   const [posts, setPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
-  const userCode = localStorage.getItem("userCode");
+
+  useEffect(() => {
+    if (token) {
+      getUserInfo();
+    }
+  }, [token]);
+
+  const getUserInfo = async () => {
+    try {
+      const response = await findUser(token);
+      if (response.data.error) {
+        logout();
+      } else {
+        setUser(response.data);
+      }
+    } catch {
+      logout();
+    }
+  };
 
   useEffect(() => {
     if (params && Object.keys(params).length > 0) {
-      fetchSearchedPostsData(params);
+      fetchSearched(params);
     }
-  }, [params]);
-
-  useEffect(() => {
-    fetchLikedPostsData();
-    fetchSavedPostsData();
-  }, [userCode]);
-
-  const fetchSearchedPostsData = async (params) => {
-    try {
-      const data = await fetchSearchedPosts(params);
-      setPosts(data || []);
-    } catch (error) {
-      console.error("Error fetching searched posts:", error);
-      setPosts([]); // 오류 발생 시 빈 배열로 초기화
+    if (user.userCode !== 0) {
+      fetchLiked();
+      fetchSaved();
     }
+  }, [params, user.userCode]);
+
+  const fetchSearched = async (params) => {
+    const response = await fetchSearchedPosts(params);
+    console.log(response);
+    setPosts(response || []);
   };
 
-  const fetchLikedPostsData = async () => {
-    if (userCode) {
-      const response = await fetchLikedPosts(userCode);
-      const liked = response.data.postInfoList.map((post) => ({
-        ...post,
-        isLiked: true,
-      }));
-      setLikedPosts(liked || []);
-    }
+  const fetchLiked = async () => {
+    const response = await fetchLikedPosts(user.userCode);
+    const liked = response.data.postInfoList.map((post) => ({
+      ...post,
+      isLiked: true,
+    }));
+    setLikedPosts(liked || []);
   };
 
-  const fetchSavedPostsData = async () => {
-    if (userCode) {
-      const response = await fetchSavedPosts(userCode);
-      const saved = response.data.postInfoList.map((post) => ({
-        ...post,
-        isSaved: true,
-      }));
-      setSavedPosts(saved || []);
-    }
+  const fetchSaved = async () => {
+    const response = await fetchSavedPosts(user.userCode);
+    const saved = response.data.postInfoList.map((post) => ({
+      ...post,
+      isSaved: true,
+    }));
+    setSavedPosts(saved || []);
   };
 
   return (
     <div className="bg-gray-100 text-gray-800">
       <main className="container mx-auto px-4 py-8">
         <section className="mb-8">
-          <h2 className="text-xl font-bold mb-4">검색 결과</h2>
+          <h2 className="text-xl font-bold mb-4">Searched Result</h2>
           <SearchedPostsBox
             posts={posts}
             likedPosts={likedPosts}
             savedPosts={savedPosts}
+            user={user}
+            fetchLiked={fetchLiked}
+            fetchSaved={fetchSaved}
           />
         </section>
       </main>
