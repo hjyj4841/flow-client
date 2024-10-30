@@ -5,6 +5,7 @@ import axios from "axios";
 import LikeToggleButton from "../../components/toggleBtn/LikeToggleButton";
 import SaveToggleButton from "../../components/toggleBtn/SaveToggleButton";
 import { SlArrowDown } from "react-icons/sl";
+import "../../assets/css/newfeed.css";
 
 const NewFeed = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));

@@ -52,6 +52,7 @@ const Main = () => {
       fetchSaved();
       fetchFollowedUserPosts();
     }
+    console.log(newFeedImages);
   }, [user.userCode]);
 
   // Fetch liked posts

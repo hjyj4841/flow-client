@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { TiDelete } from "react-icons/ti";
-import "../assets/css/post.css";
+import "../assets/css/post.scss";
 
 const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
   const [imgPreviews, setImgPreviews] = useState([]);
@@ -173,6 +173,17 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
     });
   };
 
+  const switched = (e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setPost({ ...post, postPublicYn: "N" });
+      console.log("비공개");
+    } else {
+      setPost({ ...post, postPublicYn: "Y" });
+      console.log("공개");
+    }
+  };
+
   return (
     <>
       <div className="max-w-2xl mx-auto p-6 bg-white shadow-md mt-10 rounded-lg">
@@ -293,7 +304,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
               />
               <input
                 type="text"
-                placeholder="제품 사이즈"
+                placeholder="컬러/사이즈"
                 value={item.productSize}
                 onChange={(e) => setSize(e, index)}
                 style={{
@@ -346,14 +357,14 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
           </button>
         </div>
 
-        <div className="mb-4 text-sm">
+        <div className="mb-4 text-sm" style={{ display: "flex" }}>
           <label
             htmlFor="content"
             className="block text-sm font-bold font-medium mb-2"
           >
             공개 여부
           </label>
-          <div>
+          {/*<div>
             <label>
               <input
                 type="radio"
@@ -377,6 +388,15 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
               />
               비공개
             </label>
+          </div>*/}
+          <div>
+            <label className="switch">
+              <input type="checkbox" onChange={switched} />
+              <span>
+                <em />
+                <strong />
+              </span>
+            </label>
           </div>
         </div>
 
@@ -385,7 +405,56 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
           <div className="text-sm">
             <div className="mb-2 font-bold">SEASON</div>
             <div>
-              <label>
+              <div className="checkbox-wrapper">
+                <input type="checkbox" className="check" id="check1" />
+                <label htmlFor="check1" className="label">
+                  <svg width={20} height={25} viewBox="0 0 95 95">
+                    <rect
+                      x={0}
+                      y={8}
+                      width={60}
+                      height={60}
+                      stroke="black"
+                      fill="none"
+                    />
+                    <g transform="scale(0.9) translate(-10,-965.36222)">
+                      <path
+                        d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
+                        stroke="black"
+                        strokeWidth={3}
+                        fill="none"
+                        className="path1"
+                      />
+                    </g>
+                  </svg>
+                  테스트
+                </label>
+
+                <input type="checkbox" className="check" id="check2" />
+                <label htmlFor="check2" className="label">
+                  <svg width={20} height={25} viewBox="0 0 95 95">
+                    <rect
+                      x={0}
+                      y={8}
+                      width={60}
+                      height={60}
+                      stroke="black"
+                      fill="none"
+                    />
+                    <g transform="scale(0.9) translate(-10,-965.36222)">
+                      <path
+                        d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
+                        stroke="black"
+                        strokeWidth={3}
+                        fill="none"
+                        className="path1"
+                      />
+                    </g>
+                  </svg>
+                  테스트2
+                </label>
+              </div>
+              <label className="checkBox">
                 <input
                   type="checkbox"
                   className="mr-1"
@@ -394,7 +463,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 />
                 봄
               </label>
-              <label>
+              <label className="checkBox">
                 <input
                   type="checkbox"
                   className="mr-1"
@@ -404,7 +473,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 />
                 여름
               </label>
-              <label>
+              <label className="checkBox">
                 <input
                   type="checkbox"
                   className="mr-1"
@@ -414,7 +483,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 />
                 가을
               </label>
-              <label>
+              <label className="checkBox">
                 <input
                   type="checkbox"
                   className="mr-1"
