@@ -60,7 +60,7 @@ const CommentReportModal = ({ comment }) => {
               }
             }}
           >
-            <div className="reportComment-content">
+            <div className="reportComment-content" style={{ zIndex: "100" }}>
               <input
                 className="report-comment-desc ml-2"
                 type="text"
