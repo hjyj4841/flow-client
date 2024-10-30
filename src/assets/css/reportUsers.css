@@ -1,3 +1,6 @@
+.fullContainer {
+  height: 800px;
+}
 .buttonContainer {
   display: flex;
 }
@@ -15,9 +18,10 @@
 }
 .cancel-report-user-btn {
   width: 90px;
-  background-color: black;
+  background-color: gray;
   color: white;
   font-weight: bold;
+  border-radius: 15px;
 }
 .delete-report-comment-btn {
   width: 90px;

@@ -36,6 +36,8 @@ import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
 import UserModal from "../../components/UserModal";
 import "../../assets/css/detail.scoped.scss";
+import PostReportModal from "../../components/PostReportModal";
+import CommentReportModal from "../../components/CommentReportModal";
 
 const Detail = () => {
   const navigate = useNavigate();
@@ -432,29 +434,7 @@ const Detail = () => {
                         </button>
                       </div>
                     )}
-                    {!check ? (
-                      <span>
-                        <input
-                          className="report-post-desc"
-                          type="text"
-                          placeholder="신고 내용(변경예정)"
-                          value={reportPost.postReportDesc}
-                          onChange={(e) =>
-                            setReportPost({
-                              ...reportPost,
-                              postReportDesc: e.target.value,
-                            })
-                          }
-                        />
-                        <PiSirenLight
-                          onClick={() => {
-                            reportPostBtn(reportPost);
-                          }}
-                        />
-                      </span>
-                    ) : (
-                      <></>
-                    )}
+                    <PostReportModal />
                   </div>
                 </div>
                 <div className="detail-desc-mid">
@@ -765,32 +745,7 @@ const Detail = () => {
                                       )}
                                     </>
                                   )}
-                                  <input
-                                    className="report-comment-desc ml-2"
-                                    type="text"
-                                    placeholder="신고 내용"
-                                    value={reportComment.commentReportDesc}
-                                    onChange={(e) =>
-                                      setReportComment({
-                                        commentReportDesc: e.target.value,
-                                        comment: {
-                                          commentCode: comment.commentCode,
-                                        },
-                                      })
-                                    }
-                                  />
-                                  <button
-                                    className="report-comment-btn"
-                                    type="button"
-                                    style={{
-                                      color: "red",
-                                    }}
-                                    onClick={() =>
-                                      reportCommentBtn(reportComment)
-                                    }
-                                  >
-                                    신고
-                                  </button>
+                                  <CommentReportModal comment={comment} />
                                 </div>
                               </div>
                             </div>
