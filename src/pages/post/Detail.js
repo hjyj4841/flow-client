@@ -619,6 +619,8 @@ const Detail = () => {
                         <div>로딩 중...</div>
                       ) : error ? (
                         <div>댓글을 불러오는 데 문제가 발생했습니다.</div>
+                      ) : comments.data && comments.data.length === 0 ? (
+                        <p>첫번째로 댓글을 남겨보세요.</p>
                       ) : comments.data && comments.data.length > 0 ? (
                         comments.data.map((comment, index) => (
                           <div className="comment-contents" key={index}>

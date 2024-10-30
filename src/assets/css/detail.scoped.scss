@@ -263,6 +263,13 @@
           height: 130px;
           margin-bottom: 10px;
           overflow-y: auto;
+          > p {
+            color: #bbb;
+            font-size: 0.9rem;
+            text-align: center;
+            vertical-align: center;
+            margin-top: 20px;
+          }
 
           .comment-contents {
             width: 100%;
