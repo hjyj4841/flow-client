@@ -57,6 +57,7 @@ const Main = () => {
   // Fetch liked posts
   const fetchLiked = async () => {
     const response = await fetchLikedPosts(user.userCode);
+    console.log(response);
     const likedPosts = response.data.postInfoList.map((post) => ({
       ...post,
       isLiked: true,
