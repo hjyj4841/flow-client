@@ -1,12 +1,11 @@
 import { useParams} from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useCallback, useEffect} from "react";
-import "../../assets/css/mypage_follow.css"
+import "../../assets/css/MyFollower.modules.css"
 import FollowingPage from "./FollowingPage";
 import FollowerPage from "./FollowerPage";
 
 const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
-  const dispatch = useDispatch();
   const { mypageUserCode } = useParams();
   const count = useSelector((state) => state.follow.countFollower);
   const counter = useSelector((state) => state.follow.counter);
@@ -60,17 +59,19 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   return (
     <>
       {isModalOpen && (
-          <div className="modal-content"
+          <div className="myfollower-modal-content"
           onMouseDown={handleMouseDown} 
           onClick={(e) => e.stopPropagation()}
           style={{
             transform: `translate(${position.x}px, ${position.y}px)`, // 위치를 translate로 제어
           }}
           >
-            <button className="close-button" onClick={() => {
+            <button className="followModal-close-button" onClick={() => {
               setIsModalOpen(false);
               setBool(logic);
-              }}>✕</button>
+              setKey("");
+              }}
+              >✕</button>
               <div className="imageBar"></div>
             <div className="following-userInfo">
               <header style={{ opacity, transition: 'opacity 0.3s ease' }}>

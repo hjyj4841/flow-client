@@ -40,7 +40,7 @@ const ToRegister = ({setRegisterOpen, setShowModal}) => {
               className="kakao"
               onClick={() => getKakaoCode("register")}
             >
-              Kakao
+              <span className="text-stretch">kakao</span>
             </button>
             <button
               type="button"

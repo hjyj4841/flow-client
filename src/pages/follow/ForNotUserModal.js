@@ -40,7 +40,7 @@ const ForNotUser = ({setShowModal, toRegister}) => {
                 className="kakao"
                 onClick={() => getKakaoCode("login")}
               >
-                Kakao
+                <span className="text-stretch">kakao</span>
               </button>
               <button
                 type="button"

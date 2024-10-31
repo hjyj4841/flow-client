@@ -3,7 +3,7 @@ import FollowButton from "./FollowButton";
 import { useDispatch, useSelector } from "react-redux";
 import { followMe} from "../../store/followSlice";
 import { useEffect, useState, useCallback, useMemo} from "react";
-import "../../assets/css/mypage_follow.css"
+import "../../assets/css/MyFollower.modules.css"
 import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
 import { useNavigate } from "react-router-dom";
