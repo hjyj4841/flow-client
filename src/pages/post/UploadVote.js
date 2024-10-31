@@ -45,7 +45,7 @@ const UploadVote = () => {
     try {
       await addPostVote(formData);
       alert("업로드 완료");
-      window.location.href = "/";
+      window.location.href = "/votePost";
     } catch (error) {
       alert("업로드 실패:" + error);
       console.log(post);

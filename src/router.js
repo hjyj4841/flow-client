@@ -53,7 +53,7 @@ const router = createBrowserRouter([
 
       { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드
       { path: "/uploadPost", element: <UploadPost /> },
-      
+
       {
         path: "/post/",
         children: [
