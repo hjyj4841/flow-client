@@ -6,13 +6,13 @@
 }
 .delete-report-user-btn {
   width: 90px;
-  background-color: rgb(255, 55, 55);
+  background-color: black;
   color: white;
   font-weight: bold;
 }
 .ban-report-user-btn {
   width: 90px;
-  background-color: black;
+  background-color: rgb(255, 55, 55);
   color: white;
   font-weight: bold;
 }

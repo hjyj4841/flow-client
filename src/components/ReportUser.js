@@ -49,7 +49,7 @@ const ReportUser = () => {
   const banUser = (userCode, userReportCode) => {
     // 밴 기능
     banUserReport(dispatch, userCode);
-    delReportUser(dispatch, userReportCode);
+    cancelRUser(dispatch, userReportCode);
     alert("관리자에 의해 밴되었습니다.");
   };
 
@@ -83,13 +83,6 @@ const ReportUser = () => {
                     onClick={() => cancleUser(user.userReportCode)}
                   >
                     취소
-                  </button>
-                  <button
-                    className="delete-report-user-btn"
-                    type="button"
-                    onClick={() => deleteUser(user.userReportCode)}
-                  >
-                    삭제
                   </button>
                   <button
                     className="ban-report-user-btn"

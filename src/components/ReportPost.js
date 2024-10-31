@@ -57,7 +57,8 @@ const ReportPost = () => {
 
   const cancelPost = (postReportCode) => {
     // 취소 기능
-    cancelRPost(dispatch, postReportCode);
+    // cancelRPost(dispatch, postReportCode);
+    console.log(reportPosts);
     alert("관리자에 의해 취소되었습니다.");
   };
 

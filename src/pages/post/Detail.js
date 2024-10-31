@@ -434,7 +434,11 @@ const Detail = () => {
                         </button>
                       </div>
                     )}
-                    <PostReportModal />
+                    {!check && (
+                      <>
+                        <PostReportModal />
+                      </>
+                    )}
                   </div>
                 </div>
                 <div className="detail-desc-mid">

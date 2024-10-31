@@ -27,10 +27,11 @@
 .buttonContainer {
   bottom: 5px;
   width: 200px;
+  margin-left: 1350px;
 }
 .delete-report-post-btn {
   width: 90px;
-  background-color: rgb(255, 55, 55);
+  background-color: black;
   color: white;
   font-weight: bold;
 }

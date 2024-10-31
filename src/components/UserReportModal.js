@@ -80,12 +80,15 @@ const UserReportModal = ({ closeUserModal }) => {
 
   return (
     <>
-      <button
-        className="report-open-button"
-        onClick={() => setUserReportOpen(true)}
-      >
-        유저 신고하기
-      </button>
+      {!check && (
+        <button
+          className="report-open-button"
+          onClick={() => setUserReportOpen(true)}
+        >
+          유저 신고하기
+        </button>
+      )}
+
       {userReportOpen && (
         <div
           className={"user-Report-container"}

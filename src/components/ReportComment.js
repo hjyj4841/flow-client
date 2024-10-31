@@ -42,7 +42,8 @@ const ReportComment = () => {
 
   const cancleComment = (commentReportCode) => {
     // 취소 기능
-    cancelRComment(dispatch, commentReportCode);
+    // cancelRComment(dispatch, commentReportCode);
+    console.log(reportComments);
     alert("관리자에 의해 취소되었습니다.");
   };
 
