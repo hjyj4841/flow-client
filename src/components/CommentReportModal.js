@@ -60,7 +60,7 @@ const CommentReportModal = ({ comment }) => {
               }
             }}
           >
-            <div className="reportComment-content" style={{ zIndex: "100" }}>
+            <div className="reportComment-content">
               <input
                 className="report-comment-desc ml-2"
                 type="text"
@@ -78,9 +78,6 @@ const CommentReportModal = ({ comment }) => {
               <button
                 className="report-comment-btn"
                 type="button"
-                style={{
-                  color: "red",
-                }}
                 onClick={() => reportCommentBtn(reportComment)}
               >
                 신고하기

@@ -67,43 +67,56 @@ const PostReportModal = () => {
         onClick={() => setPostReportOpen((prev) => !prev)}
       />
       {postReportOpen && (
-        <div
-          className="postReport-container"
-          ref={postReportRef}
-          onClick={(e) => {
-            if (e.target === postReportRef.current) {
-              setPostReportOpen(false);
-            }
-          }}
-        >
-          <div className="postReport-content">
-            {!check ? (
-              <span>
-                <input
-                  className="report-post-desc"
-                  type="text"
-                  placeholder="신고 내용"
-                  value={reportPost.postReportDesc}
-                  onChange={(e) =>
-                    setReportPost({
-                      ...reportPost,
-                      postReportDesc: e.target.value,
-                    })
-                  }
-                />
-                <button
-                  onClick={() => {
-                    reportPostBtn(reportPost);
-                  }}
-                >
-                  게시글 신고
-                </button>
-              </span>
-            ) : (
-              <></>
-            )}
+        <>
+          <div
+            style={{
+              top: 0,
+              left: 0,
+              width: "100vw",
+              height: "100vh",
+              zIndex: "50",
+              position: "absolute",
+            }}
+            onClick={() => setPostReportOpen(false)}
+          />
+          <div
+            className="postReport-container"
+            ref={postReportRef}
+            onClick={(e) => {
+              if (e.target === postReportRef.current) {
+                setPostReportOpen(false);
+              }
+            }}
+          >
+            <div className="postReport-content">
+              {!check ? (
+                <span>
+                  <input
+                    className="report-post-desc"
+                    type="text"
+                    placeholder="신고 내용"
+                    value={reportPost.postReportDesc}
+                    onChange={(e) =>
+                      setReportPost({
+                        ...reportPost,
+                        postReportDesc: e.target.value,
+                      })
+                    }
+                  />
+                  <button
+                    onClick={() => {
+                      reportPostBtn(reportPost);
+                    }}
+                  >
+                    게시글 신고
+                  </button>
+                </span>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

@@ -1,5 +1,35 @@
 .reportComment-content {
+  background-color: white;
   border: 1px solid black;
   position: absolute;
-  right: 100px;
+  right: 50px;
+  width: 300px;
+  border: 1px solid black;
+  width: 300px;
+  height: 150px;
+  z-index: 100;
+}
+.report-comment-desc {
+  padding: 5px;
+  width: 290px;
+  height: 90px;
+  margin-left: 4px;
+  outline: none;
+  box-shadow: 0.5px 3px 4px black;
+}
+.report-comment-btn {
+  border-radius: 10px;
+  background-color: #e74c3c;
+  color: white;
+  width: 120px;
+  height: 40px;
+  margin-top: 10px;
+  margin-left: 90px;
+  box-shadow: 2px 2px 4px black;
+}
+.report-comment-btn:active {
+  position: relative;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0px 0px 0 rgb(0, 0, 0, 5);
 }
