@@ -74,6 +74,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
       ],
     };
 
+    // Remove empty parameters
     Object.keys(params).forEach((key) => {
       if (Array.isArray(params[key]) && params[key].length === 0) {
         delete params[key];
@@ -134,6 +135,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               초기화
             </button>
           </div>
+          {/* Height Filter */}
           <div className="mb-4">
             <h2 className="section-title">HEIGHT</h2>
             <div className="flex justify-between items-center mb-2">
@@ -150,6 +152,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               className="mb-4"
             />
           </div>
+          {/* Weight Filter */}
           <div className="mb-4">
             <h2 className="section-title">WEIGHT</h2>
             <div className="flex justify-between items-center mb-2">
@@ -166,6 +169,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               className="mb-4"
             />
           </div>
+          {/* Gender Filter */}
           <div className="mb-4">
             <h2 className="section-title">GENDER</h2>
             <div className="flex justify-between items-center mb-2">
@@ -191,6 +195,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               />
             </div>
           </div>
+          {/* Job Filter */}
           <div className="mb-4">
             <h2 className="section-title">JOB</h2>
             <div className="grid grid-cols-4 gap-2">
@@ -207,6 +212,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
+          {/* Season Filter */}
           <div className="mb-4">
             <h2 className="section-title">SEASON</h2>
             <div className="grid grid-cols-4 gap-2">
@@ -223,6 +229,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
+          {/* Mood Filter */}
           <div className="mb-4">
             <h2 className="section-title">MOOD</h2>
             <div className="grid grid-cols-4 gap-2">

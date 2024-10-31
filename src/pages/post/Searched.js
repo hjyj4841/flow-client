@@ -77,7 +77,7 @@ const Searched = () => {
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4">Searched Result</h2>
           <SearchedPostsBox
-            posts={posts}
+            posts={posts} // posts는 배열로 다 가져옴
             likedPosts={likedPosts}
             savedPosts={savedPosts}
             user={user}
