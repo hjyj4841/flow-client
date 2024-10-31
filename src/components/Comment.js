@@ -7,6 +7,7 @@ const Comment = ({ comment, postCode }) => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
   const [commentDesc, setCommentDesc] = useState("");
+  const [parentCommentCode, setParentCommentCode] = useState(null);
   const [newComment, setNewComment] = useState({
     commentCode: 0,
     commentDesc: "",
