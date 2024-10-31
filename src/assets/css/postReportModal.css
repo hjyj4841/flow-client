@@ -15,21 +15,23 @@
   height: 150px;
 }
 .postReport-content {
-  position: absolute;
-  border: 1px solid black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
   width: 300px;
   height: 150px;
-  z-index: 100;
+  display: flex;
+  flex-wrap: wrap;
 }
 .postReport-content button {
   border-radius: 10px;
+  font-size: 0.9rem;
   background-color: #e74c3c;
   color: white;
   width: 120px;
   height: 40px;
-  margin-top: 10px;
+  margin-top: 5px;
   margin-left: 90px;
-  box-shadow: 2px 2px 4px black;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .postReport-content button:active {
   position: relative;
@@ -38,10 +40,12 @@
   box-shadow: 0px 0px 0 rgb(0, 0, 0, 5);
 }
 .report-post-desc {
+  border-radius: 10px;
   padding: 5px;
   width: 290px;
   height: 90px;
-  margin-left: 4px;
+  margin: 4px;
   outline: none;
-  box-shadow: 0.5px 3px 4px black;
+  overflow-wrap: break-word;
+  white-space: normal;
 }

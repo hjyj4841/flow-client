@@ -392,31 +392,6 @@ const UpdatePost = () => {
           >
             공개 여부
           </label>
-          {/*<div>
-            <label>
-              <input
-                type="radio"
-                name="publicYn"
-                className="mr-1"
-                value="Y"
-                checked={update.postPublicYn === "Y"}
-                onChange={() => setUpdate({ ...update, postPublicYn: "Y" })}
-              />
-              공개
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="publicYn"
-                className="mr-1"
-                value="N"
-                checked={update.postPublicYn === "N"}
-                onChange={() => setUpdate({ ...update, postPublicYn: "N" })}
-                style={{ marginLeft: "15px" }}
-              />
-              비공개
-            </label>
-          </div>*/}
           <div>
             <label className="switch">
               <input

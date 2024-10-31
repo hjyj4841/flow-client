@@ -91,7 +91,7 @@ const PostReportModal = () => {
             <div className="postReport-content">
               {!check ? (
                 <span>
-                  <input
+                  <textarea
                     className="report-post-desc"
                     type="text"
                     placeholder="신고 내용"
