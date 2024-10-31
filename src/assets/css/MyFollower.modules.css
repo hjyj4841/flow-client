@@ -3,7 +3,7 @@
     border-bottom: 1px solid #c8d6e5a9;;
     border-radius: 12px;
     /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
-    background-image: url('../image/joanna-kosinska-mjC9apK53a8-unsplash.jpg');
+    background-image: url('../image/joanna-kosinska-mjC9apK53a8-unsplash.webp');
     background-size: cover; /* 화면을 덮도록 설정 */
     background-position: center;
     background-repeat: no-repeat;
@@ -123,10 +123,11 @@
     color: rgba(158, 158, 158, 0.849);
     font-weight: bolder;
     z-index: 5;
+    margin-top: 5px;
 }
 
   .following-userInfo .searchBar {
-    background-image: url('../image/volodymyr-hryshchenko-vqfiIoRjXWU-unsplash.jpg');
+    background-image: url('../image/volodymyr-hryshchenko-vqfiIoRjXWU-unsplash.webp');
     background-size: cover;
     background-position: center -10px;
     display: flex;

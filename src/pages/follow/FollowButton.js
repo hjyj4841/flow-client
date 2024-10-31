@@ -38,7 +38,7 @@ const FollowStyleAndEffect = styled.div`
         }
         &:hover:active {
           transform: translateY(2px);
-          box-shadow: inset 1px 1px 4px rgba(139, 0, 0, 0.5);
+          box-shadow: inset 1px 1px 2px rgba(45, 0, 0, 0.5);
         }
       }
       #follow{
@@ -46,15 +46,15 @@ const FollowStyleAndEffect = styled.div`
         background-color: #6EC6FF;
         border: 1px solid transparent;
         &:hover {
-          border: 1.2px solid #40E0D0;
+          border: 1.2px solid #6EC6FF;
           background-color: white;
-          color: #40E0D0;
+          color: #6EC6FF;
         }
         &:hover:active {
           transform: translateY(2px);
-          box-shadow: inset 1px 1px 4px rgba(64, 224, 208, 0.4);
-          border-color: #40E0D0;
-          background-color: white; /* 살짝 연한 청록색 배경으로 변화 */
+          box-shadow: inset 1px 1px 2px rgb(71, 166, 230);
+          border-color: #6EC6FF;
+          background-color: white;
         }
       }
     }

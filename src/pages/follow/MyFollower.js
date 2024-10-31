@@ -6,7 +6,6 @@ import FollowingPage from "./FollowingPage";
 import FollowerPage from "./FollowerPage";
 
 const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
-  const dispatch = useDispatch();
   const { mypageUserCode } = useParams();
   const count = useSelector((state) => state.follow.countFollower);
   const counter = useSelector((state) => state.follow.counter);
@@ -70,7 +69,9 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
             <button className="followModal-close-button" onClick={() => {
               setIsModalOpen(false);
               setBool(logic);
-              }}>✕</button>
+              setKey("");
+              }}
+              >✕</button>
               <div className="imageBar"></div>
             <div className="following-userInfo">
               <header style={{ opacity, transition: 'opacity 0.3s ease' }}>
