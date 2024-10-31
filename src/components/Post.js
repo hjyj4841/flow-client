@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { TiDelete } from "react-icons/ti";
-import "../assets/css/post.scss";
+import { BiShoppingBag } from "react-icons/bi";
+import "../assets/css/post.scoped.scss";
 
 const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
   const [imgPreviews, setImgPreviews] = useState([]);
@@ -336,12 +337,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 }}
               />
               <button
-                style={{
-                  marginLeft: "10px",
-                  position: "relative",
-                  top: "8px",
-                  fontSize: "1.8rem",
-                }}
+                className="product-del"
                 onClick={() => deleteProduct(index)}
               >
                 <TiDelete />
@@ -353,7 +349,10 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
             className="w-full p-2 border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
             onClick={addProduct}
           >
-            제품 정보 추가
+            <p className="add-product">
+              제품 정보 추가
+              <BiShoppingBag />
+            </p>
           </button>
         </div>
 
@@ -364,31 +363,6 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
           >
             공개 여부
           </label>
-          {/*<div>
-            <label>
-              <input
-                type="radio"
-                name="publicYn"
-                className="mr-1"
-                value="Y"
-                checked={post.postPublicYn === "Y"}
-                onChange={() => setPost({ ...post, postPublicYn: "Y" })}
-              />
-              공개
-            </label>
-            <label>
-              <input
-                type="radio"
-                name="publicYn"
-                className="mr-1"
-                value="N"
-                checked={post.postPublicYn === "N"}
-                onChange={() => setPost({ ...post, postPublicYn: "N" })}
-                style={{ marginLeft: "15px" }}
-              />
-              비공개
-            </label>
-          </div>*/}
           <div>
             <label className="switch">
               <input type="checkbox" onChange={switched} />
@@ -454,6 +428,17 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                   테스트2
                 </label>
               </div>
+              <div className="container">
+                <input type="checkbox" id="cbx" style={{ display: "none" }} />
+                <label htmlFor="cbx" className="check5">
+                  <svg width="18px" height="18px" viewBox="0 0 18 18">
+                    <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z" />
+                    <polyline points="1 9 7 14 15 4" />
+                  </svg>
+                  테스트 333
+                </label>
+              </div>
+
               <label className="checkBox">
                 <input
                   type="checkbox"

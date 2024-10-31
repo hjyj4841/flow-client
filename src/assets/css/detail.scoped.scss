@@ -22,7 +22,7 @@
       position: relative;
       display: flex;
       justify-content: center;
-      background-color: black;
+      background-color: white;
 
       button {
         position: absolute;
@@ -85,15 +85,27 @@
           }
         }
 
-        .detail-post-report {
-          div {
-            display: flex;
-            button {
-              border: 1px solid gainsboro;
-              border-radius: 5px;
-              margin-left: 5px;
-              padding: 5px;
-              width: 60px;
+        .user-button {
+          display: flex;
+          font-size: 1.3rem;
+          margin-left: 3px;
+          padding: 5px;
+          color: #bbb;
+
+          .edit {
+            margin-left: 3px;
+            padding: 5px;
+            :hover {
+              color: rgba(0, 0, 0, 0.849);
+            }
+          }
+
+          .del {
+            margin-left: 3px;
+            margin-top: 3.5px;
+            padding: 5px;
+            :hover {
+              color: rgba(221, 19, 19, 0.815);
             }
           }
 
@@ -215,6 +227,7 @@
                 height: 40px;
                 object-fit: cover;
                 border-radius: 50%;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
               }
             }
 
@@ -238,7 +251,7 @@
           }
 
           .post-user-follow {
-            margin-top: 6px;
+            margin-top: 10px;
           }
         }
       }
@@ -274,7 +287,7 @@
           .comment-contents {
             width: 100%;
             display: flex;
-            padding: 2px;
+            padding: 4px;
 
             .comment-user-img {
               display: flex;
@@ -303,18 +316,23 @@
               }
 
               .comment-info-top {
+                display: flex;
+                flex-wrap: wrap;
                 .comment-user-nick {
                   font-weight: bold;
                   font-size: 0.9rem;
                 }
                 .comment-desc {
                   padding-left: 10px;
+                  overflow-wrap: break-word; /* 줄바꿈 */
+                  word-break: break-word; /* 단어자르기 */
+                  flex: 1;
                 }
               }
               .comment-info-bot {
                 .comment-date {
                   color: darkgray;
-                  font-size: 0.8rem;
+                  font-size: 0.7rem;
                 }
                 .comment-button {
                   button {
@@ -342,6 +360,7 @@
             border-radius: 10px;
             padding: 10px;
             font-size: 0.9rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
           }
 
           input:focus {
@@ -355,6 +374,7 @@
             right: 0;
             border-radius: 10px;
             background-color: black;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             color: white;
             font-size: 0.8rem;
           }

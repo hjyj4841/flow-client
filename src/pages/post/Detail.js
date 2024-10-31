@@ -28,9 +28,10 @@ import {
 } from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { FaRegHeart, FaHeart, FaRegEdit } from "react-icons/fa";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
+import { RiDeleteBin5Line } from "react-icons/ri";
 import { PiSirenLight } from "react-icons/pi";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
@@ -273,8 +274,12 @@ const Detail = () => {
     },
   });
   const addComment = () => {
-    addMutation.mutate(newComment);
-    setNewComment({ ...newComment, commentDesc: "" });
+    if (newComment.commentDesc !== "") {
+      addMutation.mutate(newComment);
+      setNewComment({ ...newComment, commentDesc: "" });
+    } else {
+      alert("내용을 입력해주세요");
+    }
   };
   // 댓글 삭제
   const deleteMutation = useMutation({
@@ -419,18 +424,12 @@ const Detail = () => {
                   </div>
                   <div className="detail-post-report">
                     {check && (
-                      <div>
-                        <button
-                          className="bg-gray-200 hover:bg-gray-300"
-                          onClick={updatePost}
-                        >
-                          수정
+                      <div className="user-button">
+                        <button className="edit" onClick={updatePost}>
+                          <FaRegEdit />
                         </button>
-                        <button
-                          className="bg-red-200 hover:bg-red-300"
-                          onClick={deletePost}
-                        >
-                          삭제
+                        <button className="del" onClick={deletePost}>
+                          <RiDeleteBin5Line />
                         </button>
                       </div>
                     )}

@@ -79,10 +79,10 @@ const PostReportModal = () => {
           <div className="postReport-content">
             {!check ? (
               <span>
-                <input
+                <textarea
                   className="report-post-desc"
                   type="text"
-                  placeholder="신고 내용"
+                  placeholder="신고 내용을 입력해주세요"
                   value={reportPost.postReportDesc}
                   onChange={(e) =>
                     setReportPost({
