@@ -143,6 +143,7 @@
     border-radius: 0 0 12px 12px;
     box-shadow: 0 -3px 3px 0 rgba(0, 0, 0, 0.1);
     border-top: 1px solid #c8d6e5a9;
+    cursor: default;
   }
 
 
@@ -322,4 +323,5 @@
     justify-content: center;
     flex-direction: column;
     gap: 10px; /* 버튼 사이에 일정한 간격 */
+    margin: 0;
 }

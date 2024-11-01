@@ -25,6 +25,9 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   }, []);
 
   const handleMouseDown = (e) => {
+    if (e.target.closest(".searchBar") || e.target.closest(".following-users") || e.target.closest("header")) {
+      return; // 드래그 기능을 비활성화
+  }
     setIsDragging(true);
     setOffset({
       x: e.clientX - position.x,
