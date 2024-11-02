@@ -11,6 +11,7 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   const counter = useSelector((state) => state.follow.counter);
   const [bool, setBool] = useState(logic);
   const [key, setKey] = useState("");
+  const [keyword, setKeyword] = useState("");
   const [opacity, setOpacity] = useState(1);
    const [position, setPosition] = useState({ x: -250, y: -180 });
   const [isDragging, setIsDragging] = useState(false);
@@ -58,7 +59,10 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
       document.removeEventListener("mouseup", handleMouseUp);
     };
   }, [isDragging]);
-
+  useEffect(() => {
+    const encodedKey = encodeURIComponent(key);
+    setKeyword(encodedKey);
+  },[key]);
   return (
     <>
       {isModalOpen && (
@@ -100,10 +104,10 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
               </div>
               <div className="following-users">
                 <div className="scroll" style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowingPage followingUserCode={mypageUserCode} search={key} />
+                  <FollowingPage followingUserCode={mypageUserCode} search={keyword} bool={bool}/>
                 </div>
                 <div className="scroll" style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowerPage followingUserCode={mypageUserCode} search={key} />
+                  <FollowerPage followingUserCode={mypageUserCode} search={keyword} bool={bool}/>
                 </div>
               </div>
             </div>
