@@ -86,6 +86,7 @@ const Main = () => {
       <main className="container mx-auto">
         <div className="mb-8 flex justify-center">
           <video
+            className="mainVideo"
             src="http://192.168.10.51:8081/video/mainVideo.mp4"
             autoPlay
             loop
