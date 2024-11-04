@@ -3,6 +3,7 @@ import {
   fetchCreatedPosts,
   fetchLikedPosts,
   fetchSavedPosts,
+  getUserVote,
 } from "../api/post";
 import { useNavigate, useParams } from "react-router-dom";
 import { findUser, findUserByCode } from "../api/user";
@@ -164,6 +165,13 @@ const MyPage = () => {
     setPageState("liked");
   };
 
+  // 유저가 생성한 투표 조회
+  const getVotePosts = async () => {
+    const response = await getUserVote(mypageUser.userCode);
+    setCreatedPosts(response.data);
+    setPageState("voted");
+  };
+
   // 유저가 북마크한 게시물 조회
   const getBookmarkedPosts = async () => {
     const response = await fetchSavedPosts(mypageUser.userCode);
@@ -245,6 +253,11 @@ const MyPage = () => {
     }
   }, [mypageUser.userCode, user.userCode]);
 
+  const voteDetail = (postCode) => {
+    // 나머지 태그에서는 네비게이션 동작
+    navigate(`/votePost/${postCode}`);
+  };
+
   return (
     <div className="text-gray-800">
       <section className="bg-white py-4 shadow-md" />
@@ -292,7 +305,7 @@ const MyPage = () => {
                   logic={false}
                 />
               </span>
-             
+
               <span onClick={openModal2}>
                 팔로잉 <span>{followingCount}</span>
                 <MyFollower
@@ -301,7 +314,6 @@ const MyPage = () => {
                   logic={true}
                 />
               </span>
-             
             </div>
             <div className="myJobBox">
               <i>
@@ -368,9 +380,16 @@ const MyPage = () => {
               <PiGridFourThin />
               게시물
             </button>
-            <button>
+            <button
+              onClick={getVotePosts}
+              style={
+                pageState === "voted"
+                  ? { borderTop: "1px solid black" }
+                  : { borderTop: "1px solid white" }
+              }
+            >
               <LiaPollSolid />
-              투표현황
+              투표
             </button>
             <button
               onClick={getLikedPosts}
@@ -415,7 +434,11 @@ const MyPage = () => {
                     </div>
                   )}
                   <div
-                    onClick={() => detail(item.post.postCode)}
+                    onClick={() => {
+                      pageState !== "voted"
+                        ? detail(item.post.postCode)
+                        : voteDetail(item.post.postCode);
+                    }}
                     className="cursor-pointer rounded-lg absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
                     <div className="flex items-start w-full ml-2">

@@ -82,16 +82,7 @@ const Main = () => {
 
   return (
     <div className="bg-gray-100 text-gray-800">
-      <section className="bg-white py-4 shadow-md flex justify-center">
-        <div className="menu-container flex justify-center">
-          {[...Array(8)].map((_, i) => (
-            <div
-              key={i}
-              className="menu-button flex-none w-16 h-16 bg-gray-300 rounded-full ml-5 mr-5"
-            />
-          ))}
-        </div>
-      </section>
+      <section className="bg-white py-4 shadow-md flex justify-center" />
       <main className="container mx-auto">
         <div className="mb-8 flex justify-center">
           <video
