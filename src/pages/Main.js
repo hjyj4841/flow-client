@@ -39,6 +39,7 @@ const Main = () => {
 
   const fetchNewFeedImages = async () => {
     const response = await newFeed();
+    console.log(response);
     setNewFeedImages(response);
   };
   const fetchPopularFeedImages = async () => {
@@ -52,13 +53,11 @@ const Main = () => {
       fetchSaved();
       fetchFollowedUserPosts();
     }
-    console.log(newFeedImages);
   }, [user.userCode]);
 
   // Fetch liked posts
   const fetchLiked = async () => {
     const response = await fetchLikedPosts(user.userCode);
-    console.log(response);
     const likedPosts = response.data.postInfoList.map((post) => ({
       ...post,
       isLiked: true,
