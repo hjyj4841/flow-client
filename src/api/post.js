@@ -117,6 +117,11 @@ export const fetchSavedPosts = async (userCode) => {
   }
 };
 
+// 해당 유저가 업로드한 투표 목록 조회
+export const getUserVote = async (userCode) => {
+  return await instance.get(`${userCode}/getUserVote`);
+};
+
 // 해당 유저가 업로드한 게시물 조회
 export const uploadPostVote = async (userCode) => {
   return await instance.get(`${userCode}/postVote`);
