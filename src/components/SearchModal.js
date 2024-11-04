@@ -74,6 +74,8 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
       ],
     };
 
+    console.log("Search params:", params);
+
     // Remove empty parameters
     Object.keys(params).forEach((key) => {
       if (Array.isArray(params[key]) && params[key].length === 0) {
