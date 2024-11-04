@@ -1,9 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import UserReportModal from "./UserReportModal";
 import "../assets/css/userModal.css";
 
-const UserModal = ({ user }) => {
+const UserModal = ({ user, check }) => {
   const navigate = useNavigate();
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const menuRef = useRef();
@@ -16,7 +16,11 @@ const UserModal = ({ user }) => {
     <div className="userMenu">
       <span
         className="menu-open-Button"
-        onClick={() => setUserMenuOpen((prev) => !prev)}
+        onClick={() => {
+          if (!check) {
+            setUserMenuOpen((prev) => !prev);
+          }
+        }}
       >
         {user.userNickname}
       </span>

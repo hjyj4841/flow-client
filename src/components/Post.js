@@ -378,68 +378,127 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
         <div className="mb-4">
           <div className="text-sm">
             <div className="mb-2 font-bold">SEASON</div>
-            <div>
-              <div className="checkbox-wrapper">
-                <input type="checkbox" className="check" id="check1" />
-                <label htmlFor="check1" className="label">
-                  <svg width={20} height={25} viewBox="0 0 95 95">
-                    <rect
-                      x={0}
-                      y={8}
-                      width={60}
-                      height={60}
+            <div className="checkbox-wrapper">
+              <input
+                type="checkbox"
+                className="check"
+                id="check1"
+                value="1"
+                onChange={tagCheck}
+              />
+              <label htmlFor="check1" className="label">
+                <svg width={20} height={25} viewBox="0 0 95 95">
+                  <rect
+                    x={0}
+                    y={8}
+                    width={60}
+                    height={60}
+                    stroke="black"
+                    fill="none"
+                  />
+                  <g transform="scale(0.9) translate(-10,-965.36222)">
+                    <path
+                      d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
                       stroke="black"
+                      strokeWidth={3}
                       fill="none"
+                      className="path1"
                     />
-                    <g transform="scale(0.9) translate(-10,-965.36222)">
-                      <path
-                        d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
-                        stroke="black"
-                        strokeWidth={3}
-                        fill="none"
-                        className="path1"
-                      />
-                    </g>
-                  </svg>
-                  테스트
-                </label>
+                  </g>
+                </svg>
+                봄
+              </label>
 
-                <input type="checkbox" className="check" id="check2" />
-                <label htmlFor="check2" className="label">
-                  <svg width={20} height={25} viewBox="0 0 95 95">
-                    <rect
-                      x={0}
-                      y={8}
-                      width={60}
-                      height={60}
+              <input
+                type="checkbox"
+                className="check"
+                id="check2"
+                value="2"
+                onChange={tagCheck}
+              />
+              <label htmlFor="check2" className="label">
+                <svg width={20} height={25} viewBox="0 0 95 95">
+                  <rect
+                    x={0}
+                    y={8}
+                    width={60}
+                    height={60}
+                    stroke="black"
+                    fill="none"
+                  />
+                  <g transform="scale(0.85) translate(-10,-965.36222)">
+                    <path
+                      d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
                       stroke="black"
+                      strokeWidth={3}
                       fill="none"
+                      className="path1"
                     />
-                    <g transform="scale(0.9) translate(-10,-965.36222)">
-                      <path
-                        d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
-                        stroke="black"
-                        strokeWidth={3}
-                        fill="none"
-                        className="path1"
-                      />
-                    </g>
-                  </svg>
-                  테스트2
-                </label>
-              </div>
-              <div className="container">
-                <input type="checkbox" id="cbx" style={{ display: "none" }} />
-                <label htmlFor="cbx" className="check5">
-                  <svg width="18px" height="18px" viewBox="0 0 18 18">
-                    <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z" />
-                    <polyline points="1 9 7 14 15 4" />
-                  </svg>
-                  테스트 333
-                </label>
-              </div>
+                  </g>
+                </svg>
+                여름
+              </label>
+              <input
+                type="checkbox"
+                className="check"
+                id="check3"
+                value="3"
+                onChange={tagCheck}
+              />
+              <label htmlFor="check3" className="label">
+                <svg width={20} height={25} viewBox="0 0 95 95">
+                  <rect
+                    x={0}
+                    y={8}
+                    width={60}
+                    height={60}
+                    stroke="black"
+                    fill="none"
+                  />
+                  <g transform="scale(0.85) translate(-10,-965.36222)">
+                    <path
+                      d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
+                      stroke="black"
+                      strokeWidth={3}
+                      fill="none"
+                      className="path1"
+                    />
+                  </g>
+                </svg>
+                가을
+              </label>
+              <input
+                type="checkbox"
+                className="check"
+                id="check4"
+                value="4"
+                onChange={tagCheck}
+              />
+              <label htmlFor="check4" className="label">
+                <svg width={20} height={25} viewBox="0 0 95 95">
+                  <rect
+                    x={0}
+                    y={8}
+                    width={60}
+                    height={60}
+                    stroke="black"
+                    fill="none"
+                  />
+                  <g transform="scale(0.85) translate(-10,-965.36222)">
+                    <path
+                      d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
+                      stroke="black"
+                      strokeWidth={3}
+                      fill="none"
+                      className="path1"
+                    />
+                  </g>
+                </svg>
+                겨울
+              </label>
+            </div>
 
-              <label className="checkBox">
+            {/* <label className="checkBox">
                 <input
                   type="checkbox"
                   className="mr-1"
@@ -447,7 +506,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                   onChange={tagCheck}
                 />
                 봄
-              </label>
+              </label> 
               <label className="checkBox">
                 <input
                   type="checkbox"
@@ -477,8 +536,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                   style={{ marginLeft: "15px" }}
                 />
                 겨울
-              </label>
-            </div>
+              </label>*/}
           </div>
           <div className="text-sm mt-4">
             <div className="mb-2 font-bold">CAREER</div>
