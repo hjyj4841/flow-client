@@ -35,7 +35,10 @@ const CommentReportModal = ({ comment }) => {
 
   return (
     <>
-      <button onClick={() => setCommentReportOpen((prev) => !prev)}>
+      <button
+        className="cmmtReport-button"
+        onClick={() => setCommentReportOpen((prev) => !prev)}
+      >
         신고
       </button>
       {commentReportOpen && (

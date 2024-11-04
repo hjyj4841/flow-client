@@ -8,24 +8,34 @@
   padding-left: 5px;
 }
 .menu-content {
-  height: 100px;
-  width: 200px;
+  height: 80px;
+  width: 120px;
   position: absolute;
   border: 1px solid gray;
   display: flex;
   flex-direction: column;
-  top: 30px;
-  right: -45px;
+  top: 20px;
+  right: -25px;
   border-radius: 4px;
   background-color: white;
   z-index: 100;
 }
 .menu-content button {
-  margin-top: 12px;
+  margin-top: 5px;
   margin-left: 8px;
-  width: 180px;
+  font-size: 0.8rem;
+  border-bottom: 1px solid #ddd;
+  width: 100px;
   height: 30px;
-  border: 1px solid black;
-  border-radius: 5px;
-  box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.5);
+  /* border: 1px solid black; */
+  /* border-radius: 5px; */
+  /* box-shadow: 4px 5px 5px rgba(0, 0, 0, 0.5); */
+}
+
+.user-button:hover {
+  border-bottom: 1px solid black;
+}
+
+.report-open-button:hover {
+  border-bottom: 1px solid #e74c3c;
 }

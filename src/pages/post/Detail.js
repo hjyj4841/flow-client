@@ -556,32 +556,6 @@ const Detail = () => {
                                       product.productBuyFrom
                                     ) : null}
                                   </td>
-
-                                  {/* <td>
-                                    <a
-                                      href={
-                                        product.productLink === "" ||
-                                        (product.productLink.includes(
-                                          "http://"
-                                        ) ||
-                                          product.productLink.includes(
-                                            "https://"
-                                          ))
-                                          ? product.productLink
-                                          : `https://${product.productLink}`
-                                      }
-                                    >
-                                      {product.productLink === "" ||
-                                      (product.productLink.includes(
-                                        "http://"
-                                      ) ||
-                                        product.productLink.includes(
-                                          "https://"
-                                        ))
-                                        ? product.productLink
-                                        : `https://${product.productLink}`}
-                                    </a>
-                                  </td> */}
                                 </tr>
                               ))}
                             </tbody>
@@ -599,7 +573,7 @@ const Detail = () => {
                         />
                       </div>
                       <div className="post-user-info">
-                        <UserModal user={followUser} />
+                        <UserModal user={followUser} check={check} />
                         <div className="post-user-more">
                           <span>
                             {followUser.userGender === "남성" ? (
