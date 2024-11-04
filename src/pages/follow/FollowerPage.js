@@ -8,7 +8,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const FollowerPage = React.memo(({followingUserCode, search}) => {
+const FollowerPage = React.memo(({followingUserCode, search, bool}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const followee = useSelector((state) => state.follow.followee);
@@ -37,7 +37,7 @@ const FollowerPage = React.memo(({followingUserCode, search}) => {
       // Redux 액션을 디스패치하는 useEffect
       useEffect(() => {
         fetchFollowers();
-      }, [fetchFollowers, search]);
+      }, [fetchFollowers, search, bool]);
 
       const userList = 
       useMemo(
