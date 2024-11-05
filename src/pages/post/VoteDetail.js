@@ -367,7 +367,7 @@ const Detail = () => {
                         className={
                           vote.voteYn === "Y"
                             ? "bg-gray-900 bg-opacity-90 w-1/2 h-full"
-                            : "bg-gray-900 bg-opacity-50 hover:bg-opacity-80 w-1/2 h-full"
+                            : "group bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-1/2 h-full"
                         }
                         style={{
                           color: "white",
@@ -388,14 +388,16 @@ const Detail = () => {
                         }
                       >
                         {vote.voteYn === "Y" ? <span>투표했음</span> : <></>}
-                        <span>{post.voteTextFirst}</span>
+                        <span className="group-hover:opacity-0">
+                          {post.voteTextFirst}
+                        </span>
                       </p>
 
                       <p
                         className={
                           vote.voteYn === "N"
                             ? "bg-gray-900 bg-opacity-90 w-1/2 h-full"
-                            : "bg-gray-900 bg-opacity-50 hover:bg-opacity-80 w-1/2 h-full"
+                            : "group bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-1/2 h-full"
                         }
                         style={{
                           color: "white",
@@ -416,7 +418,9 @@ const Detail = () => {
                         }
                       >
                         {vote.voteYn === "N" ? <span>투표했음</span> : <></>}
-                        <span>{post.voteTextSecond}</span>
+                        <span className="group-hover:opacity-0">
+                          {post.voteTextSecond}
+                        </span>
                       </p>
                     </div>
                   </>
@@ -435,11 +439,10 @@ const Detail = () => {
                       <p
                         className={
                           vote.voteYn === "Y"
-                            ? "bg-gray-900 bg-opacity-90 w-full h-full"
-                            : "bg-gray-900 bg-opacity-50 hover:bg-opacity-80 w-full h-full"
+                            ? "group bg-gray-10 w-full h-full hover:bg-opacity-0"
+                            : "group text-white bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-full h-full"
                         }
                         style={{
-                          color: "white",
                           position: "absolute",
                           zIndex: "20",
                           display: "flex",
@@ -455,9 +458,17 @@ const Detail = () => {
                             : () => voteLeft()
                         }
                       >
-                        {vote.voteYn === "Y" ? <span>투표했음</span> : <></>}
+                        {vote.voteYn === "Y" ? (
+                          <span className="mb-1.5 group-hover:opacity-0">
+                            check
+                          </span>
+                        ) : (
+                          <></>
+                        )}
 
-                        <span>{post.voteTextFirst}</span>
+                        <span className="group-hover:opacity-0">
+                          {post.voteTextFirst}
+                        </span>
                       </p>
                     </div>
                     <div
@@ -475,7 +486,7 @@ const Detail = () => {
                         className={
                           vote.voteYn === "N"
                             ? "bg-gray-900 bg-opacity-90 w-full h-full"
-                            : "bg-gray-900 bg-opacity-50 hover:bg-opacity-80 w-full h-full"
+                            : "group bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-full h-full"
                         }
                         style={{
                           color: "white",
@@ -495,7 +506,9 @@ const Detail = () => {
                         }
                       >
                         {vote.voteYn === "N" ? <span>투표했음</span> : <></>}
-                        <span>{post.voteTextSecond}</span>
+                        <span className="group-hover:opacity-0">
+                          {post.voteTextSecond}
+                        </span>
                       </p>
                     </div>
                   </>
