@@ -43,7 +43,7 @@ const MyFollowerFeed = () => {
         ...prev,
         ...(response.data.content || []),
       ]);
-      setTotalPages(response.data.totalPages); // Set total pages from backend response
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching follower posts", error);
     }
@@ -87,7 +87,7 @@ const MyFollowerFeed = () => {
 
   const loadMorePosts = () => {
     if (page < totalPages) {
-      setPage((prev) => prev + 1); // Only increment if not at the last page
+      setPage((prev) => prev + 1);
     }
   };
 
@@ -116,13 +116,13 @@ const MyFollowerFeed = () => {
                     <div className="absolute top-2 left-2 flex space-x-2">
                       <LikeToggleButton
                         likedPosts={likedPosts}
-                        user={{ userCode }} // user object 생성
+                        user={{ userCode }}
                         post={post}
                         fetchLiked={fetchLikedPosts}
                       />
                       <SaveToggleButton
                         savedPosts={savedPosts}
-                        user={{ userCode }} // user object 생성
+                        user={{ userCode }}
                         post={post}
                         fetchSaved={fetchSavedPosts}
                       />

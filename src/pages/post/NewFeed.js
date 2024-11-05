@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { newFeed } from "../../api/post";
 import { useNavigate } from "react-router-dom";
+import { newFeed } from "../../api/post";
 import axios from "axios";
 import LikeToggleButton from "../../components/toggleBtn/LikeToggleButton";
 import SaveToggleButton from "../../components/toggleBtn/SaveToggleButton";
@@ -9,7 +9,7 @@ import "../../assets/css/newfeed.scoped.scss";
 
 const NewFeed = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [newFeedImages, setNewFeedImages] = useState([]);
+  const [newFeedPosts, setNewFeedPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [page, setPage] = useState(1);
@@ -21,17 +21,17 @@ const NewFeed = () => {
 
   useEffect(() => {
     if (token && userCode) {
-      fetchPosts(page);
+      fetchNewFeedPosts(page);
       fetchLikedPosts();
       fetchSavedPosts();
     }
   }, [token, userCode, page]);
 
-  const fetchPosts = async (currentPage) => {
+  const fetchNewFeedPosts = async (currentPage) => {
     try {
       const data = await newFeed(currentPage);
-      const content = data.content || []; // `content`를 안전하게 추출
-      setNewFeedImages((prev) => [...prev, ...content]);
+      const content = data.content || [];
+      setNewFeedPosts((prev) => [...prev, ...content]);
     } catch (error) {
       console.error("Error fetching new feed images:", error);
     }
@@ -82,7 +82,7 @@ const NewFeed = () => {
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-4">NEW FEED</h2>
         <div className="grid grid-cols-4 gap-4">
-          {newFeedImages.map((post) =>
+          {newFeedPosts.map((post) =>
             post.imageUrls.length > 0 ? (
               <div
                 key={post.postCode}
@@ -103,13 +103,13 @@ const NewFeed = () => {
                   <div className="absolute top-2 left-2 flex space-x-2">
                     <LikeToggleButton
                       likedPosts={likedPosts}
-                      user={{ userCode }} // user object를 생성
+                      user={{ userCode }}
                       post={post}
                       fetchLiked={fetchLikedPosts}
                     />
                     <SaveToggleButton
                       savedPosts={savedPosts}
-                      user={{ userCode }} // user object를 생성
+                      user={{ userCode }}
                       post={post}
                       fetchSaved={fetchSavedPosts}
                     />
