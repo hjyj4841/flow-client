@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import { delImg, delProduct, detailPost, editPost } from "../../api/post";
 import { TiDelete } from "react-icons/ti";
+import { BiShoppingBag } from "react-icons/bi";
+import "../../assets/css/post.scoped.scss";
 import { useState, useEffect } from "react";
 
 const UpdatePost = () => {
@@ -381,7 +383,10 @@ const UpdatePost = () => {
             className="w-full p-2 border border-gray-300 rounded bg-gray-200 hover:bg-gray-300 mt-2"
             onClick={addProduct}
           >
-            제품 정보 추가 +
+            <p className="add-product">
+              제품 정보 추가
+              <BiShoppingBag />
+            </p>
           </button>
         </div>
 
