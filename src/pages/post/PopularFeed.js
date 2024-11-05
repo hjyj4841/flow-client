@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { SlArrowDown } from "react-icons/sl";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import LikeToggleButton from "../../components/toggleBtn/LikeToggleButton";
 import SaveToggleButton from "../../components/toggleBtn/SaveToggleButton";
+import { SlArrowDown } from "react-icons/sl";
 import "../../assets/css/popularfeed.css";
+import { popularFeed } from "../../api/post"; // Main에서 사용한 popularFeed API 가져오기
 
 const PopularFeed = () => {
   const [token, setToken] = useState(localStorage.getItem("token"));
-  const [popularFeedImages, setPopularFeedImages] = useState([]);
+  const [popularFeedPosts, setPopularFeedPosts] = useState([]);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
   const [page, setPage] = useState(1);
@@ -26,19 +27,17 @@ const PopularFeed = () => {
   useEffect(() => {
     setToken(localStorage.getItem("token"));
     if (token && userCode) {
-      fetchPosts(page);
+      fetchPopularFeedPosts(page);
       fetchLikedPosts();
       fetchSavedPosts();
     }
   }, [token, userCode, page]);
 
-  const fetchPosts = async (currentPage) => {
+  const fetchPopularFeedPosts = async (currentPage) => {
     try {
-      const response = await axios.get(
-        `http://localhost:8080/api/likes/post/ordered-by-likes?page=${currentPage}`
-      );
+      const response = await popularFeed(currentPage); // popularFeed API 호출
       const { content, totalPages } = response.data;
-      setPopularFeedImages((prev) => [...prev, ...content]);
+      setPopularFeedPosts((prev) => [...prev, ...content]);
       setTotalPages(totalPages);
     } catch (error) {
       console.error("Error fetching popular feed", error);
@@ -94,7 +93,7 @@ const PopularFeed = () => {
       <section className="mb-8">
         <h2 className="text-xl font-bold mb-4">POPULAR FEED</h2>
         <div className="grid grid-cols-4 gap-4">
-          {popularFeedImages.map((post) =>
+          {popularFeedPosts.map((post) =>
             post.imageUrls.length > 0 ? (
               <div
                 key={post.postCode}
@@ -115,13 +114,13 @@ const PopularFeed = () => {
                   <div className="absolute top-2 left-2 flex space-x-2">
                     <LikeToggleButton
                       likedPosts={likedPosts}
-                      user={{ userCode }} // user object를 생성
+                      user={{ userCode }}
                       post={post}
                       fetchLiked={fetchLikedPosts}
                     />
                     <SaveToggleButton
                       savedPosts={savedPosts}
-                      user={{ userCode }} // user object를 생성
+                      user={{ userCode }}
                       post={post}
                       fetchSaved={fetchSavedPosts}
                     />
