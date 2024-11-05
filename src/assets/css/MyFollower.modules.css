@@ -227,9 +227,11 @@
 }
 
 .following-users .scroll {
+    scrollbar-gutter: stable;
     width: 100%;
     max-height: calc(750px - 220px); /* 원하는 높이 제한 */
     overflow-y: auto; /* 스크롤을 scroll div에만 적용 */
+    overflow-x: hidden;
     box-sizing: border-box;
     padding-bottom: 10px;
     padding-top: 20px;
@@ -263,7 +265,7 @@
     width: 100%;
     max-width: 500px;
     height: 90px;
-    margin: 0 auto 20px; /* 아래쪽 마진 추가 */
+    margin: 0 50px 20px; /* 아래쪽 마진 추가 */
     padding: 20px 30px;
     border-radius: 8px;
     border: 1px solid #c8ddf09f;
