@@ -130,7 +130,6 @@ const Detail = () => {
       fetchLiked();
       fetchSaved();
     }
-    console.log(post);
   }, [likeRendering, saveRendering, post]); // 의존성 배열 추가
   // 2-1. 좋아요 정보를 객체 배열로 담기
   const fetchLiked = async () => {
@@ -450,7 +449,7 @@ const Detail = () => {
                   </div>
                   <div className="detail-post-report">
                     {check && (
-                      <div className="user-button">
+                      <div className="post-user-button">
                         <button className="edit" onClick={updatePost}>
                           <FaRegEdit />
                         </button>

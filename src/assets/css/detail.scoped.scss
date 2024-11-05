@@ -84,25 +84,21 @@
           }
         }
 
-        .user-button {
+        .post-user-button {
           display: flex;
           font-size: 1.3rem;
-          margin-left: 3px;
-          padding: 5px;
+
           color: #bbb;
 
           .edit {
-            margin-left: 3px;
-            padding: 5px;
             :hover {
               color: rgba(0, 0, 0, 0.849);
             }
           }
 
           .del {
-            margin-left: 3px;
+            margin-left: 10px;
             margin-top: 3.5px;
-            padding: 5px;
             :hover {
               color: rgba(221, 19, 19, 0.815);
             }
@@ -286,13 +282,13 @@
           .comment-contents {
             width: 100%;
             display: flex;
-            padding: 4px;
+            padding: 5px;
 
             .comment-user-img {
               display: flex;
               justify-content: center;
               align-items: center;
-              padding: 5px;
+              padding-right: 8px;
 
               img {
                 width: 30px;
@@ -303,7 +299,7 @@
             }
 
             .comment-info {
-              width: 100%;
+              width: 90%;
               height: 100%;
               display: flex;
               flex-direction: column;
@@ -311,12 +307,13 @@
               > div {
                 display: flex;
                 align-items: center;
-                padding: 3px;
               }
 
               .comment-info-top {
                 display: flex;
                 flex-wrap: wrap;
+                padding-top: 3px;
+                padding-bottom: 3px;
                 .comment-user-nick {
                   font-weight: bold;
                   font-size: 0.9rem;
