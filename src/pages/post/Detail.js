@@ -24,7 +24,6 @@ import {
   deleteComment,
   getAllComment,
   updateComment as updateCommentAPI,
-  deleteParent,
 } from "../../api/comment";
 import FollowButton from "../follow/FollowButton";
 import { GrNext, GrPrevious } from "react-icons/gr";
@@ -32,7 +31,6 @@ import { FaRegHeart, FaHeart, FaRegEdit } from "react-icons/fa";
 import { CgGenderMale, CgGenderFemale } from "react-icons/cg";
 import { BsCollection, BsCollectionFill } from "react-icons/bs";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { PiSirenLight } from "react-icons/pi";
 import { handleLikeToggle } from "../../api/likes";
 import { handleSaveToggle } from "../../api/collection";
 import UserModal from "../../components/UserModal";
@@ -367,19 +365,6 @@ const Detail = () => {
       });
     }
   }, [user.userCode]);
-
-  const groupParent = (comments) => {
-    const groupComments = {};
-
-    comments.forEach((comment) => {
-      const parentCommentCode = comment.parentCommentCode || "root";
-      if (!groupedComments[parentCommentCode]) {
-        groupedComments[parentCode] = [];
-      }
-      groupComments[parentCommentCode].push(comment);
-    });
-    return groupedComments;
-  };
 
   if (isLoading) return <>로딩중...</>;
   if (error) return <>에러 발생...</>;

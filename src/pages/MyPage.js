@@ -297,7 +297,7 @@ const MyPage = () => {
                 게시물 <span>{createdPosts.totalPosts}</span>
               </span>
               {/* 팔로우 경로 */}
-              <span onClick={openModal1}>
+              <span onClick={openModal1} style={{ cursor: "pointer" }}>
                 팔로워 <span>{followerCount}</span>
                 <MyFollower
                   setIsModalOpen={setIsModalOpen1}
@@ -306,7 +306,7 @@ const MyPage = () => {
                 />
               </span>
 
-              <span onClick={openModal2}>
+              <span onClick={openModal2} style={{ cursor: "pointer" }}>
                 팔로잉 <span>{followingCount}</span>
                 <MyFollower
                   setIsModalOpen={setIsModalOpen2}
