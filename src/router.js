@@ -24,7 +24,6 @@ import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
 import Searched from "./pages/post/Searched.js";
 import VoteDetail from "./pages/post/VoteDetail.js";
 import UploadVote from "./pages/post/UploadVote.js";
-import UpdateVote from "./pages/post/UpdateVote.js";
 
 const router = createBrowserRouter([
   {
@@ -53,10 +52,6 @@ const router = createBrowserRouter([
           {
             path: ":postCode",
             element: <VoteDetail />,
-          },
-          {
-            path: "update/:postCode",
-            element: <UpdateVote />,
           },
         ],
       },

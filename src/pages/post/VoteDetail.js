@@ -595,12 +595,6 @@ const Detail = () => {
                     {check && (
                       <div>
                         <button
-                          className="bg-gray-200 hover:bg-gray-300"
-                          onClick={updateVote}
-                        >
-                          수정
-                        </button>
-                        <button
                           className="bg-red-200 hover:bg-red-300"
                           onClick={deletePost}
                         >

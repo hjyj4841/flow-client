@@ -54,117 +54,124 @@ const VoteUpload = ({ upload, post, setPost }) => {
 
   return (
     <>
-      <div>
-        <textarea
-          id="content"
-          className="w-full border border-gray-300 rounded px-3 py-2 h-32"
-          placeholder="내용을 입력해 다른이들과 소통해보세요!"
-          value={post.postDesc}
-          onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
-        />
-        <input
-          type="text"
-          placeholder="투표 내용 1을 입력하세요"
-          value={post.voteTextFirst}
-          onChange={(e) => setPost({ ...post, voteTextFirst: e.target.value })}
-          style={{ marginTop: "10px", width: "100%", padding: "10px" }}
-        />
-        <input
-          type="text"
-          placeholder="투표 내용 2를 입력하세요"
-          value={post.voteTextSecond}
-          onChange={(e) => setPost({ ...post, voteTextSecond: e.target.value })}
-          style={{ marginTop: "10px", width: "100%", padding: "10px" }}
-        />
-      </div>
-      <div
-        className="mb-4"
-        style={{ display: "flex", flexDirection: "column" }}
-      >
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={imageUpload}
-          style={{ padding: "10px" }}
-        />
+      <div className="max-w-2xl mx-auto p-6 bg-white shadow-md mt-10 rounded-lg">
+        <div className="mb-4">
+          <textarea
+            id="content"
+            className="w-full border border-gray-300 rounded px-3 py-2 h-32"
+            placeholder="내용을 입력해 다른이들과 소통해보세요!"
+            value={post.postDesc}
+            onChange={(e) => setPost({ ...post, postDesc: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="투표 내용 1을 입력하세요"
+            value={post.voteTextFirst}
+            onChange={(e) =>
+              setPost({ ...post, voteTextFirst: e.target.value })
+            }
+            style={{ marginTop: "10px", width: "100%", padding: "10px" }}
+          />
+          <input
+            type="text"
+            placeholder="투표 내용 2를 입력하세요"
+            value={post.voteTextSecond}
+            onChange={(e) =>
+              setPost({ ...post, voteTextSecond: e.target.value })
+            }
+            style={{ marginTop: "10px", width: "100%", padding: "10px" }}
+          />
+        </div>
 
-        {imgPreviews.length > 0 && (
-          <div
-            className="imgPreviews"
-            style={{ height: "130px", width: "100%", padding: "5px" }}
-          >
-            <p style={{ color: "crimson", marginBottom: "10px" }}>
-              이미지 클릭해서 업로드 순서 선택
-            </p>
+        <div
+          className="mb-4"
+          style={{ display: "flex", flexDirection: "column" }}
+        >
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={imageUpload}
+            style={{ padding: "10px" }}
+          />
 
-            {imgPreviews.map((preview, index) => (
-              <div
-                key={index}
-                style={{
-                  position: "relative",
-                  display: "inline-block",
-                }}
-              >
-                <img
-                  src={preview}
-                  alt={`preview-${index}`}
+          {imgPreviews.length > 0 && (
+            <div
+              className="imgPreviews"
+              style={{ height: "130px", width: "100%", padding: "5px" }}
+            >
+              <p style={{ color: "crimson", marginBottom: "10px" }}>
+                이미지 클릭해서 업로드 순서 선택
+              </p>
+
+              {imgPreviews.map((preview, index) => (
+                <div
+                  key={index}
                   style={{
-                    width: "100px",
-                    height: "100px",
-                    objectFit: "cover",
-                    margin: "5px",
+                    position: "relative",
+                    display: "inline-block",
                   }}
-                  onClick={() => handleImageClick(index)}
-                />
-                {click.includes(index) && (
-                  <span
+                >
+                  <img
+                    src={preview}
+                    alt={`preview-${index}`}
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      objectFit: "cover",
+                      margin: "5px",
+                    }}
+                    onClick={() => handleImageClick(index)}
+                  />
+                  {click.includes(index) && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        fontWeight: "bold",
+                        top: "87px",
+                        left: "5px",
+                        color: "white",
+                        backgroundColor: "rgba(0, 0, 0, 0.6)",
+                        padding: "2px 5px",
+                        borderRadius: "3px",
+                        fontSize: "14px",
+                      }}
+                    >
+                      {click.indexOf(index) + 1}
+                    </span>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      handleDelete(index);
+                    }}
                     style={{
                       position: "absolute",
                       fontWeight: "bold",
-                      top: "87px",
-                      left: "5px",
+                      top: "0",
+                      right: "0",
                       color: "white",
                       backgroundColor: "rgba(0, 0, 0, 0.6)",
                       padding: "2px 5px",
-                      borderRadius: "3px",
-                      fontSize: "14px",
+                      cursor: "pointer",
+                      zIndex: "1",
                     }}
                   >
-                    {click.indexOf(index) + 1}
-                  </span>
-                )}
-                <button
-                  onClick={(e) => {
-                    handleDelete(index);
-                  }}
-                  style={{
-                    position: "absolute",
-                    fontWeight: "bold",
-                    top: "0",
-                    right: "0",
-                    color: "white",
-                    backgroundColor: "rgba(0, 0, 0, 0.6)",
-                    padding: "2px 5px",
-                    cursor: "pointer",
-                    zIndex: "1",
-                  }}
-                >
-                  X
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-      <div>
-        <button
-          type="submit"
-          className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
-          onClick={upload}
-        >
-          업로드
-        </button>
+                    X
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div>
+          <button
+            type="submit"
+            className="w-full p-3 bg-black text-white rounded hover:bg-gray-800"
+            onClick={upload}
+          >
+            업로드
+          </button>
+        </div>
       </div>
     </>
   );
