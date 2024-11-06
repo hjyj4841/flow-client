@@ -53,38 +53,39 @@ const CommentReportModal = ({ comment }) => {
               position: "absolute",
             }}
             onClick={() => setCommentReportOpen(false)}
-          />
-          <div
-            className="commentReport-container"
-            ref={commentReportRef}
-            onClick={(e) => {
-              if (e.target === commentReportRef.current) {
-                setCommentReportOpen(false);
-              }
-            }}
           >
-            <div className="reportComment-content">
-              <input
-                className="report-comment-desc ml-2"
-                type="text"
-                placeholder="신고 내용"
-                value={reportComment.commentReportDesc}
-                onChange={(e) =>
-                  setReportComment({
-                    commentReportDesc: e.target.value,
-                    comment: {
-                      commentCode: comment.commentCode,
-                    },
-                  })
+            <div
+              className="commentReport-container"
+              ref={commentReportRef}
+              onClick={(e) => {
+                if (e.target === commentReportRef.current) {
+                  setCommentReportOpen(false);
                 }
-              />
-              <button
-                className="report-comment-btn"
-                type="button"
-                onClick={() => reportCommentBtn(reportComment)}
-              >
-                신고하기
-              </button>
+              }}
+            >
+              <div className="reportComment-content">
+                <input
+                  className="report-comment-desc ml-2"
+                  type="text"
+                  placeholder="신고 내용"
+                  value={reportComment.commentReportDesc}
+                  onChange={(e) =>
+                    setReportComment({
+                      commentReportDesc: e.target.value,
+                      comment: {
+                        commentCode: comment.commentCode,
+                      },
+                    })
+                  }
+                />
+                <button
+                  className="report-comment-btn"
+                  type="button"
+                  onClick={() => reportCommentBtn(reportComment)}
+                >
+                  신고하기
+                </button>
+              </div>
             </div>
           </div>
         </>
