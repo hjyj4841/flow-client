@@ -251,7 +251,7 @@ const MyPage = () => {
         })
       );
     }
-  }, [mypageUser.userCode, user.userCode]);
+  }, [mypageUser.userCode, user.userCode, isModalOpen1, isModalOpen2]);
 
   const voteDetail = (postCode) => {
     // 나머지 태그에서는 네비게이션 동작

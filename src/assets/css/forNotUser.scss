@@ -205,16 +205,17 @@
         }
 
         .registerAndLogin {
-            width: 100%;
-            position: absolute;
-            bottom: 0; /* 부모 요소의 맨 아래에 배치 */
-            left: 75%;
-            transform: translateX(-50%); /* 수평 가운데 정렬 */
-            display: flex;
-            align-items: center;
-            font-size: 0.95rem;
-            color: #666;
-            margin-bottom: 80px;
+          width: 250px;
+          position: absolute;
+          bottom: 0;
+          /* left: 50%; */
+          /* transform: translateX(-50%); */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          font-size: 0.95rem;
+          color: #666;
+          margin-bottom: 80px;
 
             .registerAndLoginLink {
                 color: #1e90ff;
