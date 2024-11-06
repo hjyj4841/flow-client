@@ -44,8 +44,13 @@ const router = createBrowserRouter([
         element: <VotePost />,
       },
       {
-        path: "/votePost/:postCode",
-        element: <VoteDetail />,
+        path: "/votePost/",
+        children: [
+          {
+            path: ":postCode",
+            element: <VoteDetail />,
+          },
+        ],
       },
 
       { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드

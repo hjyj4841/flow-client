@@ -30,6 +30,18 @@ const UploadVote = () => {
       return;
     }
 
+    // 내용이 비어 있는 경우
+    if (!post.postDesc.trim()) {
+      alert("내용을 입력해 주세요.");
+      return;
+    }
+
+    // 투표 항목이 비어 있는 경우
+    if (!post.voteTextFirst.trim() || !post.voteTextSecond.trim()) {
+      alert("투표 내용을 모두 입력해 주세요.");
+      return;
+    }
+
     // 이미지 리스트
     for (let i = 0; i < post.imageFiles.length; i++) {
       console.log(post.imageFiles[i]);
