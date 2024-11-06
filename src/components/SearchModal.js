@@ -4,6 +4,41 @@ import "rc-slider/assets/index.css";
 import "../assets/css/SearchModal.css";
 import { useNavigate } from "react-router-dom";
 
+const seasonTagMap = {
+  봄: 1,
+  여름: 2,
+  가을: 3,
+  겨울: 4,
+};
+
+const careerTagMap = {
+  "~1년 미만": 5,
+  "1~3년차": 6,
+  "3년 이상": 7,
+  임원급: 8,
+};
+
+const moodTagMap = {
+  포멀: 9,
+  캐주얼: 10,
+  스트릿: 11,
+  아메카지: 12,
+  빈티지: 13,
+  시티보이: 14,
+  페미닌: 15,
+  미니멀: 16,
+  스포티: 17,
+  톰보이: 18,
+  기타: 19,
+};
+
+const bodyTypeMap = {
+  마름: 20,
+  보통: 21,
+  건장: 22,
+  빅사이즈: 23,
+};
+
 const SearchModal = ({ isOpen, onClose, user = {} }) => {
   const navigate = useNavigate();
   const [heightRange, setHeightRange] = useState([
@@ -34,6 +69,12 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
     가을: false,
     겨울: false,
   });
+  const [career, setCareer] = useState({
+    "~1년 미만": false,
+    "1~3년차": false,
+    "3년 이상": false,
+    임원급: false,
+  });
   const [mood, setMood] = useState({
     포멀: false,
     캐주얼: false,
@@ -46,6 +87,12 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
     스포티: false,
     톰보이: false,
     기타: false,
+  });
+  const [bodyType, setBodyType] = useState({
+    마름: false,
+    보통: false,
+    건장: false,
+    빅사이즈: false,
   });
 
   const handleSliderChange = (setter) => (value) => {
@@ -61,22 +108,54 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
   };
 
   const handleSearch = () => {
+    const seasonTags = Object.keys(season)
+      .filter((key) => season[key])
+      .map((seasonKey) => seasonTagMap[seasonKey]);
+
+    const careerTags = Object.keys(career)
+      .filter((key) => career[key])
+      .map((careerKey) => careerTagMap[careerKey]);
+
+    const moodTags = Object.keys(mood)
+      .filter((key) => mood[key])
+      .map((moodKey) => moodTagMap[moodKey]);
+
+    const bodyTypeTags = Object.keys(bodyType)
+      .filter((key) => bodyType[key])
+      .map((bodyTypeKey) => bodyTypeMap[bodyTypeKey]);
+
+    const allTags = [
+      ...seasonTags,
+      ...careerTags,
+      ...moodTags,
+      ...bodyTypeTags,
+    ];
+
+    const selectedJobs = Object.keys(job).filter((key) => job[key]);
+
     const params = {
-      userJob: Object.keys(job).filter((key) => job[key]),
+      userJob: selectedJobs,
       userGender: gender || undefined,
       userHeightMin: heightRange[0],
       userHeightMax: heightRange[1],
       userWeightMin: weightRange[0],
       userWeightMax: weightRange[1],
-      tags: [
-        ...Object.keys(season).filter((key) => season[key]),
-        ...Object.keys(mood).filter((key) => mood[key]),
-      ],
+      tagCode: allTags.length > 0 ? allTags : undefined,
     };
 
-    console.log("Search params:", params);
+    if (
+      selectedJobs.length === 0 &&
+      !gender &&
+      allTags.length === 0 &&
+      heightRange[0] === 140 &&
+      heightRange[1] === 200 &&
+      weightRange[0] === 30 &&
+      weightRange[1] === 120
+    ) {
+      alert("최소한 하나 이상의 필터 조건을 선택해야 합니다.");
+      return;
+    }
 
-    // Remove empty parameters
     Object.keys(params).forEach((key) => {
       if (Array.isArray(params[key]) && params[key].length === 0) {
         delete params[key];
@@ -84,6 +163,8 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
         delete params[key];
       }
     });
+
+    console.log("Search params:", params);
 
     navigate("/searched", { state: { params } });
     onClose();
@@ -107,6 +188,12 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
       기타: false,
     });
     setSeason({ 봄: false, 여름: false, 가을: false, 겨울: false });
+    setCareer({
+      "~1년 미만": false,
+      "1~3년차": false,
+      "3년 이상": false,
+      임원급: false,
+    });
     setMood({
       포멀: false,
       캐주얼: false,
@@ -120,6 +207,7 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
       톰보이: false,
       기타: false,
     });
+    setBodyType({ 마름: false, 보통: false, 건장: false, 빅사이즈: false });
   };
 
   if (!isOpen) return null;
@@ -231,6 +319,23 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
+          {/* Career Filter */}
+          <div className="mb-4">
+            <h2 className="section-title">CAREER</h2>
+            <div className="grid grid-cols-4 gap-2">
+              {Object.keys(career).map((item) => (
+                <label className="checkbox-label" key={item}>
+                  <span>{item}</span>
+                  <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={career[item]}
+                    onChange={() => handleCheckboxChange(setCareer, item)}
+                  />
+                </label>
+              ))}
+            </div>
+          </div>
           {/* Mood Filter */}
           <div className="mb-4">
             <h2 className="section-title">MOOD</h2>
@@ -243,6 +348,23 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
                     className="checkbox-input"
                     checked={mood[item]}
                     onChange={() => handleCheckboxChange(setMood, item)}
+                  />
+                </label>
+              ))}
+            </div>
+          </div>
+          {/* bodyType Filter */}
+          <div className="mb-4">
+            <h2 className="section-title">BODY TYPE</h2>
+            <div className="grid grid-cols-4 gap-2">
+              {Object.keys(bodyType).map((item) => (
+                <label className="checkbox-label" key={item}>
+                  <span>{item}</span>
+                  <input
+                    type="checkbox"
+                    className="checkbox-input"
+                    checked={bodyType[item]}
+                    onChange={() => handleCheckboxChange(setBodyType, item)}
                   />
                 </label>
               ))}
