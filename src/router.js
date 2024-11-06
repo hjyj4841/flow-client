@@ -24,6 +24,7 @@ import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
 import Searched from "./pages/post/Searched.js";
 import VoteDetail from "./pages/post/VoteDetail.js";
 import UploadVote from "./pages/post/UploadVote.js";
+import UpdateVote from "./pages/post/UpdateVote.js";
 
 const router = createBrowserRouter([
   {
@@ -47,8 +48,17 @@ const router = createBrowserRouter([
         element: <VotePost />,
       },
       {
-        path: "/votePost/:postCode",
-        element: <VoteDetail />,
+        path: "/votePost/",
+        children: [
+          {
+            path: ":postCode",
+            element: <VoteDetail />,
+          },
+          {
+            path: "update/:postCode",
+            element: <UpdateVote />,
+          },
+        ],
       },
 
       { path: "/uploadVote", element: <UploadVote /> }, // 투표 게시물 업로드

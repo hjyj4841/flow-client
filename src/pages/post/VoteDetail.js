@@ -148,10 +148,11 @@ const Detail = () => {
       setFollowCheck(followBool);
   }, [followBool]);
 
-  // 게시물 수정 페이지로 이동
-  const updatePost = () => {
-    navigate("/post/update/" + postCode);
+  // 투표 수정 페이지로 이동
+  const updateVote = () => {
+    navigate("/votePost/update/" + postCode);
   };
+
   // 게시물 신고
   const reportPostBtn = (data) => {
     addReportPost(reportDispatch, data);
@@ -366,7 +367,7 @@ const Detail = () => {
                       <p
                         className={
                           vote.voteYn === "Y"
-                            ? "bg-gray-900 bg-opacity-90 w-1/2 h-full"
+                            ? "group bg-black-900 bg-opacity-90 w-1/2 h-full hover:bg-opacity-0"
                             : "group bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-1/2 h-full"
                         }
                         style={{
@@ -387,8 +388,26 @@ const Detail = () => {
                             : () => voteLeft()
                         }
                       >
-                        {vote.voteYn === "Y" ? <span>투표했음</span> : <></>}
-                        <span className="group-hover:opacity-0">
+                        {vote.voteYn === "Y" ? (
+                          <span
+                            className="group-hover:opacity-0 mb-1.5"
+                            style={{
+                              fontWeight: "bold",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 10)",
+                            }}
+                          >
+                            Pick your
+                          </span>
+                        ) : (
+                          <></>
+                        )}
+                        <span
+                          className="group-hover:opacity-0"
+                          style={{
+                            fontWeight: "bold",
+                            textShadow: "2px 2px 4px rgba(0, 0, 0, 10)",
+                          }}
+                        >
                           {post.voteTextFirst}
                         </span>
                       </p>
@@ -396,7 +415,7 @@ const Detail = () => {
                       <p
                         className={
                           vote.voteYn === "N"
-                            ? "bg-gray-900 bg-opacity-90 w-1/2 h-full"
+                            ? "group bg-black-900 bg-opacity-90 w-1/2 h-full hover:bg-opacity-0"
                             : "group bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-1/2 h-full"
                         }
                         style={{
@@ -417,8 +436,26 @@ const Detail = () => {
                             : () => voteRight()
                         }
                       >
-                        {vote.voteYn === "N" ? <span>투표했음</span> : <></>}
-                        <span className="group-hover:opacity-0">
+                        {vote.voteYn === "N" ? (
+                          <span
+                            className="group-hover:opacity-0 mb-1.5"
+                            style={{
+                              fontWeight: "bold",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 10)",
+                            }}
+                          >
+                            Pick your
+                          </span>
+                        ) : (
+                          <></>
+                        )}
+                        <span
+                          className="group-hover:opacity-0"
+                          style={{
+                            fontWeight: "bold",
+                            textShadow: "2px 2px 4px rgba(0, 0, 0, 10)",
+                          }}
+                        >
                           {post.voteTextSecond}
                         </span>
                       </p>
@@ -443,6 +480,7 @@ const Detail = () => {
                             : "group text-white bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-full h-full"
                         }
                         style={{
+                          color: "white",
                           position: "absolute",
                           zIndex: "20",
                           display: "flex",
@@ -459,14 +497,26 @@ const Detail = () => {
                         }
                       >
                         {vote.voteYn === "Y" ? (
-                          <span className="mb-1.5 group-hover:opacity-0">
-                            check
+                          <span
+                            className="group-hover:opacity-0 mb-1.5"
+                            style={{
+                              fontWeight: "bold",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 50)",
+                            }}
+                          >
+                            Pick your
                           </span>
                         ) : (
                           <></>
                         )}
 
-                        <span className="group-hover:opacity-0">
+                        <span
+                          className="group-hover:opacity-0"
+                          style={{
+                            fontWeight: "bold",
+                            textShadow: "2px 2px 4px rgba(0, 0, 0, 50)",
+                          }}
+                        >
                           {post.voteTextFirst}
                         </span>
                       </p>
@@ -485,8 +535,8 @@ const Detail = () => {
                       <p
                         className={
                           vote.voteYn === "N"
-                            ? "bg-gray-900 bg-opacity-90 w-full h-full"
-                            : "group bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-full h-full"
+                            ? "group bg-gray-10 w-full h-full hover:bg-opacity-0"
+                            : "group text-white bg-gray-900 bg-opacity-50 hover:bg-opacity-0 w-full h-full"
                         }
                         style={{
                           color: "white",
@@ -505,8 +555,26 @@ const Detail = () => {
                             : () => voteRight()
                         }
                       >
-                        {vote.voteYn === "N" ? <span>투표했음</span> : <></>}
-                        <span className="group-hover:opacity-0">
+                        {vote.voteYn === "N" ? (
+                          <span
+                            className="group-hover:opacity-0 mb-1.5"
+                            style={{
+                              fontWeight: "bold",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 50)",
+                            }}
+                          >
+                            Pick your
+                          </span>
+                        ) : (
+                          <></>
+                        )}
+                        <span
+                          className="group-hover:opacity-0"
+                          style={{
+                            fontWeight: "bold",
+                            textShadow: "2px 2px 4px rgba(0, 0, 0, 50)",
+                          }}
+                        >
                           {post.voteTextSecond}
                         </span>
                       </p>
@@ -528,7 +596,7 @@ const Detail = () => {
                       <div>
                         <button
                           className="bg-gray-200 hover:bg-gray-300"
-                          onClick={updatePost}
+                          onClick={updateVote}
                         >
                           수정
                         </button>
@@ -553,7 +621,7 @@ const Detail = () => {
                       <p>{post.postDesc}</p>
                     </div>
                     <div className="detail-post-product">
-                      <p>전체 투표 수 : {post.voteCount}</p>
+                      <p>Total : {post.voteCount}</p>
                       <p>
                         {post.voteTextFirst} : {post.ycount}
                       </p>
