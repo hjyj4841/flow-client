@@ -367,8 +367,23 @@ const Detail = () => {
       });
     }
   }, [user.userCode]);
+
+  const groupParent = (comments) => {
+    const groupComments = {};
+
+    comments.forEach((comment) => {
+      const parentCommentCode = comment.parentCommentCode || "root";
+      if (!groupedComments[parentCommentCode]) {
+        groupedComments[parentCode] = [];
+      }
+      groupComments[parentCommentCode].push(comment);
+    });
+    return groupedComments;
+  };
+
   if (isLoading) return <>로딩중...</>;
   if (error) return <>에러 발생...</>;
+
   return (
     <>
       <section className="bg-white py-4 shadow-md" />
@@ -700,48 +715,38 @@ const Detail = () => {
                                     </button>
                                   ) : (
                                     <div className="parent-input">
-                                      <input
-                                        type="text"
-                                        value={newComment.commentDesc}
-                                        onChange={(e) =>
-                                          setNewComment({
-                                            ...newComment,
-                                            commentDesc: e.target.value,
-                                          })
-                                        }
-                                      />
+                                      {newComment.parentCommentCode ===
+                                        comment.commentCode && (
+                                        <>
+                                          <div className="parent-box">
+                                            <input
+                                              type="text"
+                                              value={newComment.commentDesc}
+                                              placeholder="답글을 작성해주세요!"
+                                              onChange={(e) =>
+                                                setNewComment({
+                                                  ...newComment,
+                                                  commentDesc: e.target.value,
+                                                })
+                                              }
+                                              style={{
+                                                width: "150%",
+                                                border: "1px #808080 solid",
+                                                borderRadius: "5px",
+                                              }}
+                                            />
+                                          </div>
+                                          <button
+                                            onClick={() => parentCancel(null)}
+                                          >
+                                            취소
+                                          </button>
+                                          <button onClick={parentCommentCode}>
+                                            답글완료
+                                          </button>
+                                        </>
+                                      )}
                                     </div>
-                                  )}
-                                  {newComment.parentCommentCode ===
-                                    comment.commentCode && (
-                                    <>
-                                      <div className="parent-box">
-                                        <input
-                                          type="text"
-                                          value={newComment.commentDesc}
-                                          placeholder="답글을 작성해주세요!"
-                                          onChange={(e) =>
-                                            setNewComment({
-                                              ...newComment,
-                                              commentDesc: e.target.value,
-                                            })
-                                          }
-                                          style={{
-                                            width: "150%",
-                                            border: "1px #808080 solid",
-                                            borderRadius: "5px",
-                                          }}
-                                        />
-                                      </div>
-                                      <button
-                                        onClick={() => parentCancel(null)}
-                                      >
-                                        취소
-                                      </button>
-                                      <button onClick={parentCommentCode}>
-                                        답글완료
-                                      </button>
-                                    </>
                                   )}
                                   <CommentReportModal comment={comment} />
                                 </div>
