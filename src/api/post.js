@@ -153,8 +153,12 @@ export const myFollowerFeed = async (userCode, page = 0) => {
 };
 
 // 팔로잉 하는 유저의 게시물
-export const followedUserPosts = async (userCode) => {
-  const response = await instance.get(`posts/following/${userCode}`);
+export const followedUserPosts = async (userCode, page = 0) => {
+  const response = await instance.get(`posts/following/${userCode}`, {
+    params: {
+      page: page,
+    },
+  });
   return response.data;
 };
 

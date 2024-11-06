@@ -35,10 +35,10 @@ const MainPostsBox = ({
                 <Link
                   to={
                     feed === "popularFeed"
-                      ? "/popularFeed"
+                      ? "/feedPage/popularFeed"
                       : feed === "newFeed"
-                      ? "/newFeed"
-                      : "/myFollowerFeed"
+                      ? "/feedPage/newFeed"
+                      : "/feedPage/followedFeed"
                   }
                   className="hover:underline"
                 >

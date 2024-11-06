@@ -39,7 +39,6 @@ const Main = () => {
 
   const fetchNewFeedImages = async () => {
     const response = await newFeed();
-    console.log(response);
     setNewFeedImages(response);
   };
   const fetchPopularFeedImages = async () => {

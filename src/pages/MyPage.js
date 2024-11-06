@@ -298,7 +298,7 @@ const MyPage = () => {
               </span>
               {/* 팔로우 경로 */}
               <span onClick={openModal1}>
-                팔로우 <span>{followerCount}</span>
+                팔로워 <span>{followerCount}</span>
                 <MyFollower
                   setIsModalOpen={setIsModalOpen1}
                   isModalOpen={isModalOpen1}
@@ -357,7 +357,7 @@ const MyPage = () => {
                 </button>
               ) : statusByFollow === false ? (
                 <button className="followButton" onClick={addFollow}>
-                  Follw
+                  Follow
                 </button>
               ) : (
                 <button className="followButton" onClick={removefollow}>
@@ -441,20 +441,24 @@ const MyPage = () => {
                     }}
                     className="cursor-pointer rounded-lg absolute inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity"
                   >
-                    <div className="flex items-start w-full ml-2">
-                      <LikeToggleButton
-                        likedPosts={likedPosts}
-                        user={user}
-                        post={item.post}
-                        fetchLiked={fetchLiked}
-                      />
-                      <SaveToggleButton
-                        savedPosts={savedPosts}
-                        user={user}
-                        post={item.post}
-                        fetchSaved={fetchSaved}
-                      />
-                    </div>
+                    {pageState !== "voted" ? (
+                      <div className="flex items-start w-full ml-2">
+                        <LikeToggleButton
+                          likedPosts={likedPosts}
+                          user={user}
+                          post={item.post}
+                          fetchLiked={fetchLiked}
+                        />
+                        <SaveToggleButton
+                          savedPosts={savedPosts}
+                          user={user}
+                          post={item.post}
+                          fetchSaved={fetchSaved}
+                        />
+                      </div>
+                    ) : (
+                      <></>
+                    )}
                     <div className="h-full w-full flex justify-center items-center flex-col">
                       <p
                         className="w-11/12 truncate text-center"

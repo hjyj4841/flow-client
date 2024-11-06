@@ -12,18 +12,15 @@ import UploadPost from "./pages/post/UploadPost";
 import AuthRegisterGoogle from "./pages/auth/AuthRegisterGoogle";
 import AuthLoginGoogle from "./pages/auth/AuthLoginGoogle";
 import ReportList from "./pages/ReportList";
-import MyFollower from "./pages/follow/MyFollower";
 import AuthLoginNaver from "./pages/auth/AuthLoginNaver";
 import UpdatePost from "./pages/post/UpdatePost";
 import VotePost from "./pages/post/VotePost";
 import Detail from "./pages/post/Detail";
 import UpdateUser from "./pages/user/UpdateUser";
-import NewFeed from "./pages/post/NewFeed";
-import PopularFeed from "./pages/post/PopularFeed";
-import MyFollowerFeed from "./pages/post/MyFollowerFeed.js";
 import Searched from "./pages/post/Searched.js";
 import VoteDetail from "./pages/post/VoteDetail.js";
 import UploadVote from "./pages/post/UploadVote.js";
+import FeedPage from "./pages/post/FeedPage.js";
 
 const router = createBrowserRouter([
   {
@@ -69,9 +66,7 @@ const router = createBrowserRouter([
       },
       { path: "/updateUser", element: <UpdateUser /> },
       { path: "/updatePost/:postCode", element: <UpdatePost /> },
-      { path: "/newFeed", element: <NewFeed /> },
-      { path: "/popularFeed", element: <PopularFeed /> },
-      { path: "/myFollowerFeed", element: <MyFollowerFeed /> },
+      { path: "/feedPage/:pageState", element: <FeedPage /> },
       { path: "/searched", element: <Searched /> },
     ],
   },
