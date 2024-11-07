@@ -29,14 +29,20 @@ const UserReportModal = ({ closeUserModal }) => {
   });
 
   const reportUserBtn = (data) => {
-    addReportUser(reportDispatch, data);
-    alert("신고가 완료되었습니다.");
-    setReportUser({
-      ...reportUser,
-      userReportDesc: "",
-    });
-    setUserReportOpen(false);
-    closeUserModal();
+    if (token != null) {
+      addReportUser(reportDispatch, data);
+      alert("신고가 완료되었습니다.");
+      setReportUser({
+        ...reportUser,
+        userReportDesc: "",
+      });
+      setUserReportOpen(false);
+      closeUserModal();
+    } else if (token == null) {
+      alert("유저 정보가 없습니다.");
+      setUserReportOpen(false);
+      closeUserModal();
+    }
   };
 
   const [user, setUser] = useState({

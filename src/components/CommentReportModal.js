@@ -1,10 +1,12 @@
-import { useState, useRef, useReducer } from "react";
+import { useState, useRef, useReducer, useEffect } from "react";
 import {
   initState as reportState,
   reportReducer,
   addReportComment,
 } from "../reducers/reportReducer";
 import "../assets/css/commentReportModal.css";
+import { useAuth } from "../contexts/AuthContext";
+import { findUser } from "../api/user";
 
 const CommentReportModal = ({ comment }) => {
   const [commentReportOpen, setCommentReportOpen] = useState();
@@ -21,16 +23,36 @@ const CommentReportModal = ({ comment }) => {
     },
   });
 
+  const { token } = useAuth(); // 현재 브라우저 내에 저장되어 있는 토큰
+  // 현재 접속중인 유저 정보
+  const [user, setUser] = useState({
+    userCode: 0,
+  });
+  const getUserInfo = async () => {
+    setUser((await findUser(token)).data);
+  };
+
+  useEffect(() => {
+    if (token !== null) {
+      getUserInfo();
+    }
+  }, []);
+
   // 댓글 신고
   const reportCommentBtn = (data) => {
-    addReportComment(reportDispatch, data);
-    alert("신고가 완료되었습니다");
-    console.log(reportComment);
-    setReportComment({
-      ...reportComment,
-      commentReportDesc: "",
-    });
-    setCommentReportOpen(false);
+    if (token !== null) {
+      addReportComment(reportDispatch, data);
+      alert("신고가 완료되었습니다");
+      console.log(reportComment);
+      setReportComment({
+        ...reportComment,
+        commentReportDesc: "",
+      });
+      setCommentReportOpen(false);
+    } else if (token == null) {
+      alert("유저 정보가 없습니다.");
+      setCommentReportOpen(false);
+    }
   };
 
   return (

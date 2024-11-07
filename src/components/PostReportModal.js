@@ -7,6 +7,8 @@ import {
 } from "../reducers/reportReducer";
 import { useParams } from "react-router-dom";
 import "../assets/css/postReportModal.css";
+import { findUser, findUserByCode } from "../api/user";
+import { useAuth } from "../contexts/AuthContext";
 
 const PostReportModal = () => {
   const [postReportOpen, setPostReportOpen] = useState(false);
@@ -35,6 +37,19 @@ const PostReportModal = () => {
     },
   });
 
+  const { token } = useAuth(); // 현재 브라우저 내에 저장되어 있는 토큰
+
+  // 1-1. 유저정보 가져오기
+  const getUserInfo = async () => {
+    setUser((await findUser(token)).data);
+  };
+
+  useEffect(() => {
+    if (token !== null) {
+      getUserInfo();
+    }
+  }, []);
+
   // 3. 작성자 유저 코드가 변경되는 시점
   useEffect(() => {
     if (post?.userCode !== undefined) {
@@ -51,13 +66,18 @@ const PostReportModal = () => {
 
   // 게시물 신고
   const reportPostBtn = (data) => {
-    addReportPost(reportDispatch, data);
-    alert("신고가 완료되었습니다.");
-    setReportPost({
-      ...reportPost,
-      postReportDesc: "",
-    });
-    setPostReportOpen(false);
+    if (user.userCode != 0) {
+      addReportPost(reportDispatch, data);
+      alert("신고가 완료되었습니다.");
+      setReportPost({
+        ...reportPost,
+        postReportDesc: "",
+      });
+      setPostReportOpen(false);
+    } else if (user.userCode == 0) {
+      alert("유저 정보가 없습니다.");
+      setPostReportOpen(false);
+    }
   };
 
   return (
