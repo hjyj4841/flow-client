@@ -33,8 +33,8 @@ const FeedPage = () => {
   }, []);
 
   useEffect(() => {
+    fetchFeedImages(page);
     if (user.userCode !== 0) {
-      fetchFeedImages(page);
       fetchLiked();
       fetchSaved();
     }
