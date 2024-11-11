@@ -80,16 +80,6 @@ const Detail = () => {
       userCode: 0,
     },
   });
-  // 대댓글 입력 상태
-  const [saveParents, setSaveParents] = useState({
-    commentCode: null,
-    commentDesc: "",
-    postCode: postCode,
-    userCode: 0,
-    parentCommentCode: 0,
-  });
-  // 대댓글 취소
-  const [setParent, setIsParent] = useState(false);
   // 댓글 수정, 취소
   const [isUpdating, setIsUpdating] = useState(false);
   // 댓글 작성
@@ -309,7 +299,7 @@ const Detail = () => {
 
   const update = (comment) => {
     setUpdateComment({
-      commentCode: comment.comm.entCode,
+      commentCode: comment.commentCode,
       commentDesc: comment.commentDesc,
       postCode: postCode,
       userCode: user.userCode,
@@ -328,35 +318,6 @@ const Detail = () => {
   const handleUpdateCancel = () => {
     setIsUpdating(null); // 수정 상태 초기화
     setUpdateComment({ ...updateComment, commentDesc: "", commentCode: 0 }); // 입력 필드 초기화
-  };
-
-  // 대댓글 추가
-  const parentCommentCode = () => {
-    console.log(newComment);
-    addMutation.mutate(newComment); // 새로운 댓글 추가
-    setNewComment({
-      commentDesc: "",
-      postCode: postCode,
-      userCode: user.userCode,
-      parentCommentCode: 0,
-    }); // 입력 필드 초기화
-  };
-
-  // 대댓글 작성 시작
-  const addParent = (parentCommentCode) => {
-    setNewComment({
-      ...newComment,
-      parentCommentCode: parentCommentCode, // 부모 댓글 코드 설정
-    });
-  };
-
-  // 답글 작성 취소
-  const parentCancel = () => {
-    setNewComment({
-      ...newComment,
-      commentDesc: "", // 입력 필드 초기화
-      parentCommentCode: 0, // 부모 댓글 코드 초기화
-    });
   };
 
   // 접속한 유저 코드가 들어온 시점
@@ -626,7 +587,7 @@ const Detail = () => {
                               <div className="comment-info">
                                 <div className="comment-info-top">
                                   <div className="comment-user-nick">
-                                    <p>{comment.userCode.userNickname}</p>
+                                    <p>{comment.userNickname}</p>
                                   </div>
                                   <div className="comment-desc">
                                     {isUpdating === comment.commentCode ? (
@@ -692,50 +653,6 @@ const Detail = () => {
                                         )}
                                       </>
                                     )}
-                                    {newComment.parentCommentCode !==
-                                    comment.commentCode ? (
-                                      <button
-                                        onClick={() =>
-                                          addParent(comment.commentCode)
-                                        }
-                                      >
-                                        답글
-                                      </button>
-                                    ) : (
-                                      <div className="parent-input">
-                                        {newComment.parentCommentCode ===
-                                          comment.commentCode && (
-                                          <>
-                                            <div className="parent-box">
-                                              <input
-                                                type="text"
-                                                value={newComment.commentDesc}
-                                                placeholder="답글을 작성해주세요!"
-                                                onChange={(e) =>
-                                                  setNewComment({
-                                                    ...newComment,
-                                                    commentDesc: e.target.value,
-                                                  })
-                                                }
-                                                style={{
-                                                  width: "150%",
-                                                  border: "1px #808080 solid",
-                                                  borderRadius: "5px",
-                                                }}
-                                              />
-                                            </div>
-                                            <button
-                                              onClick={() => parentCancel(null)}
-                                            >
-                                              취소
-                                            </button>
-                                            <button onClick={parentCommentCode}>
-                                              답글완료
-                                            </button>
-                                          </>
-                                        )}
-                                      </div>
-                                    )}
                                     {user.userCode === comment.userCode ? (
                                       <></>
                                     ) : (
@@ -743,20 +660,6 @@ const Detail = () => {
                                     )}
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                            {comment.replies.map((reply) => (
-                              <>{reply.commentDesc}</>
-                            ))}
-                            <div className="parent-content">
-                              <div
-                                className="comment-user-img2"
-                                style={{ height: "25px", width: "20px" }}
-                              >
-                                <img src={comment.commentImgUrl} />
-                              </div>
-                              <div className="comment-user-nick2">
-                                <p>{comment.userCode.userNickname}</p>
                               </div>
                             </div>
                           </>
