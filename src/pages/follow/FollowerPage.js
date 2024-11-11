@@ -8,12 +8,14 @@ import { useAuth } from "../../contexts/AuthContext";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const FollowerPage = React.memo(({followingUserCode, search, bool}) => {
+const FollowerPage = React.memo(({followingUserCode, search, bool, scrollRefbyFollower}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const followee = useSelector((state) => state.follow.followee);
     const {token} = useAuth();
     const [code, setCode] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
 
     useEffect(() => {
       if (token) {
@@ -23,7 +25,6 @@ const FollowerPage = React.memo(({followingUserCode, search, bool}) => {
         setCode(userData.userCode);
       }
     }, [token]); // 의존성 배열 추가
-    const users = useMemo(() => followee, [followee]);
 
       const fetchFollowers = useCallback(() => {
         if(followingUserCode !== undefined) {
@@ -39,11 +40,29 @@ const FollowerPage = React.memo(({followingUserCode, search, bool}) => {
         fetchFollowers();
       }, [fetchFollowers, search, bool]);
 
+      useEffect(() => {
+        const handleScroll = () => {
+            const { scrollTop, scrollHeight, clientHeight } = scrollRefbyFollower.current;
+            if (scrollTop + clientHeight >= scrollHeight - 100) { // 스크롤이 끝에 도달했을 때
+                setCurrentPage((prevPage) => prevPage + 1);
+            }
+        };
+
+        const scrollElement = scrollRefbyFollower.current;
+        scrollElement.addEventListener("scroll", handleScroll);
+
+        return () => scrollElement.removeEventListener("scroll", handleScroll);
+    }, [scrollRefbyFollower]);
+
+    const paginatedItems = useMemo(() => {
+      return followee.slice(0, currentPage * itemsPerPage);
+  }, [followee, currentPage]);
+
       const userList = 
       useMemo(
         () =>
-          users.map((dto) => (
-            <div className="userSection" key={dto.user.userCode}
+          paginatedItems.map((dto, index) => (
+            <div className="userSection" key={index}
             onClick={() => {
               navigate(`/mypage/${dto.user.userCode}`);
             }}
@@ -60,7 +79,7 @@ const FollowerPage = React.memo(({followingUserCode, search, bool}) => {
                 </div>
             </div>
           )),
-        [users, search]
+        [paginatedItems, currentPage]
       );
     return (
       <>
