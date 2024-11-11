@@ -1,15 +1,16 @@
 import axios from "axios";
 
-const kakaoApiKey = "1a0c2ee5a1c05d498d69df5ba445b391";
+const kakaoApiKey = process.env.REACT_APP_KAKAO_API_KEY;
+const kakaoSecret = process.env.REACT_APP_KAKAO_SECRET;
 const redirectLoginUri = "http://localhost:3000/authLoginKakao";
 const redirectRegisterUri = "http://localhost:3000/authRegisterKakao";
-const kakaoSecret = "L8NYxWHVPQW4p2RIqID4TSJ1WKT3GI20";
 
 // 인증 코드 발급
 export const getKakaoCode = (type) => {
   let redirectUri;
 
-  if (type === "register") redirectUri = redirectRegisterUri; // 회원가입
+  if (type === "register") redirectUri = redirectRegisterUri;
+  // 회원가입
   else redirectUri = redirectLoginUri; // 로그인
   window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${kakaoApiKey}&redirect_uri=${redirectUri}&response_type=code`;
 };
@@ -18,7 +19,8 @@ export const getKakaoCode = (type) => {
 export const getKakaoToken = async (code, type) => {
   let redirectUri;
 
-  if (type === "register") redirectUri = redirectRegisterUri; // 회원가입
+  if (type === "register") redirectUri = redirectRegisterUri;
+  // 회원가입
   else redirectUri = redirectLoginUri; // 로그인
 
   const res = await axios.post(

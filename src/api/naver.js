@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const clientId = "vlHEtLBbU2ZmJLj2TMwV";
-const clientSecret = "m9Ggb5mdjt";
+const clientId = process.env.REACT_APP_NAVER_CLIENT_ID;
+const clientSecret = process.env.REACT_APP_NAVER_CLIENT_SECRET;
 const redirectRegisterUri = "http://localhost:3000/authRegisterNaver";
 const redirectLoginUri = "http://localhost:3000/authLoginNaver";
 
@@ -9,7 +9,8 @@ const redirectLoginUri = "http://localhost:3000/authLoginNaver";
 export const getNaverCode = (type) => {
   let redirectUri;
 
-  if (type === "register") redirectUri = redirectRegisterUri; // 회원가입
+  if (type === "register") redirectUri = redirectRegisterUri;
+  // 회원가입
   else redirectUri = redirectLoginUri; // 로그인
   window.location.href = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&state=flow-user-new-acc&redirect_uri=${redirectUri}`;
 };
