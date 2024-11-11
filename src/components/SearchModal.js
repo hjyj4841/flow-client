@@ -291,13 +291,13 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
             <div className="grid grid-cols-4 gap-2">
               {Object.keys(job).map((item) => (
                 <label className="checkbox-label" key={item}>
-                  <span>{item}</span>
                   <input
                     type="checkbox"
                     className="checkbox-input"
                     checked={job[item]}
                     onChange={() => handleCheckboxChange(setJob, item)}
                   />
+                  <span>{item}</span>
                 </label>
               ))}
             </div>
@@ -308,13 +308,13 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
             <div className="grid grid-cols-4 gap-2">
               {Object.keys(season).map((item) => (
                 <label className="checkbox-label" key={item}>
-                  <span>{item}</span>
                   <input
                     type="checkbox"
                     className="checkbox-input"
                     checked={season[item]}
                     onChange={() => handleCheckboxChange(setSeason, item)}
                   />
+                  <span>{item}</span>
                 </label>
               ))}
             </div>
@@ -325,13 +325,13 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
             <div className="grid grid-cols-4 gap-2">
               {Object.keys(career).map((item) => (
                 <label className="checkbox-label" key={item}>
-                  <span>{item}</span>
                   <input
                     type="checkbox"
                     className="checkbox-input"
                     checked={career[item]}
                     onChange={() => handleCheckboxChange(setCareer, item)}
                   />
+                  <span>{item}</span>
                 </label>
               ))}
             </div>
@@ -342,13 +342,13 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
             <div className="grid grid-cols-4 gap-2">
               {Object.keys(mood).map((item) => (
                 <label className="checkbox-label" key={item}>
-                  <span>{item}</span>
                   <input
                     type="checkbox"
                     className="checkbox-input"
                     checked={mood[item]}
                     onChange={() => handleCheckboxChange(setMood, item)}
                   />
+                  <span>{item}</span>
                 </label>
               ))}
             </div>
@@ -359,13 +359,13 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
             <div className="grid grid-cols-4 gap-2">
               {Object.keys(bodyType).map((item) => (
                 <label className="checkbox-label" key={item}>
-                  <span>{item}</span>
                   <input
                     type="checkbox"
                     className="checkbox-input"
                     checked={bodyType[item]}
                     onChange={() => handleCheckboxChange(setBodyType, item)}
                   />
+                  <span>{item}</span>
                 </label>
               ))}
             </div>
