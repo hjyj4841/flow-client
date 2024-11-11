@@ -653,8 +653,7 @@ const Detail = () => {
                                 <div className="comment-info-bot">
                                   <div className="comment-date">2024-10-31</div>
                                   <div className="comment-button">
-                                    {user.userCode ===
-                                      comment.userCode.userCode && (
+                                    {user.userCode === comment.userCode && (
                                       <>
                                         {isUpdating === comment.commentCode ? (
                                           <>
@@ -737,8 +736,7 @@ const Detail = () => {
                                         )}
                                       </div>
                                     )}
-                                    {user.userCode ===
-                                    comment.userCode.userCode ? (
+                                    {user.userCode === comment.userCode ? (
                                       <></>
                                     ) : (
                                       <CommentReportModal comment={comment} />
