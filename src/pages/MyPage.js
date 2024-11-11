@@ -234,13 +234,13 @@ const MyPage = () => {
       fetchSaved();
       dispatch(
         myFollower({
-          followingUserCode: mypageUser.userCode,
+          followingUserCode: mypageUserCode,
           key: null,
         })
       );
       dispatch(
         followMe({
-          followerUserCode: mypageUser.userCode,
+          followerUserCode: mypageUserCode,
           key: null,
         })
       );
@@ -251,7 +251,7 @@ const MyPage = () => {
         })
       );
     }
-  }, [mypageUser.userCode, user.userCode, isModalOpen1, isModalOpen2]);
+  }, [mypageUser.userCode, user.userCode, isModalOpen1, isModalOpen2, mypageUserCode]);
 
   const voteDetail = (postCode) => {
     // 나머지 태그에서는 네비게이션 동작

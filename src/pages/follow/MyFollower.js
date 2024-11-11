@@ -1,9 +1,10 @@
 import { useParams} from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { useState, useCallback, useEffect} from "react";
 import "../../assets/css/MyFollower.modules.css"
 import FollowingPage from "./FollowingPage";
 import FollowerPage from "./FollowerPage";
+import { useRef } from "react";
 
 const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   const { mypageUserCode } = useParams();
@@ -12,10 +13,11 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
   const [bool, setBool] = useState(logic);
   const [key, setKey] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [opacity, setOpacity] = useState(1);
-   const [position, setPosition] = useState({ x: -250, y: -180 });
+  const [position, setPosition] = useState({ x: -250, y: -180 });
   const [isDragging, setIsDragging] = useState(false);
   const [offset, setOffset] = useState({ x: 0, y: 0 });
+  const scrollRefbyFollowing = useRef();
+  const scrollRefbyFollower = useRef();
 
   const warp1 = useCallback(() => {
     setBool(true);
@@ -81,7 +83,7 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
               >✕</button>
               <div className="imageBar"></div>
             <div className="following-userInfo">
-              <header style={{ opacity, transition: 'opacity 0.3s ease' }}>
+              <header>
                 <div className={`section ${bool ? 'active' : ''}`} onClick={warp1}>
                   <h1>팔로잉</h1>
                   <p>{count}</p>
@@ -90,11 +92,8 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
                   <h1>팔로워</h1>
                   <p>{counter}</p>
                 </div>
-                <div className="section" id="last-section">
-                  <h1>추천 팔로워</h1>
-                </div>
               </header>
-              <div className="searchBar" style={{ opacity, transition: 'opacity 0.3s ease' }}>
+              <div className="searchBar">
                 <input
                   type="text"
                   placeholder="검색"
@@ -103,11 +102,11 @@ const MyFollower = ({setIsModalOpen, isModalOpen, logic}) => {
                 />
               </div>
               <div className="following-users">
-                <div className="scroll" style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowingPage followingUserCode={mypageUserCode} search={keyword} bool={bool}/>
+                <div className="scroll" ref={scrollRefbyFollowing} style={{ display: bool ? 'flex' : 'none', flexDirection: 'column' }}>
+                  <FollowingPage followingUserCode={mypageUserCode} search={keyword} bool={bool} scrollRefbyFollowing={scrollRefbyFollowing}/>
                 </div>
-                <div className="scroll" style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
-                  <FollowerPage followingUserCode={mypageUserCode} search={keyword} bool={bool}/>
+                <div className="scroll" ref={scrollRefbyFollower} style={{ display: !bool ? 'flex' : 'none', flexDirection: 'column' }}>
+                  <FollowerPage followingUserCode={mypageUserCode} search={keyword} bool={bool} scrollRefbyFollower={scrollRefbyFollower}/>
                 </div>
               </div>
             </div>
