@@ -1,7 +1,8 @@
 .cmmtReport-button {
   margin-left: 5px;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   cursor: pointer;
+  color: gray;
 }
 
 .cmmtReport-button:hover {

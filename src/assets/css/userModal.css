@@ -3,6 +3,9 @@
   position: relative;
   align-items: center;
 }
+.userMenu > span:hover {
+  color: #555;
+}
 .menu-open-Button {
   position: relative;
   cursor: pointer;

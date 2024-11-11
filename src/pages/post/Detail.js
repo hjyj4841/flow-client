@@ -351,10 +351,6 @@ const Detail = () => {
     });
   };
 
-  // 작성자의 유저정보 페이지로 이동
-  const goUserInfo = () => {
-    navigate(`/mypage/${post.userCode}`);
-  };
   // 접속한 유저 코드가 들어온 시점
   useEffect(() => {
     // newComment에 유저 코드 대입
@@ -566,10 +562,7 @@ const Detail = () => {
                   <div className="detail-post-user">
                     <div className="post-user-desc">
                       <div className="post-user-img">
-                        <img
-                          src={followUser.userProfileUrl}
-                          onClick={goUserInfo}
-                        />
+                        <img src={followUser.userProfileUrl} />
                       </div>
                       <div className="post-user-info">
                         <UserModal user={followUser} check={check} />
@@ -733,7 +726,12 @@ const Detail = () => {
                                       )}
                                     </div>
                                   )}
-                                  <CommentReportModal comment={comment} />
+                                  {comment.userCode.userCode ===
+                                  user.userCode ? (
+                                    <></>
+                                  ) : (
+                                    <CommentReportModal comment={comment} />
+                                  )}
                                 </div>
                               </div>
                             </div>
