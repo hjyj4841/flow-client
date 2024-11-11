@@ -22,7 +22,7 @@ const FeedPage = () => {
     userCode: 0,
   });
   const [FeedImages, setFeedImages] = useState([]);
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(null);
   const [likedPosts, setLikedPosts] = useState([]);
   const [savedPosts, setSavedPosts] = useState([]);
 
@@ -30,15 +30,18 @@ const FeedPage = () => {
     if (token !== null) {
       getUserInfo();
     }
+    setPage(0);
   }, []);
 
   useEffect(() => {
-    fetchFeedImages(page);
-    if (user.userCode !== 0) {
-      fetchLiked();
-      fetchSaved();
+    if (page !== null) {
+      if (user.userCode !== 0) {
+        fetchLiked();
+        fetchSaved();
+      }
+      fetchFeedImages(page);
     }
-  }, [user, page]);
+  }, [page]);
 
   const getUserInfo = async () => {
     const respones = (await findUser(token)).data;
@@ -61,7 +64,6 @@ const FeedPage = () => {
 
   const fetchLiked = async () => {
     const respones = await fetchLikedPosts(user.userCode);
-    console.log(respones);
     const likedPosts = respones.map((post) => ({
       ...post,
       isLiked: true,
