@@ -378,7 +378,7 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
         <div className="mb-4">
           <div className="text-sm">
             <div className="mb-2 font-bold">SEASON</div>
-            <div className="checkbox-wrapper">
+            {/* <div className="checkbox-wrapper">
               <input
                 type="checkbox"
                 className="check"
@@ -496,47 +496,47 @@ const Post = ({ upload, post, setPost, setBodyTag, setCareerTag }) => {
                 </svg>
                 겨울
               </label>
-            </div>
+            </div> */}
 
-            {/* <label className="checkBox">
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="1"
-                  onChange={tagCheck}
-                />
-                봄
-              </label> 
-              <label className="checkBox">
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="2"
-                  onChange={tagCheck}
-                  style={{ marginLeft: "15px" }}
-                />
-                여름
-              </label>
-              <label className="checkBox">
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="3"
-                  onChange={tagCheck}
-                  style={{ marginLeft: "15px" }}
-                />
-                가을
-              </label>
-              <label className="checkBox">
-                <input
-                  type="checkbox"
-                  className="mr-1"
-                  value="4"
-                  onChange={tagCheck}
-                  style={{ marginLeft: "15px" }}
-                />
-                겨울
-              </label>*/}
+            <label className="checkBox">
+              <input
+                type="checkbox"
+                className="mr-1"
+                value="1"
+                onChange={tagCheck}
+              />
+              봄
+            </label>
+            <label className="checkBox">
+              <input
+                type="checkbox"
+                className="mr-1"
+                value="2"
+                onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
+              />
+              여름
+            </label>
+            <label className="checkBox">
+              <input
+                type="checkbox"
+                className="mr-1"
+                value="3"
+                onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
+              />
+              가을
+            </label>
+            <label className="checkBox">
+              <input
+                type="checkbox"
+                className="mr-1"
+                value="4"
+                onChange={tagCheck}
+                style={{ marginLeft: "15px" }}
+              />
+              겨울
+            </label>
           </div>
           <div className="text-sm mt-4">
             <div className="mb-2 font-bold">CAREER</div>
