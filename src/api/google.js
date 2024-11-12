@@ -10,9 +10,10 @@ const redirectLoginUri = "http://localhost:3000/authLoginGoogle";
 export const getGoogleCode = (type) => {
   let redirectUri;
 
-  if (type === "register") redirectUri = redirectRegisterUri;
   // 회원가입
-  else redirectUri = redirectLoginUri; // 로그인
+  if (type === "register") redirectUri = redirectRegisterUri;
+  // 로그인
+  else redirectUri = redirectLoginUri;
   window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${googleClientId}&redirect_uri=${redirectUri}&response_type=code&scope=${scope}`;
 };
 
@@ -20,9 +21,10 @@ export const getGoogleCode = (type) => {
 export const getGoogleToken = async (code, type) => {
   let redirectUri;
 
-  if (type === "register") redirectUri = redirectRegisterUri;
   // 회원가입
-  else redirectUri = redirectLoginUri; // 로그인
+  if (type === "register") redirectUri = redirectRegisterUri;
+  // 로그인
+  else redirectUri = redirectLoginUri;
 
   const res = await axios.post(`https://oauth2.googleapis.com/token`, {
     client_id: googleClientId,
