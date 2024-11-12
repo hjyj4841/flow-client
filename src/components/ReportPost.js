@@ -12,6 +12,7 @@ import {
   banUserReport,
 } from "../reducers/reportReducer";
 import "../assets/css/reportPost.css";
+import { useNavigate } from "react-router-dom";
 
 const ReportPost = () => {
   const [state, dispatch] = useReducer(reportReducer, reportPostState);
@@ -19,10 +20,12 @@ const ReportPost = () => {
 
   const [count, setCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postPerPage] = useState(5);
+  const [postPerPage] = useState(6);
   const [indexOfLastPost, setIndexOfLastPost] = useState(0);
   const [indexOfFirstPost, setIndexOfFirstPost] = useState(0);
   const [currentPosts, setCurrentPosts] = useState(0);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchReportPost(dispatch);
@@ -62,52 +65,88 @@ const ReportPost = () => {
     alert("관리자에 의해 취소되었습니다.");
   };
 
+  const moveBtn = (post) => {
+    if (post.postType === "post") {
+      navigate("/post/" + post.postCode);
+    } else if (post.postType === "vote") {
+      navigate("/votePost/" + post.postCode);
+    }
+  };
+
+  const myPage = (post) => {
+    navigate("/myPage/" + post.post.user.userCode);
+  };
+
   return (
     <>
       <div className="fullContainer">
         {currentPosts && reportPosts.length > 0 ? (
           currentPosts.map((post) => (
-            <Card
-              className="card"
+            <div
+              className="bg-white shadow-md rounded-lg p-6 flex items-center space-x-4 w-full max-w-full"
               key={post.postReportCode}
-              sx={{ minWidth: 275 }}
-              variant="outlined"
             >
-              <CardContent className="reportContainer">
-                <Typography variant="h5" component="div" className="reportName">
-                  신고번호: {post.postReportCode}
-                </Typography>
-                <Typography variant="body" className="reportInfo">
-                  신고내용 : {post.postReportDesc}
-                </Typography>
-
-                <div className="buttonContainer">
-                  <button
-                    className="cancel-report-post-btn"
-                    type="button"
-                    onClick={() => cancelPost(post.postReportCode)}
+              <div
+                className="w-16 h-16 bg-gray-300 rounded-full flex-shrink-0"
+                style={{
+                  overflow: "hidden",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img
+                  src={post.post.user.userProfileUrl}
+                  onClick={() => myPage(post)}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <div className="flex-grow">
+                <div className="bg-gray-100 p-4 rounded-lg shadow-inner relative">
+                  <p
+                    className="text-gray-700"
+                    onClick={() => moveBtn(post.post)}
+                    style={{ cursor: "pointer" }}
                   >
-                    취소
-                  </button>
-                  <button
-                    className="delete-report-post-btn"
-                    type="button"
-                    onClick={() => deletePost(post.postReportCode)}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    className="ban-report-user-btn"
-                    type="button"
-                    onClick={() =>
-                      banUser(post.post.user.userCode, post.postReportCode)
-                    }
-                  >
-                    밴
-                  </button>
+                    신고내용 :
+                    <span className="text-gray-500">
+                      {" "}
+                      {post.postReportDesc}
+                    </span>
+                  </p>
+                  <div className="absolute left-4 bottom-0 transform translate-y-1/2">
+                    <svg
+                      className="w-6 h-6 text-gray-100"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 22l-8-8h6V2h4v12h6z" />
+                    </svg>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+              <div className="flex space-x-2">
+                <button
+                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400"
+                  onClick={() => cancelPost(post.postReportCode)}
+                >
+                  취소
+                </button>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                  onClick={() => deletePost(post.postReportCode)}
+                >
+                  삭제
+                </button>
+                <button
+                  className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
+                  onClick={() =>
+                    banUser(post.post.user.userCode, post.postReportCode)
+                  }
+                >
+                  밴
+                </button>
+              </div>
+            </div>
           ))
         ) : (
           <div className="report-post-list">
