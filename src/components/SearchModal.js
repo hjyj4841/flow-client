@@ -219,17 +219,17 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
           ✕
         </button>
         <div>
-          <div className="flex justify-between items-center border-b pb-4 mb-4">
-            <h1 className="text-xl font-bold">FILTER</h1>
-            <button className="text-sm text-gray-500" onClick={handleReset}>
+          <div className="modal-header">
+            <h1 className="filter-title">FILTER</h1>
+            <button className="reset-button" onClick={handleReset}>
               초기화
             </button>
           </div>
-          {/* Height Filter */}
-          <div className="mb-4">
+          {/* HEIGHT 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">HEIGHT</h2>
-            <div className="flex justify-between items-center mb-2">
-              <span>
+            <div className="range-display">
+              <span className="range-title">
                 {heightRange[0]}cm ~ {heightRange[1]}cm
               </span>
             </div>
@@ -239,14 +239,14 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               max={200}
               value={heightRange}
               onChange={handleSliderChange(setHeightRange)}
-              className="mb-4"
+              className="slider"
             />
           </div>
-          {/* Weight Filter */}
-          <div className="mb-4">
+          {/* WEIGHT 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">WEIGHT</h2>
-            <div className="flex justify-between items-center mb-2">
-              <span>
+            <div className="range-display">
+              <span className="range-title">
                 {weightRange[0]}kg ~ {weightRange[1]}kg
               </span>
             </div>
@@ -256,14 +256,14 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               max={120}
               value={weightRange}
               onChange={handleSliderChange(setWeightRange)}
-              className="mb-4"
+              className="slider"
             />
           </div>
-          {/* Gender Filter */}
-          <div className="mb-4">
+          {/* GENDER 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">GENDER</h2>
-            <div className="flex justify-between items-center mb-2">
-              <span className="font-bold">MEN</span>
+            <div className="radio-group">
+              <span className="gender-title">MEN</span>
               <input
                 type="radio"
                 name="gender"
@@ -273,8 +273,8 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
                 onChange={handleGenderChange}
               />
             </div>
-            <div className="flex justify-between items-center">
-              <span className="font-bold">WOMEN</span>
+            <div className="radio-group">
+              <span className="gender-title">WOMEN</span>
               <input
                 type="radio"
                 name="gender"
@@ -285,10 +285,10 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               />
             </div>
           </div>
-          {/* Job Filter */}
-          <div className="mb-4">
+          {/* JOB 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">JOB</h2>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="checkbox-group">
               {Object.keys(job).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <input
@@ -302,10 +302,10 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
-          {/* Season Filter */}
-          <div className="mb-4">
+          {/* SEASON 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">SEASON</h2>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="checkbox-group">
               {Object.keys(season).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <input
@@ -319,10 +319,10 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
-          {/* Career Filter */}
-          <div className="mb-4">
+          {/* CAREER 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">CAREER</h2>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="checkbox-group">
               {Object.keys(career).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <input
@@ -336,10 +336,10 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
-          {/* Mood Filter */}
-          <div className="mb-4">
+          {/* MOOD 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">MOOD</h2>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="checkbox-group">
               {Object.keys(mood).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <input
@@ -353,10 +353,10 @@ const SearchModal = ({ isOpen, onClose, user = {} }) => {
               ))}
             </div>
           </div>
-          {/* bodyType Filter */}
-          <div className="mb-4">
+          {/* BODY TYPE 필터 */}
+          <div className="filter-section">
             <h2 className="section-title">BODY TYPE</h2>
-            <div className="grid grid-cols-4 gap-2">
+            <div className="checkbox-group">
               {Object.keys(bodyType).map((item) => (
                 <label className="checkbox-label" key={item}>
                   <input

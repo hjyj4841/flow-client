@@ -25,13 +25,68 @@
   right: 0.5rem;
 }
 
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filter-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.reset-button {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.filter-section {
+  margin-bottom: 1rem;
+}
+
+.range-title {
+  margin-left: 0.5rem;
+}
+
+.gender-title {
+  margin-left: 0.5rem;
+}
+
 .section-title {
   font-weight: bold;
   margin-bottom: 0.5rem;
 }
 
+.range-display {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.slider {
+  margin-bottom: 1rem;
+}
+
+.radio-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
 .checkbox-input {
   margin-right: 0.5rem;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
 }
 
 .checkbox-label {
@@ -55,7 +110,10 @@
   font-weight: bold;
 }
 
-/* 반응형 디자인 */
+.submit-button:hover {
+  background-color: #333;
+}
+
 @media (max-width: 768px) {
   .modal-content {
     width: 90%;
