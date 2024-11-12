@@ -21,7 +21,7 @@ export const userCheck = async (user) => {
         });
         return response.data;
       } catch (error) {
-        alert("너 밴");
+        alert("계정이 일시정지 되었습니다.");
       }
       return null;
     } else {
