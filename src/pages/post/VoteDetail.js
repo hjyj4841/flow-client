@@ -253,10 +253,6 @@ const Detail = () => {
     setUpdateComment({ ...updateComment, commentDesc: "", commentCode: 0 }); // 입력 필드 초기화
   };
 
-  // 작성자의 유저정보 페이지로 이동
-  const goUserInfo = () => {
-    navigate(`/mypage/${post.userCode}`);
-  };
   // 접속한 유저 코드가 들어온 시점
   useEffect(() => {
     // newComment에 유저 코드 대입
@@ -627,10 +623,7 @@ const Detail = () => {
                   <div className="detail-post-user">
                     <div className="post-user-desc">
                       <div className="post-user-img">
-                        <img
-                          src={followUser.userProfileUrl}
-                          onClick={goUserInfo}
-                        />
+                        <img src={followUser.userProfileUrl} />
                       </div>
                       <div className="post-user-info">
                         <UserModal user={followUser} />
@@ -674,85 +667,102 @@ const Detail = () => {
                         <div>로딩 중...</div>
                       ) : error ? (
                         <div>댓글을 불러오는 데 문제가 발생했습니다.</div>
+                      ) : comments.data && comments.data.length === 0 ? (
+                        <p>첫번째로 댓글을 남겨보세요.</p>
                       ) : comments.data && comments.data.length > 0 ? (
                         comments.data.map((comment, index) => (
-                          <div className="comment-contents" key={index}>
-                            <div className="comment-user-img">
-                              <img src={comment.userCode.userProfileUrl} />
-                            </div>
-                            <div className="comment-info">
-                              <div className="comment-info-top">
-                                <div className="comment-user-nick">
-                                  <p>{comment.userCode.userNickname}</p>
+                          <>
+                            <div className="comment-contents" key={index}>
+                              <div className="comment-user-img">
+                                <img src={comment.commentImgUrl} />
+                              </div>
+                              <div className="comment-info">
+                                <div className="comment-info-top">
+                                  <div className="comment-user-nick">
+                                    <p>{comment.userNickname}</p>
+                                  </div>
+                                  <div className="comment-desc">
+                                    {isUpdating === comment.commentCode ? (
+                                      <input
+                                        type="text"
+                                        value={updateComment.commentDesc}
+                                        onChange={(e) =>
+                                          setUpdateComment({
+                                            ...updateComment,
+                                            commentDesc: e.target.value,
+                                          })
+                                        }
+                                        style={{
+                                          width: "100%",
+                                          border: "1px #808080 solid",
+                                          borderRadius: "5px",
+                                        }}
+                                      />
+                                    ) : (
+                                      <p>{comment.commentDesc}</p>
+                                    )}
+                                  </div>
                                 </div>
-                                <div className="comment-desc">
-                                  {isUpdating === comment.commentCode ? (
-                                    <input
-                                      type="text"
-                                      value={updateComment.commentDesc}
-                                      onChange={(e) =>
-                                        setUpdateComment({
-                                          ...updateComment,
-                                          commentDesc: e.target.value,
-                                        })
-                                      }
-                                    />
-                                  ) : (
-                                    <p>{comment.commentDesc}</p>
-                                  )}
+                                <div className="comment-info-bot">
+                                  <div className="comment-date">
+                                    {comment.commentDate.split("T")[0]}
+                                  </div>
+                                  <div className="comment-button">
+                                    {user.userCode === comment.userCode && (
+                                      <>
+                                        {isUpdating === comment.commentCode ? (
+                                          <>
+                                            <button
+                                              onClick={handleUpdateCancel}
+                                              className="hover:text-gray-900 text-gray-500"
+                                            >
+                                              취소
+                                            </button>
+                                            <button
+                                              onClick={handleUpdate}
+                                              className="hover:text-gray-900 text-gray-500"
+                                            >
+                                              수정완료
+                                            </button>
+                                          </>
+                                        ) : (
+                                          <>
+                                            <button
+                                              onClick={() => update(comment)}
+                                              className="hover:text-gray-900 text-gray-500"
+                                            >
+                                              수정
+                                            </button>
+                                            <button
+                                              onClick={() =>
+                                                handleDelete(
+                                                  comment.commentCode
+                                                )
+                                              }
+                                              className="hover:text-red-500 text-gray-500"
+                                            >
+                                              삭제
+                                            </button>
+                                          </>
+                                        )}
+                                      </>
+                                    )}
+                                    {user.userCode === comment.userCode ? (
+                                      <></>
+                                    ) : (
+                                      <CommentReportModal comment={comment} />
+                                    )}
+                                  </div>
                                 </div>
                               </div>
-                              <div className="comment-info-bot">
-                                <div className="comment-date">2024-10-31</div>
-                                <div className="comment-button">
-                                  {user.userCode ===
-                                    comment.userCode.userCode && (
-                                    <>
-                                      {isUpdating === comment.commentCode ? (
-                                        <>
-                                          <button
-                                            onClick={handleUpdateCancel}
-                                            className="hover:text-gray-900 text-gray-500"
-                                          >
-                                            취소
-                                          </button>
-                                          <button
-                                            onClick={handleUpdate}
-                                            className="hover:text-gray-900 text-gray-500"
-                                          >
-                                            수정완료
-                                          </button>
-                                        </>
-                                      ) : (
-                                        <>
-                                          <button
-                                            onClick={() => update(comment)}
-                                            className="hover:text-gray-900 text-gray-500"
-                                          >
-                                            수정
-                                          </button>
-                                          <button
-                                            onClick={() =>
-                                              handleDelete(comment.commentCode)
-                                            }
-                                            className="hover:text-red-500 text-gray-500"
-                                          >
-                                            삭제
-                                          </button>
-                                        </>
-                                      )}
-                                    </>
-                                  )}
-                                  <CommentReportModal />
-                                </div>
-                              </div>
                             </div>
-                          </div>
+                          </>
                         ))
                       ) : (
-                        <></>
+                        <div />
                       )}
                     </div>
+                    <div />
                   </div>
                   <div className="comment-add">
                     {token !== null ? (

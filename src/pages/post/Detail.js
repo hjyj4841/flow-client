@@ -601,7 +601,7 @@ const Detail = () => {
                                           })
                                         }
                                         style={{
-                                          width: "140%",
+                                          width: "100%",
                                           border: "1px #808080 solid",
                                           borderRadius: "5px",
                                         }}
