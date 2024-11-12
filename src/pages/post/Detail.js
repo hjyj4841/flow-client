@@ -612,7 +612,9 @@ const Detail = () => {
                                   </div>
                                 </div>
                                 <div className="comment-info-bot">
-                                  <div className="comment-date">2024-10-31</div>
+                                  <div className="comment-date">
+                                    {comment.commentDate.split("T")[0]}
+                                  </div>
                                   <div className="comment-button">
                                     {user.userCode === comment.userCode && (
                                       <>

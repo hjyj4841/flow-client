@@ -39,13 +39,25 @@ const FeedPage = () => {
         fetchLiked();
         fetchSaved();
       }
-      fetchFeedImages(page);
+      if (pageState !== "followedFeed") fetchFeedImages(page);
+      else {
+        if (page !== 0) {
+          fetchFeedImages(page);
+        }
+      }
     }
   }, [page]);
+
+  useEffect(() => {
+    if (pageState === "followedFeed" && user.userCode !== 0) {
+      fetchFeedImages(page);
+    }
+  }, [user]);
 
   const getUserInfo = async () => {
     const respones = (await findUser(token)).data;
     setUser(respones);
+    // if (pageState === "followedFeed") fetchFeedImages(page);
   };
 
   const fetchFeedImages = async (currentPage) => {
@@ -57,6 +69,11 @@ const FeedPage = () => {
       respones = await popularFeed(currentPage);
     } else if (pageState === "followedFeed") {
       respones = await followedUserPosts(user.userCode, currentPage);
+      console.log(respones.content);
+      if (respones.content.length === 0) {
+        console.log(user);
+        // return fetchFeedImages(currentPage);
+      }
     }
     const content = respones.content || [];
     setFeedImages((prev) => [...prev, ...content]);
